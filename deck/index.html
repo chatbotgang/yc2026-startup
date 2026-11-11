@@ -133,6 +133,12 @@ html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-he
 @keyframes hit{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(4)}}
 .twmap .ring{transform-box:fill-box;transform-origin:center}
 
+
+.logo-chip{display:inline-flex;align-items:center;background:#fff;border-radius:10px;padding:4px 8px;flex:none}
+.logo-chip img{height:clamp(22px,1.8vw,34px);width:auto;max-width:none;display:block}
+.mono.logo-mini{background:#fff;padding:3px;overflow:hidden}
+.logo-chip.sq{padding:0;background:none;border-radius:8px;overflow:hidden}
+.mono.logo-mini img{width:clamp(22px,1.9vw,36px);height:clamp(22px,1.9vw,36px);object-fit:contain;display:block;border-radius:50%}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -409,7 +415,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
           <div class="ph"><i style="background-image:url('assets/photos/dogs.jpg');background-position:62% 60%"></i></div>
           <div class="tx">
             <span class="tag"><span class="zh">流浪動物</span><span class="en">Stray animals</span></span>
-            <div class="ngo"><span class="mono">救</span><h3><span class="zh">例如：台灣動物緊急救援小組</span><span class="en">e.g. Animal Rescue Team Taiwan</span></h3></div>
+            <div class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><h3><span class="zh">例如：台灣動物緊急救援小組</span><span class="en">e.g. Animal Rescue Team Taiwan</span></h3></div>
             <p><span class="zh">台灣仍有約 14 萬隻流浪狗。agent 接手救援通報分流、認養問答與志工排班，讓人力留給現場。</span><span class="en">Taiwan still has about 141,500 stray dogs. The agent triages rescue reports, answers adoption questions and schedules volunteers.</span></p>
           </div>
         </article>
@@ -417,7 +423,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
           <div class="ph"><i style="background-image:url('assets/photos/migrant.jpg');background-position:50% 52%"></i></div>
           <div class="tx">
             <span class="tag"><span class="zh">移工翻譯</span><span class="en">Migrant workers</span></span>
-            <div class="ngo"><span class="mono">1/40</span><h3><span class="zh">例如：One-Forty 四十分之一</span><span class="en">e.g. One-Forty</span></h3></div>
+            <div class="ngo"><span class="logo-chip sq"><img class="ngo-logo" src="assets/ngo/oneforty.png" alt="One-Forty"></span><h3><span class="zh">例如：One-Forty 四十分之一</span><span class="en">e.g. One-Forty</span></h3></div>
             <p><span class="zh">台灣有近 90 萬移工。agent 用母語解釋契約、就醫與求助管道，法律或安全問題轉給社工。</span><span class="en">Taiwan has nearly 900,000 migrant workers. The agent explains contracts, clinics and help lines in their language, and hands legal or safety issues to staff.</span></p>
           </div>
         </article>
@@ -429,7 +435,8 @@ body.idle .chrome{opacity:0;pointer-events:none}
   <!-- 5 -->
   <section class="slide" aria-label="5">
     <div class="inner">
-      <p class="h2 reveal"><span class="zh">NGO 不會寫程式？<span class="blue">agent 我們幫他做好。</span></span><span class="en">NGOs can't code? <span class="blue">We build the agent for them.</span></span></p>
+      <div class="eyebrow reveal"><span class="zh">為什麼不直接捐錢？</span><span class="en">Why not just donate cash?</span></div>
+      <p class="h2 reveal d1"><span class="zh">捐了錢，NGO 還是做不出 agent。<br><span class="blue">我們連建置、部署一起送。</span></span><span class="en">Cash alone won't build an agent.<br><span class="blue">We deliver the build and the deploy too.</span></span></p>
       <div class="pillars reveal d1">
         <div class="pillar"><span class="w"><span class="zh">額度</span><span class="en">Credits</span></span><p><span class="zh">你分出來的 AI 算力，由 Gateway 分配、計量</span><span class="en">Your shared AI capacity, allocated and metered by Gateway</span></p></div>
         <div class="pillar on"><span class="w"><span class="zh">建置</span><span class="en">Build</span></span><p><span class="zh">NGO 不寫程式，就能做出自己的 agent</span><span class="en">NGOs build their own agent with no code</span></p></div>
@@ -487,7 +494,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <article class="dcard corp">
           <div class="dtop"><span class="who"><span class="zh">企業</span><span class="en">Company</span></span><img src="assets/agentlab-logo-dark.svg" alt="" class="mini"></div>
           <div class="amt">50M <small>tokens</small></div>
-          <div class="dl"><span class="zh">今年支持</span><span class="en">This year supporting</span> <span class="ngo inline stack"><span class="mono">華</span><span class="mono">救</span><span class="mono">1/40</span><b><span class="zh">3 個 NGO</span><span class="en">3 NGOs</span></b></span></div>
+          <div class="dl"><span class="zh">今年支持</span><span class="en">This year supporting</span> <span class="ngo inline stack"><span class="mono">華</span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt=""></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt=""></span><b><span class="zh">3 個 NGO</span><span class="en">3 NGOs</span></b></span></div>
           <div class="dstats">
             <div><b>41,800</b><span><span class="zh">次對話</span><span class="en">conversations</span></span></div>
             <div><b>2,310</b><span><span class="zh">人受益</span><span class="en">people helped</span></span></div>
@@ -507,7 +514,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <div class="eyebrow reveal"><span class="zh">現在就可以</span><span class="en">Right now</span></div>
         <p class="h1 reveal d1"><span class="zh">拿出手機，<br><span class="blue">讓 NGO 的 agent 繼續服務。</span></span><span class="en">Take out your phone.<br><span class="blue">Keep the NGO's agent running.</span></span></p>
         <p class="sub reveal d2"><span class="zh">每一筆捐款都進到 NGO 的 AI 額度，台上的儀表板即時更新。</span><span class="en">Every gift goes into the NGO's AI credits. Watch the console update live.</span></p>
-        <div class="ngos reveal d3"><span class="lbl"><span class="zh">這筆捐款支持</span><span class="en">Your gift supports</span></span><span class="ngo"><span class="mono">華</span><span><span class="zh">華山基金會</span><span class="en">Hwa Shan Foundation</span></span></span><span class="ngo"><span class="mono">救</span><span><span class="zh">台灣動物緊急救援小組</span><span class="en">Animal Rescue Team Taiwan</span></span></span><span class="ngo"><span class="mono">1/40</span><span>One-Forty</span></span></div>
+        <div class="ngos reveal d3"><span class="lbl"><span class="zh">這筆捐款支持</span><span class="en">Your gift supports</span></span><span class="ngo"><span class="mono">華</span><span><span class="zh">華山基金會</span><span class="en">Hwa Shan Foundation</span></span></span><span class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><span><span class="zh">台灣動物緊急救援小組</span><span class="en">Animal Rescue Team Taiwan</span></span></span><span class="ngo"><span class="logo-chip sq"><img class="ngo-logo" src="assets/ngo/oneforty.png" alt="One-Forty"></span><span>One-Forty</span></span></div>
         <p class="url reveal d3" id="donate-url"></p>
       </div>
       <div class="qr reveal d1" id="qr"></div>
