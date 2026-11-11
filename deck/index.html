@@ -151,6 +151,17 @@ html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-he
 @keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
 @keyframes wob{0%,100%{transform:rotate(0)}50%{transform:rotate(-8deg) scale(1.06)}}
 .offer{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:var(--pill);background:var(--accent);color:#fff;font-weight:500;font-size:clamp(15px,1.4vw,24px)}
+
+.brands{display:flex;flex-direction:column;align-items:center;gap:2vh;margin-top:1vh}
+.brands .lbl{font-size:clamp(14px,1.2vw,21px);color:var(--muted)}
+.brands .lbl:last-child{color:var(--accent-2)}
+.brands .row{display:flex;align-items:center;justify-content:center;gap:clamp(24px,3.6vw,64px);flex-wrap:wrap}
+.brands img{height:clamp(20px,2vw,36px);width:auto;filter:brightness(0) invert(1);opacity:.85}
+.brands img[alt="Anthropic"]{height:clamp(13px,1.25vw,22px)}
+.brands img[alt="NVIDIA"]{height:clamp(17px,1.7vw,30px)}
+.js .slide:not(.seen) .brands img{opacity:0;transform:translateY(16px)}
+.brands img{transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.brands img:nth-child(2){transition-delay:.1s}.brands img:nth-child(3){transition-delay:.2s}.brands img:nth-child(4){transition-delay:.3s}.brands img:nth-child(5){transition-delay:.4s}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -473,6 +484,30 @@ body.idle .chrome{opacity:0;pointer-events:none}
     </div>
   </section>
 
+  <!-- 8 -->
+  <section class="slide" aria-label="8">
+    <div class="inner">
+      <p class="h2 reveal"><span class="zh">每一塊都有人做過，<br><span class="dim">還沒有人把它們接起來。</span></span><span class="en">Every piece has been proven.<br><span class="dim">Nobody has connected them.</span></span></p>
+      <div class="nums reveal d1">
+        <div class="num"><span class="n blue">28</span><span class="l"><span class="zh">家企業與機構，把算力捐進美國 NAIRR</span><span class="en">organizations pooled compute in the US NAIRR pilot</span></span></div>
+        <div class="num"><span class="n">50+</span><span class="l"><span class="zh">種語言，IRC Signpost 用 AI 服務難民</span><span class="en">languages served by IRC Signpost's AI for refugees</span></span></div>
+        <div class="num"><span class="n">120+</span><span class="l"><span class="zh">個公益組織，獲得科技公司 AI 協助</span><span class="en">nonprofits got pro bono AI help from tech companies</span></span></div>
+        <div class="num"><span class="n blue">0</span><span class="l"><span class="zh">個中立平台，把閒置算力接給 NGO</span><span class="en">neutral platforms connect spare AI to NGOs</span></span></div>
+      </div>
+      <div class="brands reveal d2">
+        <span class="lbl"><span class="zh">大公司都在捐 AI 給 NGO，但各捐各的</span><span class="en">Big tech already gives AI to NGOs, each on its own</span></span>
+        <div class="row">
+          <img src="assets/brands/microsoft.svg" alt="Microsoft">
+          <img src="assets/brands/google.svg" alt="Google">
+          <img src="assets/brands/openai.svg" alt="OpenAI">
+          <img src="assets/brands/anthropic.svg" alt="Anthropic">
+          <img src="assets/brands/nvidia.svg" alt="NVIDIA">
+        </div>
+        <span class="lbl"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe between them</span></span>
+      </div>
+    </div>
+  </section>
+
   <!-- 6b Donor cards -->
   <section class="slide" aria-label="Donors">
     <div class="inner">
@@ -571,19 +606,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <div class="pillar on"><span class="w"><span class="zh">部署</span><span class="en">Deploy</span></span><p><span class="zh">一鍵上線到 LINE、網頁、語音</span><span class="en">One click to LINE, web and voice</span></p></div>
       </div>
       <div class="powered reveal d2"><span><span class="zh">全部跑在正式環境運作中的</span><span class="en">All running in production on</span></span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
-    </div>
-  </section>
-
-  <!-- 8 -->
-  <section class="slide" aria-label="8">
-    <div class="inner">
-      <p class="h2 reveal"><span class="zh">每一塊都有人做過，<br><span class="dim">還沒有人把它們接起來。</span></span><span class="en">Every piece has been proven.<br><span class="dim">Nobody has connected them.</span></span></p>
-      <div class="nums reveal d1">
-        <div class="num"><span class="n blue">28</span><span class="l"><span class="zh">家企業與機構，把算力捐進美國 NAIRR</span><span class="en">organizations pooled compute in the US NAIRR pilot</span></span></div>
-        <div class="num"><span class="n">50+</span><span class="l"><span class="zh">種語言，IRC Signpost 用 AI 服務難民</span><span class="en">languages served by IRC Signpost's AI for refugees</span></span></div>
-        <div class="num"><span class="n">120+</span><span class="l"><span class="zh">個公益組織，獲得科技公司 AI 協助</span><span class="en">nonprofits got pro bono AI help from tech companies</span></span></div>
-        <div class="num"><span class="n blue">0</span><span class="l"><span class="zh">個中立平台，把閒置算力接給 NGO</span><span class="en">neutral platforms connect spare AI to NGOs</span></span></div>
-      </div>
     </div>
   </section>
 

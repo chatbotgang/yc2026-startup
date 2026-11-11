@@ -4,3 +4,5 @@ migrant.jpg | Foreign Care-Giver Using Mobile phone in Central Court of Shin Kon
 
 Background plates (../*.webp): Unsplash License — cosmos-field (雙 film), leaves-bokeh (Natalie Kinnear), lavender-soft (Tatyana Rubleva).
 All photos are shown in black and white in the deck and are illustrative; they are unrelated to the NGOs named.
+
+Brand logos (assets/brands/*.svg): Microsoft, Google, OpenAI, Anthropic, NVIDIA — downloaded from Wikimedia Commons, shown as nominative references to their public nonprofit AI programs. Trademarks belong to their owners.
