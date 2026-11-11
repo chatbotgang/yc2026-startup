@@ -7,7 +7,7 @@ import { copyFileSync, readFileSync, rmSync, mkdirSync, writeFileSync } from "no
 
 const ref = process.argv[2] ?? "origin/kade/share-the-speed-deck";
 const out = "public/deck";
-const DONATE_URL = "https://ngo.cresclab.com/pay";
+const DONATE_URL = "https://yc2026-wallet-310672118987.asia-east1.run.app/pay";
 
 execSync("git fetch -q origin", { stdio: "inherit" });
 rmSync(out, { recursive: true, force: true });
