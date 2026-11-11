@@ -22,6 +22,7 @@
 | `STRIPE_SECRET_KEY` | Secret Manager | `stripe-secret-key:latest` |
 | `STRIPE_WEBHOOK_SECRET` | Secret Manager | `stripe-webhook-secret:latest` |
 | `STRIPE_WALLET_CUSTOMER_ID` | 一般環境變數 | 儲值金所在的 Stripe customer ID |
+| `STRIPE_PAYMENT_METHOD_CONFIG` | 一般環境變數 | 付款方式設定（只開信用卡、Apple Pay、Google Pay）；test / live 是不同的 ID |
 
 公開存取（`allUsers` 有 `roles/run.invoker`）也已經設好，路人不用登入就能開。
 

@@ -51,6 +51,10 @@ export async function startTopUp(
     payment_intent_data: { metadata: { purpose: TOPUP_PURPOSE } },
     integration_identifier: INTEGRATION_ID,
     submit_type: "donate",
+    // Card + Apple Pay + Google Pay only (no Link). Per-mode config ID, see .env.example.
+    ...(process.env.STRIPE_PAYMENT_METHOD_CONFIG && {
+      payment_method_configuration: process.env.STRIPE_PAYMENT_METHOD_CONFIG,
+    }),
     branding_settings: {
       button_color: "#059669",
       border_style: "rounded",
