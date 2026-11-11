@@ -6,7 +6,7 @@ c0mpiled-18 YC Startup School Hackathon（台北）的現場簡報。單一 HTML
 
 https://share-the-speed.vercel.app （Vercel，Kade 個人帳號 kaddwangs-projects，專案 share-the-speed）
 
-更新線上版：把 deck/ 的內容複製到一個乾淨資料夾，在那裡執行 `vercel deploy --prod --yes --name share-the-speed`。
+更新線上版：把 deck/ 裡的 index.html、donate-widget.js、assets/ 複製到一個乾淨資料夾，在那裡執行 `vercel deploy --prod --yes --name share-the-speed`。注意 donate-widget.js 要一起帶，否則每頁右上角的捐款 QR 不會出現。
 
 ## 打開
 
