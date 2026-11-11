@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
+  // /display serves the presentation deck in public/deck (synced with `pnpm deck:sync`).
+  rewrites() {
+    return [{ source: "/display", destination: "/deck/index.html" }];
+  },
   turbopack: {
     rules: {
       "*.css": {

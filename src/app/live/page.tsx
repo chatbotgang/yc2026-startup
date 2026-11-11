@@ -2,22 +2,21 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import QRCode from "qrcode";
-import { siteOrigin } from "@/lib/origin";
 import { getWalletSnapshot } from "@/lib/wallet";
 import { LiveBalance } from "./live-balance";
 
 export const metadata: Metadata = { title: "Share the Speed · Live" };
 
+// Where the QR sends people. Separate from SITE_URL, which Checkout redirects depend on.
+const DONATE_PAGE_URL = process.env.DONATE_PAGE_URL ?? "https://ngo.cresclab.com/";
+
 async function Board() {
   await connection();
-  const [initial, origin] = await Promise.all([
-    getWalletSnapshot().catch((err) => {
-      console.error("[display] balance read failed", err);
-      return null;
-    }),
-    siteOrigin(),
-  ]);
-  const donateUrl = `${origin}/`;
+  const initial = await getWalletSnapshot().catch((err) => {
+    console.error("[live] balance read failed", err);
+    return null;
+  });
+  const donateUrl = DONATE_PAGE_URL;
   // Dark modules on white: inverted QR codes don't scan reliably on every phone.
   const qrSvg = await QRCode.toString(donateUrl, { type: "svg", margin: 0, errorCorrectionLevel: "M" });
   const isLocal = /^https?:\/\/(localhost|127\.|\[::1\])/.test(donateUrl);
