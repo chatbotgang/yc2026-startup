@@ -248,6 +248,34 @@ html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
 .fstrip img{height:clamp(14px,1.3vw,22px);width:auto;filter:brightness(0) invert(1);opacity:.75}
 .fstrip img.anth{height:clamp(10px,.85vw,15px)}
 @media (max-width:900px){.fcopy{align-items:center;text-align:center}}
+
+/* ===== 90-point upgrades ===== */
+.ticker{display:flex;flex-direction:column;align-items:center;gap:1vh;margin-top:2vh}
+.tnum{font-family:var(--font-mono);font-size:clamp(34px,4.2vw,80px);font-weight:400;letter-spacing:-0.02em;color:var(--accent-2);font-variant-numeric:tabular-nums}
+.ticker .tl{font-size:clamp(13px,1.1vw,19px);color:var(--subtle);max-width:40em}
+.sflow{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr auto;align-items:center;gap:1vw;width:min(1300px,94vw);margin:2vh auto 0}
+.node{display:flex;flex-direction:column;align-items:center;gap:1.2vh;min-width:0}
+.node b{font-weight:500;font-size:clamp(13px,1.1vw,19px);color:var(--fg);white-space:nowrap}
+.node.you .dotsq{width:clamp(70px,6vw,110px);aspect-ratio:1;border-radius:18px;border:1px dashed var(--border-strong);
+  background-image:radial-gradient(circle,var(--accent-2) 2px,transparent 2.6px);background-size:12px 12px;opacity:.9}
+.node.lab img{width:clamp(70px,6vw,110px);height:auto;background:#fff;border-radius:22px;padding:10px;box-shadow:0 0 0 6px rgba(69,134,240,.25),0 20px 60px -20px rgba(69,134,240,.8)}
+.node.ngo .trio{display:flex;flex-direction:column;gap:6px;align-items:center}
+.node.ppl .faces{display:flex}
+.node.ppl .faces span{width:clamp(48px,4vw,74px);aspect-ratio:1;border-radius:50%;background-size:cover;filter:grayscale(1) contrast(1.1);border:3px solid var(--bg);margin-left:-14px}
+.node.ppl .faces span:first-child{margin-left:0}
+.pipe{position:relative;height:2px;background:var(--border-strong);overflow:visible}
+.pipe i{position:absolute;top:-4px;left:0;width:10px;height:10px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 14px var(--accent-2);opacity:0}
+.slide.seen .pipe i{animation:travel 3.2s cubic-bezier(.45,0,.55,1) infinite}
+.slide.seen .pipe:nth-of-type(4) i{animation-delay:1s}.slide.seen .pipe:nth-of-type(6) i{animation-delay:2s}
+@keyframes travel{0%{left:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:calc(100% - 10px);opacity:0}}
+@media (max-width:900px){.sflow{grid-template-columns:minmax(0,1fr)}.pipe{height:28px;width:2px;justify-self:center}}
+.chat{display:flex;flex-direction:column;gap:1.4vh;max-width:30em}
+.bub{padding:12px 16px;border-radius:18px;font-size:clamp(14px,1.2vw,20px);line-height:1.45;max-width:92%}
+.bub.me{background:var(--sunken);border:1px solid var(--border-strong);align-self:flex-start;border-bottom-left-radius:6px}
+.bub.ai{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:6px}
+.js .slide:not(.seen) .bub{opacity:0;transform:translateY(16px)}
+.bub{transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.bub.me{transition-delay:.6s}.bub.ai{transition-delay:1.6s}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -420,6 +448,10 @@ body.idle .chrome{opacity:0;pointer-events:none}
     <div class="inner">
       <div class="eyebrow reveal">c0mpiled-18 · YC Startup School Hackathon · Taipei</div>
       <p class="h1 reveal d1"><span class="zh">今天晚上，<br>你用了多少 <span class="blue">token</span>？</span><span class="en">How many <span class="blue">tokens</span><br>did you use tonight?</span></p>
+      <div class="ticker reveal d2">
+        <span class="tnum" id="tick">0</span>
+        <span class="tl"><span class="zh">你看這頁的這幾秒，光 Google 就處理了這麼多 token（約每秒 12 億）</span><span class="en">tokens Google alone processed while you read this (about 1.2 billion per second)</span></span>
+      </div>
     </div>
   </section>
 
@@ -482,6 +514,15 @@ body.idle .chrome{opacity:0;pointer-events:none}
     <div class="inner">
       <div class="eyebrow reveal">Share the Speed · <span class="zh">我們的解法</span><span class="en">our answer</span></div>
       <p class="h1 reveal d1"><span class="zh">把你用不完的 AI，<br><span class="blue">分給被留下的弱勢。</span></span><span class="en">Share your spare AI<br><span class="blue">with the people left behind.</span></span></p>
+      <div class="sflow reveal d2" aria-label="Your spare AI flows through Agent Lab to NGO agents and the people they serve">
+        <div class="node you"><div class="dotsq"></div><b><span class="zh">你的閒置 AI 額度</span><span class="en">Your spare AI</span></b></div>
+        <div class="pipe"><i></i></div>
+        <div class="node lab"><img src="assets/agentlab/app-icon-512.png" alt=""><b>Agent Lab</b></div>
+        <div class="pipe"><i></i></div>
+        <div class="node ngo"><div class="trio"><span class="logo-chip"><img src="assets/ngo/huashan.jpg" alt=""></span><span class="logo-chip"><img src="assets/ngo/art.png" alt=""></span><span class="logo-chip sq"><img src="assets/ngo/oneforty.png" alt=""></span></div><b><span class="zh">NGO 的 AI agent</span><span class="en">NGO agents</span></b></div>
+        <div class="pipe"><i></i></div>
+        <div class="node ppl"><div class="faces"><span style="background-image:url('assets/photos/elder.jpg');background-position:52% 25%"></span><span style="background-image:url('assets/photos/dogs.jpg');background-position:60% 40%"></span><span style="background-image:url('assets/photos/migrant.jpg');background-position:58% 50%"></span></div><b><span class="zh">被留下的人</span><span class="en">People left behind</span></b></div>
+      </div>
       <p class="sub reveal d2"><span class="zh">把你的 AI 算力，分一份給服務弱勢的 NGO。<br>建置、部署，我們一起送。</span><span class="en">Share a slice of your AI capacity with the NGOs that serve people left behind.<br>We build and deploy the agent for them.</span></p>
     </div>
   </section>
@@ -490,7 +531,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
   <section class="slide howblue" aria-label="How">
     <div class="inner">
       <div class="eyebrow reveal"><span class="zh">解法 · 怎麼做到</span><span class="en">How it works</span></div>
-      <p class="h2 reveal d1"><span class="zh">捐錢買不到一個會動的 agent。<br><span class="blue">Agent Lab 把四件事接成一條線。</span></span><span class="en">Cash can't buy a working agent.<br><span class="blue">Agent Lab connects four pieces into one line.</span></span></p>
+      <p class="h2 reveal d1"><span class="zh">你的一筆捐款，<br><span class="blue">走完這四步，變成一個會動的 agent。</span></span><span class="en">Your gift<br><span class="blue">takes four steps to become a working agent.</span></span></p>
       <div class="flowline reveal d2">
         <div class="mod">
           <div class="ico"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3"/><path d="M5 14h22M10 19h5"/></svg></div>
@@ -559,8 +600,12 @@ body.idle .chrome{opacity:0;pointer-events:none}
     <div class="stage">
       <div style="display:flex;flex-direction:column;gap:2.6vh">
         <div class="eyebrow reveal"><span class="zh">現場 Demo</span><span class="en">Live demo</span></div>
-        <p class="h2 reveal d1"><span class="zh">每一次回答，<br><span class="blue">都用掉一點捐來的額度。</span></span><span class="en">Every answer<br><span class="blue">uses a little donated credit.</span></span></p>
-        <p class="sub reveal d2"><span class="zh">額度歸零，阿嬤的 agent 就會停下來。</span><span class="en">When credits hit zero, Grandma's agent stops.</span></p>
+        <p class="h2 reveal d1"><span class="zh">每一次回答，<br><span class="blue">都在用捐來的額度。</span></span><span class="en">Every answer<br><span class="blue">uses a little donated credit.</span></span></p>
+        <div class="chat reveal d2">
+          <div class="bub me"><span class="zh">剛剛「健保局」打來說我的卡被盜用，要我轉帳，是真的嗎？</span><span class="en">"The health bureau" says my card was stolen and I must transfer money. Is it real?</span></div>
+          <div class="bub ai"><span class="zh">這是詐騙，請不要轉帳。我已經通知你的社工林小姐。</span><span class="en">It's a scam. Don't transfer anything. I've alerted your caseworker.</span></div>
+        </div>
+        <p class="sub reveal d3"><span class="zh">額度歸零，阿嬤的 agent 就會停下來。</span><span class="en">When credits hit zero, Grandma's agent stops.</span></p>
       </div>
       <div class="console reveal d2" id="console">
         <div class="top"><span class="ttl"><span class="dot"></span>Agent Lab Impact Console</span><span class="pill" id="status"><i></i><span class="zh">服務中</span><span class="en">Online</span></span></div>
@@ -964,6 +1009,12 @@ body.idle .chrome{opacity:0;pointer-events:none}
   (function(){var b=document.getElementById('qr2');if(!b)return;var u=window.DONATE_URL;
     if(u&&window.QRCode){new QRCode(b,{text:u,width:400,height:400,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}
     else{b.className='qr empty';b.innerHTML='<span>DONATE_URL</span>';}})();
+
+
+  /* opening ticker: Google ~3.2 quadrillion tokens / month ~= 1.23e9 per second */
+  (function(){var el=document.getElementById('tick');if(!el)return;var rate=1.23e9,t0=null,on=false;
+    function f(ts){if(!on)return;if(!t0)t0=ts;el.textContent=Math.floor((ts-t0)/1000*rate).toLocaleString('en-US');requestAnimationFrame(f);}
+    var sl=el.closest('.slide');new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!on){on=true;t0=null;requestAnimationFrame(f);}}else{on=false;}})},{root:document.getElementById('deck'),threshold:.5}).observe(sl);})();
 
   /* count-up numbers when a slide enters */
   function countUp(el){
