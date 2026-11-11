@@ -387,6 +387,23 @@ body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none
 .slogan p{margin:0;font-size:clamp(22px,2.3vw,42px);font-weight:600;letter-spacing:-0.02em;line-height:1.2;text-wrap:balance}
 html[data-lang="zh"] .slogan p{font-weight:500}
 .slogan .tag{font-size:clamp(13px,1.1vw,19px);color:var(--muted)}
+
+/* ===== final hero ===== */
+.slide[aria-label="Live"] .glow{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(48% 38% at 50% 20%,rgba(240,163,173,.16),transparent 70%),radial-gradient(60% 50% at 50% 30%,rgba(69,134,240,.22),transparent 72%)}
+.herofinal{gap:3.6vh}
+.slogan.hero{background:none;border:0;padding:0;max-width:none;gap:1.6vh}
+.slogan.hero .heart{width:clamp(30px,2.6vw,48px);stroke:#f0a3ad;filter:drop-shadow(0 0 18px rgba(240,163,173,.6))}
+.slogan.hero p{font-size:clamp(30px,3.8vw,72px);font-weight:600;letter-spacing:-0.035em;line-height:1.06;
+  background:linear-gradient(180deg,#ffffff 30%,#c9d8f5);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-lang="zh"] .slogan.hero p{letter-spacing:-0.01em;line-height:1.18;font-weight:500}
+.slogan.hero .tag{font-family:var(--font-mono);font-size:clamp(12px,1vw,17px);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2)}
+.herofinal .stage{border-top:1px solid var(--border);padding-top:3.4vh;gap:3vw;grid-template-columns:minmax(0,1fr) minmax(0,.95fr)}
+.herofinal .livecol{gap:1.8vh}
+.herofinal .livecol .h2{font-size:clamp(24px,2.4vw,44px)}
+.herofinal .console{gap:1.4vh;padding:clamp(14px,1.4vw,24px)}
+.herofinal .credits{font-size:clamp(36px,3.6vw,64px)}
+.herofinal .log{min-height:0}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -678,15 +695,17 @@ body.idle .chrome{opacity:0;pointer-events:none}
 
   <!-- Close: tonight-only double impact + live demo -->
   <section class="slide" aria-label="Live">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="inner herofinal">
+      <div class="slogan hero reveal">
+        <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.3 3 5 6.2 5c2 0 3.3 1.1 3.8 2.2h.0C10.5 6.1 11.8 5 13.8 5 17 5 18.8 8.3 17.2 11.4 15 15.6 12 20 12 20z" transform="translate(1 0)"/></svg>
+        <p><span class="zh">AI 不該因為有人付不起，<br>就停止幫忙。</span><span class="en">AI should never stop helping<br>because someone can't afford it.</span></p>
+        <span class="tag">Agent Lab — Compute for Good.</span>
+      </div>
     <div class="stage">
       <div class="livecol">
         <div class="eyebrow reveal"><span class="zh">只有今晚 · 兩倍捐贈</span><span class="en">Tonight only · Double the impact</span></div>
         <p class="h2 reveal d1"><span class="zh">你捐多少，<br><span class="blue">影響力就變成兩倍。</span></span><span class="en">Whatever you give,<br><span class="blue">we double the impact.</span></span></p>
-        <div class="slogan reveal d2">
-          <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.3 3 5 6.2 5c2 0 3.3 1.1 3.8 2.2h.0C10.5 6.1 11.8 5 13.8 5 17 5 18.8 8.3 17.2 11.4 15 15.6 12 20 12 20z" transform="translate(1 0)"/></svg>
-          <p><span class="zh">AI 不該因為有人付不起，<br>就停止幫忙。</span><span class="en">AI should never stop helping<br>because someone can't afford it.</span></p>
-          <span class="tag">Agent Lab — Compute for Good.</span>
-        </div>
         <p class="sub reveal d2"><span class="zh">掃右下角的 QR，看阿嬤的 agent 恢復服務。</span><span class="en">Scan the QR in the corner and watch Grandma's agent come back.</span></p>
         <div class="powered reveal d3" style="justify-content:flex-start"><span>Share the Speed · Crescendo AI Gateway ·</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
       </div>
@@ -709,6 +728,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
         </div>
         <ul class="log" id="log" aria-live="polite"></ul>
       </div>
+    </div>
     </div>
   </section>
 
