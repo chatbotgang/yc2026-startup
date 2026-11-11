@@ -201,6 +201,27 @@ html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-he
 .mod h3{margin:0;font-size:clamp(20px,1.9vw,34px);font-weight:500;letter-spacing:-0.02em}
 .mod p{margin:0;font-size:clamp(13px,1.1vw,19px);color:var(--muted);line-height:1.5}
 @media (max-width:900px){.flowline{grid-template-columns:repeat(2,minmax(0,1fr))}.flowline::before{display:none}}
+
+/* ===== solution cards ===== */
+.ps{display:flex;flex-direction:column;gap:4px}
+.ps .k{font-family:var(--font-mono);font-size:clamp(10px,.8vw,13px);letter-spacing:.08em;text-transform:uppercase;width:fit-content}
+.ps .k.pain{color:var(--petal)}
+.ps .k.fix{color:var(--accent-2)}
+.ps p{margin:0}
+/* ===== final ===== */
+.fin{gap:3.4vh}
+.fgrid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1fr);gap:2.4vw;width:min(1400px,94vw);align-items:center}
+.fcol{display:flex;flex-direction:column;align-items:center;gap:2vh}
+.qcol .qr{width:clamp(180px,15vw,280px)}
+.dcard.dmini{gap:1.4vh;text-align:left}
+.dcard.dmini .amt{font-size:clamp(40px,4vw,72px)}
+.bcol .lbl{font-size:clamp(13px,1.1vw,19px);color:var(--muted);text-align:center}
+.bcol .lbl.hi{color:var(--accent-2)}
+.blogos{display:grid;grid-template-columns:repeat(2,auto);gap:2.2vh 2.4vw;justify-content:center;align-items:center}
+.blogos img{height:clamp(18px,1.7vw,30px);width:auto;filter:brightness(0) invert(1);opacity:.85}
+.blogos img[alt="Anthropic"]{height:clamp(12px,1.1vw,20px)}
+.blogos img:last-child{grid-column:1 / -1;justify-self:center}
+@media (max-width:1000px){.fgrid{grid-template-columns:minmax(0,1fr)}}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -477,14 +498,15 @@ body.idle .chrome{opacity:0;pointer-events:none}
   <!-- 4b Three NGOs, three scenarios -->
   <section class="slide" aria-label="Scenarios">
     <div class="inner">
-      <p class="h2 reveal"><span class="zh">同一份算力，幫到三種被留下的人。</span><span class="en">One pool of compute. Three groups no longer left behind.</span></p>
+      <div class="eyebrow reveal">Solution</div>
+      <p class="h2 reveal d1"><span class="zh">每個 NGO，都有自己的 <span class="blue">AI agent</span>。</span><span class="en">Every NGO gets its own <span class="blue">AI agent</span>.</span></p>
       <div class="scen reveal d1">
         <article class="sc">
           <div class="ph"><i style="background-image:url('assets/photos/elder.jpg');background-position:52% 30%"></i></div>
           <div class="tx">
             <span class="tag"><span class="zh">偏鄉長者</span><span class="en">Rural elders</span></span>
             <div class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/huashan.jpg" alt="華山基金會"></span><h3><span class="zh">例如：華山基金會</span><span class="en">e.g. Hwa Shan Foundation</span></h3></div>
-            <p><span class="zh">各地「天使站」照顧失能、失智、失依的長輩。agent 幫長輩判斷詐騙電話、讀懂補助通知，異常時通知社工。</span><span class="en">Local "angel stations" care for frail elders. The agent screens scam calls, reads subsidy notices, and alerts a caseworker when something is wrong.</span></p>
+            <div class="ps"><span class="k pain"><span class="zh">痛點</span><span class="en">Problem</span></span><p><span class="zh">長輩分不出詐騙、看不懂通知，社工一個人顧幾十位。</span><span class="en">Elders can't spot scams or read notices; one caseworker covers dozens.</span></p></div><div class="ps"><span class="k fix"><span class="zh">Agent 怎麼解</span><span class="en">Agent solution</span></span><p><span class="zh">24 小時接長輩的問題，判斷詐騙、讀懂通知，異常立刻通知社工。</span><span class="en">Answers elders 24/7, flags scams, explains notices, alerts the caseworker.</span></p></div>
           </div>
         </article>
         <article class="sc">
@@ -492,7 +514,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
           <div class="tx">
             <span class="tag"><span class="zh">流浪動物</span><span class="en">Stray animals</span></span>
             <div class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><h3><span class="zh">例如：台灣動物緊急救援小組</span><span class="en">e.g. Animal Rescue Team Taiwan</span></h3></div>
-            <p><span class="zh">台灣仍有約 14 萬隻流浪狗。agent 接手救援通報分流、認養問答與志工排班，讓人力留給現場。</span><span class="en">Taiwan still has about 141,500 stray dogs. The agent triages rescue reports, answers adoption questions and schedules volunteers.</span></p>
+            <div class="ps"><span class="k pain"><span class="zh">痛點</span><span class="en">Problem</span></span><p><span class="zh">約 14 萬隻流浪狗，通報和認養詢問塞爆志工的手機。</span><span class="en">About 141,500 stray dogs; reports and adoption questions flood volunteers.</span></p></div><div class="ps"><span class="k fix"><span class="zh">Agent 怎麼解</span><span class="en">Agent solution</span></span><p><span class="zh">自動分流救援通報、回答認養問題、排志工班，人力留給現場。</span><span class="en">Triages reports, answers adoption questions, schedules volunteers.</span></p></div>
           </div>
         </article>
         <article class="sc">
@@ -500,7 +522,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
           <div class="tx">
             <span class="tag"><span class="zh">移工翻譯</span><span class="en">Migrant workers</span></span>
             <div class="ngo"><span class="logo-chip sq"><img class="ngo-logo" src="assets/ngo/oneforty.png" alt="One-Forty"></span><h3><span class="zh">例如：One-Forty 四十分之一</span><span class="en">e.g. One-Forty</span></h3></div>
-            <p><span class="zh">台灣有近 90 萬移工。agent 用母語解釋契約、就醫與求助管道，法律或安全問題轉給社工。</span><span class="en">Taiwan has nearly 900,000 migrant workers. The agent explains contracts, clinics and help lines in their language, and hands legal or safety issues to staff.</span></p>
+            <div class="ps"><span class="k pain"><span class="zh">痛點</span><span class="en">Problem</span></span><p><span class="zh">近 90 萬移工，語言不通，看不懂契約、找不到求助管道。</span><span class="en">Nearly 900,000 migrant workers who can't read contracts or find help.</span></p></div><div class="ps"><span class="k fix"><span class="zh">Agent 怎麼解</span><span class="en">Agent solution</span></span><p><span class="zh">用母語解釋契約與就醫流程，法律或安全問題轉給社工。</span><span class="en">Explains contracts and clinics in their language; hands legal or safety issues to staff.</span></p></div>
           </div>
         </article>
       </div>
@@ -564,6 +586,42 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <p class="src reveal d3"><span class="zh">起點：台北市中山區南京東路三段 8 號（今晚會場）。據點與數字為示意。</span><span class="en">Origin: No. 8, Sec. 3, Nanjing E. Rd., Taipei (tonight's venue). Sites and figures are illustrative.</span></p>
       </div>
       <svg class="twmap reveal d1" id="twmap" viewBox="0 0 560 800" role="img" aria-label="Map of Taiwan with donations flowing from Taipei to rural towns"></svg>
+    </div>
+  </section>
+
+  <!-- Final: close + QR + donor card + big tech -->
+  <section class="slide" aria-label="Final">
+    <div class="plate" style="--img:url('assets/leaves-bokeh.webp')" aria-hidden="true"></div>
+    <div class="inner fin">
+      <p class="h2 reveal"><span class="zh">不只我們被加速，<span class="blue">讓整個世界一起被加速。</span></span><span class="en">Not just us. <span class="blue">Let's speed up the whole world.</span></span></p>
+      <div class="fgrid reveal d1">
+        <div class="fcol qcol">
+          <div class="qrbox"><div class="qr" id="qr2"></div><span class="match">×2</span></div>
+          <span class="offer"><span class="zh">你捐一份，Agent Lab 加碼一份</span><span class="en">You give one, Agent Lab matches it</span></span>
+        </div>
+        <article class="dcard corp dmini">
+          <div class="dtop"><span class="who"><span class="zh">你的名字會在這裡</span><span class="en">Your name goes here</span></span></div>
+          <div class="amt">2,000 <small>credits</small></div>
+          <div class="dl"><span class="zh">支持</span><span class="en">Supporting</span> <span class="ngo inline stack"><span class="mono logo-mini"><img src="assets/ngo/huashan.jpg" alt=""></span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt=""></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt=""></span></span></div>
+          <div class="by">Donated by <b><span class="zh">你</span><span class="en">you</span></b></div>
+        </article>
+        <div class="fcol bcol">
+          <span class="lbl"><span class="zh">大公司都在捐 AI，但各捐各的</span><span class="en">Big tech gives AI, each on its own</span></span>
+          <div class="blogos">
+            <img src="assets/brands/microsoft.svg" alt="Microsoft"><img src="assets/brands/google.svg" alt="Google"><img src="assets/brands/openai.svg" alt="OpenAI"><img src="assets/brands/anthropic.svg" alt="Anthropic"><img src="assets/brands/nvidia.svg" alt="NVIDIA">
+          </div>
+          <span class="lbl hi"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe</span></span>
+        </div>
+      </div>
+      <div class="powered reveal d2"><span>Share the Speed · Agent Lab by</span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
+    </div>
+  </section>
+
+  <!-- QA divider -->
+  <section class="slide" aria-label="QA">
+    <div class="inner">
+      <div class="eyebrow reveal">Q&amp;A</div>
+      <p class="h2 reveal d1"><span class="zh">補充資料</span><span class="en">Appendix</span></p>
     </div>
   </section>
 
@@ -637,15 +695,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <div class="step"><span class="w blue">Agent Lab</span><p><span class="zh">商業客戶付費，NGO 免費使用</span><span class="en">Businesses pay, NGOs use it free</span></p></div>
       </div>
       <div class="offer reveal d2"><span class="zh">今晚你捐一份，Agent Lab 加碼一份。</span><span class="en">Tonight, every gift is matched by Agent Lab.</span></div>
-      <div class="powered reveal d3"><span>Share the Speed · powered by</span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
-    </div>
-  </section>
-
-  <!-- QA divider -->
-  <section class="slide" aria-label="QA">
-    <div class="inner">
-      <div class="eyebrow reveal">Q&amp;A</div>
-      <p class="h2 reveal d1"><span class="zh">補充資料</span><span class="en">Appendix</span></p>
+      <div class="powered reveal d3"><span>Share the Speed · Agent Lab by</span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
     </div>
   </section>
 
@@ -688,7 +738,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <div class="pillar on"><span class="w"><span class="zh">建置</span><span class="en">Build</span></span><p><span class="zh">NGO 不寫程式，就能做出自己的 agent</span><span class="en">NGOs build their own agent with no code</span></p></div>
         <div class="pillar on"><span class="w"><span class="zh">部署</span><span class="en">Deploy</span></span><p><span class="zh">一鍵上線到 LINE、網頁、語音</span><span class="en">One click to LINE, web and voice</span></p></div>
       </div>
-      <div class="powered reveal d2"><span><span class="zh">全部跑在正式環境運作中的</span><span class="en">All running in production on</span></span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
+      <div class="powered reveal d2"><span><span class="zh">全部跑在正式環境運作中的 Agent Lab，by</span><span class="en">All running in production on Agent Lab, by</span></span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
     </div>
   </section>
 
@@ -883,6 +933,12 @@ body.idle .chrome{opacity:0;pointer-events:none}
   document.addEventListener('fullscreenchange',syncFS);document.addEventListener('webkitfullscreenchange',syncFS);
   document.addEventListener('keydown',function(e){if((e.key==='f'||e.key==='F')&&!e.metaKey&&!e.ctrlKey){toggleFS();}});
   if(!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen))fsBtn.hidden=true;
+
+
+  /* second QR on the final slide */
+  (function(){var b=document.getElementById('qr2');if(!b)return;var u=window.DONATE_URL;
+    if(u&&window.QRCode){new QRCode(b,{text:u,width:400,height:400,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}
+    else{b.className='qr empty';b.innerHTML='<span>DONATE_URL</span>';}})();
 
   /* count-up numbers when a slide enters */
   function countUp(el){
