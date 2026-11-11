@@ -1,6 +1,5 @@
 "use server";
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   CURRENCY,
@@ -11,16 +10,9 @@ import {
   TOPUP_PURPOSE,
   stripe,
 } from "@/lib/stripe";
+import { siteOrigin } from "@/lib/origin";
 
 export type TopUpState = { error?: string };
-
-async function siteOrigin(): Promise<string> {
-  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, "");
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host");
-  const proto = h.get("x-forwarded-proto") ?? "http";
-  return `${proto}://${host}`;
-}
 
 export async function startTopUp(
   _prev: TopUpState,

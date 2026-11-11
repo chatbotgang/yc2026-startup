@@ -79,3 +79,32 @@ export async function creditTopUp(sessionId: string): Promise<CreditResult> {
   });
   return { status: "credited", amount };
 }
+
+export type WalletSnapshot = {
+  balance: number;
+  latest: { id: string; amount: number; created: number } | null;
+};
+
+let snapshot: { at: number; value: Promise<WalletSnapshot> } | null = null;
+const SNAPSHOT_TTL_MS = 2_000;
+
+/**
+ * Balance for the live display. Many screens poll this every few seconds, so each
+ * server instance reuses one Stripe read for up to 2s instead of one per request.
+ */
+export function getWalletSnapshot(): Promise<WalletSnapshot> {
+  const now = Date.now();
+  if (!snapshot || now - snapshot.at > SNAPSHOT_TTL_MS) {
+    const value = getWallet().then((w) => ({
+      balance: w.balance,
+      latest: w.recent[0]
+        ? { id: w.recent[0].id, amount: w.recent[0].amount, created: w.recent[0].created }
+        : null,
+    }));
+    value.catch(() => {
+      snapshot = null; // don't keep serving a failed read
+    });
+    snapshot = { at: now, value };
+  }
+  return snapshot.value;
+}
