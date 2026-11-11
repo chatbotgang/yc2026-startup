@@ -13,14 +13,14 @@
 | 網址 | https://yc2026-wallet-310672118987.asia-east1.run.app |
 | 執行身分 | `310672118987-compute@developer.gserviceaccount.com`（預設 compute service account） |
 | GitHub | https://github.com/chatbotgang/yc2026-startup（`main` 分支） |
-| Stripe | Crescendo Agent lab 帳號的 **test mode** |
+| Stripe | 正式環境用 `.env.local` 的 `PROD_*` key 那個環境（目前仍是 test mode 的 key）；本機開發用 `STRIPE_*` 那個測試環境，兩邊資料互不相通 |
 
 ### 服務的設定（已經設好，重新部署會沿用，不用再帶）
 
 | 名稱 | 類型 | 來源 |
 |---|---|---|
-| `STRIPE_SECRET_KEY` | Secret Manager | `stripe-secret-key:latest` |
-| `STRIPE_WEBHOOK_SECRET` | Secret Manager | `stripe-webhook-secret:latest` |
+| `STRIPE_SECRET_KEY` | Secret Manager | `stripe-secret-key-prod:latest` |
+| `STRIPE_WEBHOOK_SECRET` | Secret Manager | `stripe-webhook-secret-prod:latest` |
 | `STRIPE_WALLET_CUSTOMER_ID` | 一般環境變數 | 儲值金所在的 Stripe customer ID |
 | `STRIPE_PUBLISHABLE_KEY` | 一般環境變數 | 前端付款元件用的 publishable key（公開的，不是機密） |
 | `STRIPE_PAYMENT_METHOD_CONFIG` | 一般環境變數 | 付款方式設定（只開信用卡、Apple Pay、Google Pay）；test / live 是不同的 ID |
@@ -135,3 +135,14 @@ gcloud run services describe yc2026-wallet --region=asia-east1 \
 - 線上的 webhook endpoint（test mode）：`https://yc2026-wallet-310672118987.asia-east1.run.app/api/webhooks/stripe`，監聽 `payment_intent.succeeded`、`payment_intent.payment_failed`。
 - Apple Pay 需要註冊網域（Stripe Payment method domains），換網址時要重新註冊。
 - 目前只收測試卡，不會有真的錢。改收真錢前要：換成 live key、在 live mode 另建 webhook endpoint、補上退款/爭議款從儲值金扣回的處理。
+
+## 頁面
+
+| 路徑 | 內容 |
+|---|---|
+| `/` | 簡報 deck（同 `/display`） |
+| `/pay` | 付款頁（Apple Pay / Google Pay / 信用卡） |
+| `/live` | 即時看板 |
+| `/api/balance` | 公開的餘額 JSON（deck 和看板讀這個） |
+
+QR code 目前指向 Cloud Run 的 `/pay`；`ngo.cresclab.com` 可用後，改 `scripts/sync-deck.mjs`、`public/deck/index.html`、`src/app/live/page.tsx` 三處網址。
