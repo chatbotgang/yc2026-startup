@@ -497,9 +497,9 @@ body.idle .chrome{opacity:0;pointer-events:none}
     <div class="bleed" style="--img:url('assets/photos/elder.jpg')" aria-hidden="true"></div>
     <div class="stage s3">
       <div style="display:flex;flex-direction:column;gap:2.4vh">
-        <div class="eyebrow reveal"><span class="zh">在台灣，每天都在發生</span><span class="en">Happening in Taiwan every day</span></div>
-        <p class="h2 reveal d1"><span class="zh">晚上 9:47，<br>獨居的阿梅阿嬤，<br>接到<span class="blue">「健保局」的電話。</span></span><span class="en">9:47 pm. Grandma Mei,<br>who lives alone, gets a call<br><span class="blue">from "the health bureau."</span></span></p>
-        <p class="sub reveal d2"><span class="zh">她分不出真假。社工下班了，孩子在台北。</span><span class="en">She can't tell if it's real. Her caseworker is off. Her kids are in Taipei.</span></p>
+        <div class="eyebrow reveal"><span class="zh">晚上 9:47 · 在台灣每天都在發生</span><span class="en">9:47 pm · Happening in Taiwan every day</span></div>
+        <p class="h2 reveal d1"><span class="zh">獨居的阿嬤接到詐騙電話，<br><span class="blue">身邊卻沒有一個人可以問。</span></span><span class="en">Grandma gets a scam call,<br><span class="blue">and there's no one to ask.</span></span></p>
+        <p class="sub reveal d2"><span class="zh">「健保局」說她的卡被盜用、要她轉帳。社工下班了，孩子在台北。</span><span class="en">"The health bureau" says her card was stolen and she must transfer money. Her caseworker is off. Her kids are in Taipei.</span></p>
         <div class="facts reveal d3">
           <div><span class="n">1 / 4</span><span class="l"><span class="zh">長者獨居</span><span class="en">elders live alone</span></span></div>
           <div><span class="n">16.2<small><span class="zh">萬件</span><span class="en">K</span></small></span><span class="l"><span class="zh">2025 詐騙案</span><span class="en">scam cases in 2025</span></span></div>
@@ -553,13 +553,11 @@ body.idle .chrome{opacity:0;pointer-events:none}
         </div>
         <div class="mod hot">
           <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span>Agent Lab · AI Gateway</span></div>
-          <div class="shot" style="background-image:url('assets/agentlab/og-gateway.png')"></div>
           <h3>AI Gateway</h3>
           <p><span class="zh">分配預算、自動選模型、計量每一次呼叫；額度用完就暫停</span><span class="en">Allocates budget, routes models, meters every call; pauses when credits run out</span></p>
         </div>
         <div class="mod hot">
           <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span><span class="zh">Agent Lab · 部署</span><span class="en">Agent Lab · Deploy</span></span></div>
-          <div class="shot" style="background-image:url('assets/agentlab/og-deploy.png')"></div>
           <h3>Deployment</h3>
           <p><span class="zh">NGO 不寫程式，一鍵把 agent 上線到 LINE、網頁、語音</span><span class="en">No code: one click puts the agent on LINE, web and voice</span></p>
         </div>
@@ -1036,7 +1034,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
     function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/D),e=1-Math.pow(1-p,4);tn.nodeValue=fmt(target*e);if(p<1)requestAnimationFrame(step);}
     tn.nodeValue=fmt(0);setTimeout(function(){requestAnimationFrame(step)},350);
   }
-  var cuSel='.mega .blue,.num .n,.amt,.dstats b,.credits';
+  var cuSel='.num .n,.amt,.dstats b,.credits';
   var cuIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&e.intersectionRatio>.4){[].forEach.call(e.target.querySelectorAll(cuSel),function(n){if(n.id!=='credits')countUp(n)});}})},{root:document.getElementById('deck'),threshold:[.45]});
   [].forEach.call(document.querySelectorAll('.slide'),function(s){cuIO.observe(s)});
   document.getElementById('sponsor').addEventListener('click',function(){var c=document.getElementById('console');c.classList.remove('flash');void c.offsetWidth;c.classList.add('flash');});
