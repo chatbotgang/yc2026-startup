@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
 <script>
 /* ====== 現場設定：把 Stripe Payment Link 貼在這裡（或網址加 ?donate=連結）====== */
-window.DONATE_URL = '';
+window.DONATE_URL = 'https://yc2026-wallet-310672118987.asia-east1.run.app';
 (function(){var l='zh';try{var s=localStorage.getItem('deck-lang');if(s==='zh'||s==='en')l=s;}catch(e){}
 var q=/[?#&]lang=(zh|en)/.exec(location.href);if(q)l=q[1];
 var d=/[?&]donate=([^&#]+)/.exec(location.search);if(d)window.DONATE_URL=decodeURIComponent(d[1]);
@@ -182,6 +182,25 @@ html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-he
 .slide.seen .phone{animation:ring .5s ease-in-out 1.4s 4}
 @keyframes ring{0%,100%{transform:rotate(0)}25%{transform:rotate(-2.5deg)}75%{transform:rotate(2.5deg)}}
 @media (max-width:900px){.s3{grid-template-columns:minmax(0,1fr)}.phone{width:min(260px,70%)}}
+
+/* ===== how it works ===== */
+.flowline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4vw;width:min(1400px,94vw);position:relative;text-align:left}
+.flowline::before{content:"";position:absolute;left:4%;right:4%;top:calc(clamp(18px,1.6vw,26px) + clamp(22px,2.2vw,40px));height:2px;background:linear-gradient(90deg,var(--border-strong),var(--accent),var(--accent),var(--border-strong));
+  transform-origin:left;transform:scaleX(1);transition:transform 1.6s var(--ease) .4s;z-index:0}
+.js .slide:not(.seen) .flowline::before{transform:scaleX(0)}
+.mod{position:relative;z-index:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(18px,1.6vw,26px);display:flex;flex-direction:column;gap:1.2vh;min-width:0;
+  transition:opacity .9s var(--ease),transform 1s var(--ease)}
+.js .slide:not(.seen) .mod{opacity:0;transform:translateY(30px)}
+.mod:nth-child(2){transition-delay:.55s}.mod:nth-child(3){transition-delay:.8s}.mod:nth-child(4){transition-delay:1.05s}.mod:nth-child(1){transition-delay:.3s}
+.mod.hot{border-color:var(--accent);background:linear-gradient(180deg,#0c1830,var(--surface))}
+.mod .ico{width:clamp(44px,4.4vw,80px);aspect-ratio:1;border-radius:18px;display:grid;place-items:center;background:var(--sunken);border:1px solid var(--border-strong)}
+.mod.hot .ico{background:var(--accent);border-color:var(--accent)}
+.mod .ico svg{width:55%;height:55%;fill:none;stroke:var(--fg);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mod .tag{font-family:var(--font-mono);font-size:clamp(10px,.8vw,13px);letter-spacing:.06em;width:fit-content;padding:3px 10px;border-radius:var(--pill);border:1px solid var(--border-strong);color:var(--muted)}
+.mod .tag.prod{border-color:var(--accent);color:var(--accent-2)}
+.mod h3{margin:0;font-size:clamp(20px,1.9vw,34px);font-weight:500;letter-spacing:-0.02em}
+.mod p{margin:0;font-size:clamp(13px,1.1vw,19px);color:var(--muted);line-height:1.5}
+@media (max-width:900px){.flowline{grid-template-columns:repeat(2,minmax(0,1fr))}.flowline::before{display:none}}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -417,6 +436,41 @@ body.idle .chrome{opacity:0;pointer-events:none}
       <div class="eyebrow reveal">Share the Speed · <span class="zh">我們的解法</span><span class="en">our answer</span></div>
       <p class="h1 reveal d1"><span class="zh">把你用不完的 AI，<br><span class="blue">分給被留下的弱勢。</span></span><span class="en">Share your spare AI<br><span class="blue">with the people left behind.</span></span></p>
       <p class="sub reveal d2"><span class="zh">把你的 AI 算力，分一份給服務弱勢的 NGO。<br>建置、部署，我們一起送。</span><span class="en">Share a slice of your AI capacity with the NGOs that serve people left behind.<br>We build and deploy the agent for them.</span></p>
+    </div>
+  </section>
+
+  <!-- How: modules -->
+  <section class="slide" aria-label="How">
+    <div class="inner">
+      <div class="eyebrow reveal"><span class="zh">解法 · 怎麼做到</span><span class="en">How it works</span></div>
+      <p class="h2 reveal d1"><span class="zh">捐錢買不到一個會動的 agent。<br><span class="blue">Agent Lab 把四件事接成一條線。</span></span><span class="en">Cash can't buy a working agent.<br><span class="blue">Agent Lab connects four pieces into one line.</span></span></p>
+      <div class="flowline reveal d2">
+        <div class="mod">
+          <div class="ico"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3"/><path d="M5 14h22M10 19h5"/></svg></div>
+          <span class="tag now"><span class="zh">今晚上線</span><span class="en">Live tonight</span></span>
+          <h3><span class="zh">捐贈池</span><span class="en">Donation pool</span></h3>
+          <p><span class="zh">個人刷卡、企業撥出閒置額度，統一進到 NGO 的 AI 帳戶</span><span class="en">People pay by card, companies set aside spare capacity, all into the NGO's AI account</span></p>
+        </div>
+        <div class="mod hot">
+          <div class="ico"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="10"/><path d="M6 16h20M16 6c3 3 4 6.5 4 10s-1 7-4 10M16 6c-3 3-4 6.5-4 10s1 7 4 10"/></svg></div>
+          <span class="tag prod"><span class="zh">Agent Lab 正式運作中</span><span class="en">In production</span></span>
+          <h3>AI Gateway</h3>
+          <p><span class="zh">分配預算、自動選模型、計量每一次呼叫；額度用完就暫停</span><span class="en">Allocates budget, routes models, meters every call; pauses when credits run out</span></p>
+        </div>
+        <div class="mod hot">
+          <div class="ico"><svg viewBox="0 0 32 32"><path d="M16 5l9 5v12l-9 5-9-5V10z"/><path d="M7 10l9 5 9-5M16 15v12"/></svg></div>
+          <span class="tag prod"><span class="zh">Agent Lab 正式運作中</span><span class="en">In production</span></span>
+          <h3>Deployment</h3>
+          <p><span class="zh">NGO 不寫程式，一鍵把 agent 上線到 LINE、網頁、語音</span><span class="en">No code: one click puts the agent on LINE, web and voice</span></p>
+        </div>
+        <div class="mod">
+          <div class="ico"><svg viewBox="0 0 32 32"><path d="M6 25V7M6 25h20"/><path d="M10 20l5-5 4 3 6-7"/></svg></div>
+          <span class="tag now"><span class="zh">今晚上線</span><span class="en">Live tonight</span></span>
+          <h3><span class="zh">成效回報</span><span class="en">Impact report</span></h3>
+          <p><span class="zh">服務了誰、花了多少，回到每一位捐贈者手上</span><span class="en">Who was served and at what cost, back to every donor</span></p>
+        </div>
+      </div>
+      <p class="sub reveal d3"><span class="zh">NGO 只要提供知識和服務流程，其他我們全包。</span><span class="en">NGOs bring their knowledge and process. We handle the rest.</span></p>
     </div>
   </section>
 

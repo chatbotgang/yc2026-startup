@@ -24,7 +24,7 @@ cd deck && python3 -m http.server 4620
 
 ## Stripe 捐款 QR
 
-把 Stripe Payment Link 貼進 index.html 最上方的 `window.DONATE_URL`，或在網址後面加 `?donate=<連結>`。沒填時那一頁會顯示提示。
+預設指向本 repo 的儲值頁（Cloud Run：https://yc2026-wallet-310672118987.asia-east1.run.app ，目前是 Stripe test mode）。要換連結，改 index.html 最上方的 `window.DONATE_URL`，或在網址後面加 `?donate=<連結>`。
 
 ## 素材與數據
 
