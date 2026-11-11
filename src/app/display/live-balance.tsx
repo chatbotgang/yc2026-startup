@@ -2,24 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Snapshot = {
-  balance: number;
-  latest: { id: string; amount: number; created: number } | null;
-};
+type TopUp = { id: string; amount: number; created: number; name: string; message: string };
+type Snapshot = { balance: number; recent: TopUp[] };
 
 const POLL_MS = 3_000;
 const ANIMATE_MS = 1_200;
+const FLASH_MS = 6_000;
 const twd = (n: number) => `NT$${Math.round(n).toLocaleString("zh-TW")}`;
 
-export function LiveBalance({ initial }: { initial: Snapshot }) {
+export function LiveBalance({ initial, qr }: { initial: Snapshot; qr: React.ReactNode }) {
   const [target, setTarget] = useState(initial.balance);
   const [shown, setShown] = useState(initial.balance);
-  const [flash, setFlash] = useState<{ key: string; amount: number } | null>(null);
+  const [recent, setRecent] = useState(initial.recent);
+  const [flash, setFlash] = useState<TopUp | null>(null);
   const [stale, setStale] = useState(false);
-  const latestId = useRef(initial.latest?.id ?? null);
+  const latestId = useRef(initial.recent[0]?.id ?? null);
   const shownRef = useRef(initial.balance);
 
-  // Poll the balance.
+  // Poll the balance and sponsor feed.
   useEffect(() => {
     let alive = true;
     const tick = async () => {
@@ -30,9 +30,11 @@ export function LiveBalance({ initial }: { initial: Snapshot }) {
         if (!alive) return;
         setStale(false);
         setTarget(data.balance);
-        if (data.latest && data.latest.id !== latestId.current) {
-          latestId.current = data.latest.id;
-          setFlash({ key: data.latest.id, amount: data.latest.amount });
+        setRecent(data.recent);
+        const newest = data.recent[0];
+        if (newest && newest.id !== latestId.current) {
+          latestId.current = newest.id;
+          setFlash(newest);
         }
       } catch {
         if (alive) setStale(true);
@@ -53,8 +55,7 @@ export function LiveBalance({ initial }: { initial: Snapshot }) {
     let frame = 0;
     const step = (now: number) => {
       const t = Math.min(1, (now - start) / ANIMATE_MS);
-      const eased = 1 - Math.pow(1 - t, 3);
-      const value = from + (target - from) * eased;
+      const value = from + (target - from) * (1 - Math.pow(1 - t, 3));
       shownRef.current = value;
       setShown(value);
       if (t < 1) frame = requestAnimationFrame(step);
@@ -63,32 +64,59 @@ export function LiveBalance({ initial }: { initial: Snapshot }) {
     return () => cancelAnimationFrame(frame);
   }, [target]);
 
-  // Hide the "+NT$…" badge after a few seconds.
+  // Hide the "just topped up" card after a few seconds.
   useEffect(() => {
     if (!flash) return;
-    const id = setTimeout(() => setFlash(null), 4_000);
+    const id = setTimeout(() => setFlash(null), FLASH_MS);
     return () => clearTimeout(id);
   }, [flash]);
 
   return (
-    <div className="flex flex-col items-center gap-4 text-center lg:items-start lg:text-left">
-      <p className="text-xl text-zinc-400 lg:text-2xl">當前儲值金</p>
-      <p className="text-6xl font-semibold tabular-nums tracking-tight sm:text-7xl lg:text-9xl">
-        {twd(shown)}
-      </p>
-      <div className="h-12">
-        {flash && (
-          <p
-            key={flash.key}
-            className="animate-[pop_0.4s_ease-out] rounded-full bg-emerald-500/15 px-5 py-2 text-2xl font-medium text-emerald-400 tabular-nums"
-          >
-            +{twd(flash.amount)} 剛剛儲值
-          </p>
+    <div className="grid w-full max-w-6xl flex-1 grid-cols-1 items-center gap-10 px-6 py-10 lg:grid-cols-[1fr_22rem] lg:gap-16">
+      {/* Balance + newest sponsor */}
+      <div className="flex min-w-0 flex-col items-center gap-5 text-center lg:items-start lg:text-left">
+        <p className="text-xl text-muted-foreground lg:text-2xl">當前儲值金</p>
+        <p className="text-6xl font-mono font-semibold tabular-nums tracking-tighter sm:text-7xl lg:text-9xl">
+          {twd(shown)}
+        </p>
+        <div className="flex min-h-28 w-full max-w-xl items-start justify-center lg:justify-start">
+          {flash && (
+            <div
+              key={flash.id}
+              className="animate-[pop_0.4s_ease-out] rounded-2xl bg-primary/15 ring-1 ring-primary/30 px-6 py-4 text-left"
+            >
+              <p className="text-2xl font-medium text-foreground">
+                <span className="break-words">{flash.name}</span>
+                <span className="ml-3 tabular-nums text-primary">+{twd(flash.amount)}</span>
+              </p>
+              {flash.message && (
+                <p className="mt-1 break-words text-xl text-foreground">「{flash.message}」</p>
+              )}
+            </div>
+          )}
+        </div>
+        <p className={`text-sm ${stale ? "text-amber-400" : "text-muted-foreground/60"}`}>
+          {stale ? "連線中斷，重新連線中…" : "每 3 秒自動更新"}
+        </p>
+      </div>
+
+      {/* QR + sponsor feed */}
+      <div className="flex min-w-0 flex-col items-center gap-6">
+        {qr}
+        {recent.length > 0 && (
+          <ul className="flex w-full flex-col gap-2">
+            {recent.map((t) => (
+              <li key={t.id} className="rounded-xl bg-card ring-1 ring-border px-4 py-3">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="min-w-0 truncate font-medium">{t.name}</span>
+                  <span className="shrink-0 font-mono tabular-nums text-primary">+{twd(t.amount)}</span>
+                </div>
+                {t.message && <p className="mt-0.5 break-words text-sm text-muted-foreground">{t.message}</p>}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
-      <p className={`text-sm ${stale ? "text-amber-400" : "text-zinc-600"}`}>
-        {stale ? "連線中斷，重新連線中…" : "每 3 秒自動更新"}
-      </p>
     </div>
   );
 }

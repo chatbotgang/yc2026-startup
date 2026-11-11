@@ -17,25 +17,24 @@ async function Board() {
     color: { dark: "#ffffff", light: "#00000000" },
   });
 
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-12 px-6 py-12 lg:flex-row lg:gap-24">
-      <LiveBalance initial={initial} />
-      <div className="flex flex-col items-center gap-4">
-        <div
-          className="size-48 rounded-2xl bg-white/5 p-5 lg:size-64 [&>svg]:size-full"
-          dangerouslySetInnerHTML={{ __html: qrSvg }}
-        />
-        <p className="text-lg text-zinc-400">掃描 QR code 儲值</p>
-      </div>
+  const qr = (
+    <div className="flex flex-col items-center gap-3">
+      <div
+        className="size-40 rounded-2xl bg-card p-4 ring-1 ring-border lg:size-48 [&>svg]:size-full"
+        dangerouslySetInnerHTML={{ __html: qrSvg }}
+      />
+      <p className="text-muted-foreground">掃描 QR code 贊助</p>
     </div>
   );
+
+  return <LiveBalance initial={initial} qr={qr} />;
 }
 
 export default function DisplayPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-zinc-950 text-white">
+    <main className="dark flex min-h-screen flex-col items-center bg-background text-foreground">
       <Suspense
-        fallback={<div className="flex flex-1 items-center justify-center text-zinc-500">載入中…</div>}
+        fallback={<div className="flex flex-1 items-center justify-center text-muted-foreground">載入中…</div>}
       >
         <Board />
       </Suspense>

@@ -34,3 +34,17 @@ export const MAX_TOPUP = 100_000; // NT$
 /** Tag for Checkout Sessions created by this flow (shows up in the Stripe Dashboard). */
 export const INTEGRATION_ID = "wallet-topup-qhvmrtzk";
 export const TOPUP_PURPOSE = "wallet_topup";
+
+export const NAME_MAX = 20;
+export const MESSAGE_MAX = 60;
+export const ANONYMOUS = "匿名贊助者";
+
+/** Trim, drop control characters/newlines, collapse spaces, cap length (by characters). */
+export function cleanText(value: unknown, max: number): string {
+  if (typeof value !== "string") return "";
+  const text = value
+    .replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return Array.from(text).slice(0, max).join("");
+}

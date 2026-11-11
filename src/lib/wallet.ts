@@ -1,6 +1,24 @@
 import "server-only";
 import Stripe from "stripe";
-import { CURRENCY, MINOR_UNITS, TOPUP_PURPOSE, stripe, walletCustomerId } from "./stripe";
+import {
+  ANONYMOUS,
+  CURRENCY,
+  MESSAGE_MAX,
+  MINOR_UNITS,
+  NAME_MAX,
+  TOPUP_PURPOSE,
+  cleanText,
+  stripe,
+  walletCustomerId,
+} from "./stripe";
+
+export type TopUpRecord = {
+  id: string;
+  amount: number;
+  created: number;
+  name: string;
+  message: string;
+};
 
 /**
  * The stored-value balance lives in Stripe as the wallet customer's credit balance
@@ -18,12 +36,15 @@ export async function getWallet() {
   return {
     balance: -customer.balance / MINOR_UNITS || 0, // avoid "-0"
     currency: customer.currency ?? CURRENCY,
-    recent: txns.data.map((t) => ({
-      id: t.id,
-      amount: -t.amount / MINOR_UNITS,
-      created: t.created,
-      description: t.description,
-    })),
+    recent: txns.data.map(
+      (t): TopUpRecord => ({
+        id: t.id,
+        amount: -t.amount / MINOR_UNITS,
+        created: t.created,
+        name: t.metadata?.sponsor_name || ANONYMOUS,
+        message: t.metadata?.sponsor_message ?? "",
+      }),
+    ),
   };
 }
 
@@ -51,6 +72,8 @@ export async function creditTopUp(sessionId: string): Promise<CreditResult> {
   const amountMinor = session.amount_total;
   if (!pi || amountMinor == null) throw new Error(`Session ${sessionId} has no payment`);
   const amount = amountMinor / MINOR_UNITS;
+  const name = cleanText(session.metadata?.sponsor_name, NAME_MAX);
+  const message = cleanText(session.metadata?.sponsor_message, MESSAGE_MAX);
 
   if (pi.metadata.wallet_credit_txn) return { status: "already_credited", amount };
 
@@ -61,8 +84,13 @@ export async function creditTopUp(sessionId: string): Promise<CreditResult> {
       {
         amount: -amountMinor, // negative = credit
         currency: session.currency ?? CURRENCY,
-        description: `儲值 ${session.customer_details?.email ?? ""}`.trim(),
-        metadata: { checkout_session: session.id, payment_intent: pi.id },
+        description: `${name || ANONYMOUS} 儲值`,
+        metadata: {
+          checkout_session: session.id,
+          payment_intent: pi.id,
+          sponsor_name: name,
+          sponsor_message: message,
+        },
       },
       { idempotencyKey: `wallet-credit-${session.id}` },
     );
@@ -82,7 +110,7 @@ export async function creditTopUp(sessionId: string): Promise<CreditResult> {
 
 export type WalletSnapshot = {
   balance: number;
-  latest: { id: string; amount: number; created: number } | null;
+  recent: TopUpRecord[];
 };
 
 let snapshot: { at: number; value: Promise<WalletSnapshot> } | null = null;
@@ -95,12 +123,7 @@ const SNAPSHOT_TTL_MS = 2_000;
 export function getWalletSnapshot(): Promise<WalletSnapshot> {
   const now = Date.now();
   if (!snapshot || now - snapshot.at > SNAPSHOT_TTL_MS) {
-    const value = getWallet().then((w) => ({
-      balance: w.balance,
-      latest: w.recent[0]
-        ? { id: w.recent[0].id, amount: w.recent[0].amount, created: w.recent[0].created }
-        : null,
-    }));
+    const value = getWallet().then((w) => ({ balance: w.balance, recent: w.recent.slice(0, 6) }));
     value.catch(() => {
       snapshot = null; // don't keep serving a failed read
     });
