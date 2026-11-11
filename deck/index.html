@@ -511,6 +511,16 @@ html[data-lang="zh"] .slide[aria-label="Live"] .slogan.hero p.h1.hl{letter-spaci
 .slide[aria-label="Live"] .slogan.hero p.hoffer{font-size:clamp(20px,2vw,36px);font-weight:300;color:var(--muted);margin-top:1vh}
 .slide[aria-label="Live"] .slogan.hero p.hoffer .blue{font-weight:300}
 .slide[aria-label="Live"] .slogan.hero p.hscan{font-size:clamp(14px,1.15vw,20px);color:var(--subtle)}
+
+/* final v8: slogan + donor card + credit line */
+.slide[aria-label="Live"] .slogan.hero p.hoffer,.slide[aria-label="Live"] .slogan.hero p.hscan{display:none}
+.slide[aria-label="Live"] .slogan.hero p.h1.hl{font-size:clamp(34px,4.2vw,80px)}
+.herofinal{gap:4vh}
+.fincard{position:relative;width:min(640px,42vw)}
+.fincard .dcard.big{width:100%;text-align:left}
+.fincard .fx2{position:absolute;top:-28px;left:-36px;right:auto;margin:0;z-index:2;width:clamp(64px,5.4vw,100px)}
+.herofinal > .powered{font-size:clamp(13px,1.05vw,18px)}
+@media (max-width:900px){.fincard{width:90vw}.fincard .fx2{left:-10px}}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -800,6 +810,15 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <p class="hoffer"><span class="zh">你捐多少，<span class="blue">影響力就變成兩倍。</span></span><span class="en">Whatever you give, <span class="blue">we double the impact.</span></span></p>
       <p class="hscan"><span class="zh">掃右下角的 QR，看 NGO 的 agent 恢復服務。</span><span class="en">Scan the QR in the corner and watch the NGO's agent come back.</span></p>
       </div>
+      <div class="fincard reveal d1">
+        <span class="match fx2">×2</span>
+        <article class="dcard corp big" id="bigcard">
+          <div class="dtop"><span class="who"><span class="zh">你的名字會在這裡</span><span class="en">Your name goes here</span></span></div>
+          <div class="amt" id="bigamt">2,000 <small>credits</small></div>
+          <div class="dl"><span class="zh">支持</span><span class="en">Supporting</span> <span class="ngo inline stack"><span class="mono logo-mini"><img src="assets/ngo/huashan.jpg" alt="華山基金會"></span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt="One-Forty"></span></span></div>
+          <div class="by">Donated by <b id="bigby"><span class="zh">你</span><span class="en">you</span></b></div>
+        </article>
+      </div>
     <div class="stage">
       <div class="livecol">
         <div class="eyebrow reveal"><span class="zh">只有今晚 · 兩倍捐贈</span><span class="en">Tonight only · Double the impact</span></div>
@@ -825,7 +844,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <ul class="log" id="log" aria-live="polite"></ul>
       </div>
     </div>
-      <div class="powered reveal d3"><span>Share the Speed · Crescendo AI Gateway ·</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
+      <div class="powered reveal d3"><span>Share the Speed · built on</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
     </div>
   </section>
 
