@@ -1,7 +1,8 @@
 /* Live donations for the deck: a fixed QR in the top-right corner on every slide (below the
    language toggle), and a toast that drops in under it when someone gives, then fades out.
    Kept in its own file so index.html only needs one <script> line.
-   Polls window.DONATE_API (or ?api=), defaulting to DONATE_URL. */
+   Polls window.DONATE_API (or ?api=), defaulting to DONATE_URL.
+   If window.SITE_URL is set, a matching "official website" QR card sits in the bottom-left. */
 (function () {
   var CSS = `
 .dw{position:fixed;z-index:6;right:max(16px,env(safe-area-inset-right,0px));top:calc(max(12px,env(safe-area-inset-top,0px)) + 44px);
@@ -30,6 +31,10 @@
 .dw-total.bump .n{animation:dw-bump 1.2s var(--ease)}
 @keyframes dw-bump{30%{filter:drop-shadow(0 0 10px rgba(69,134,240,.9))}}
 @media (prefers-reduced-motion: reduce){.dw-toast,.dw-toast.out,.dw-qr .code,.dw-total.bump .n{animation:none}}
+/* Official-website QR: mirrors the donate card, pinned bottom-left. */
+.dw-site{position:fixed;z-index:6;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 56px)}
+.dw-site .code{width:var(--dwq,clamp(110px,8vw,150px))}
+.dw-site[hidden]{display:none}
 /* Keep the corner QR on every slide, including ones that hide it via body.bigqr in index.html. */
 html body #dw #dw-qr{opacity:1!important;visibility:visible!important}
 `;
@@ -45,6 +50,10 @@ html body #dw #dw-qr{opacity:1!important;visibility:visible!important}
     </div>
   </div>
   <div class="dw-toasts" id="dw-toasts" role="status" aria-live="polite"></div>
+</aside>
+<aside class="dw-qr dw-site" id="dw-site" aria-label="Official website" hidden>
+  <div class="code" id="dw-site-code"></div>
+  <span class="lbl"><span class="zh">官方網站</span><span class="en">Visit our site</span></span>
 </aside>`;
 
   var POLL_MS = 3000, TIMEOUT_MS = 5000, SHOW_MS = 5000, COUNT_MS = 1200;
@@ -76,6 +85,16 @@ html body #dw #dw-qr{opacity:1!important;visibility:visible!important}
       hasQr = true;
     } catch { /* fall through: no QR */ }
   }
+  var siteUrl = window.SITE_URL || '';
+  if (siteUrl && window.QRCode) {
+    try {
+      new QRCode(document.getElementById('dw-site-code'), {
+        text: siteUrl, width: 280, height: 280, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M,
+      });
+      document.getElementById('dw-site').hidden = false;
+    } catch { /* no site QR */ }
+  }
+
   codeEl.hidden = scanEl.hidden = !hasQr;
   qr.hidden = !hasQr; // shown later if only the total is available
 

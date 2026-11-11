@@ -7,7 +7,8 @@ import { copyFileSync, readFileSync, rmSync, mkdirSync, writeFileSync } from "no
 
 const ref = process.argv[2] ?? "origin/kade/share-the-speed-deck";
 const out = "public/deck";
-const DONATE_URL = "https://yc2026-wallet-310672118987.asia-east1.run.app/pay";
+const DONATE_URL = "https://ngo.cresclab.com/pay";
+const SITE_URL = "https://ngo.cresclab.com";
 
 execSync("git fetch -q origin", { stdio: "inherit" });
 rmSync(out, { recursive: true, force: true });
@@ -25,7 +26,8 @@ const patch = (re, to, what) => {
 // QR → public donate page; live data → this same origin.
 patch(/window\.DONATE_URL\s*=\s*'[^']*';/, `window.DONATE_URL = '${DONATE_URL}';`, "window.DONATE_URL");
 html = html.replace(/\n?window\.DONATE_API\s*=\s*[^;\n]*;/, "");
-html = html.replace(/(window\.DONATE_URL = '[^']*';)/, "$1\nwindow.DONATE_API = location.origin;");
+html = html.replace(/\n?window\.SITE_URL\s*=\s*[^;\n]*;/, "");
+html = html.replace(/(window\.DONATE_URL = '[^']*';)/, `$1\nwindow.SITE_URL = '${SITE_URL}';\nwindow.DONATE_API = location.origin;`);
 // The deck's own "raised live" row should read the API, not the donate page.
 html = html.replace(/var API=\(window\.DONATE_URL\|\|''\)/, "var API=(window.DONATE_API||window.DONATE_URL||'')");
 if (!html.includes('src="donate-widget.js"')) {
