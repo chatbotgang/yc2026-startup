@@ -504,6 +504,15 @@ html[data-lang="zh"] .slogan.hero p{letter-spacing:-0.01em;line-height:1.18;font
 .slide[aria-label="Live"] .slogan.hero p:not(.hoffer):not(.hscan){font-size:clamp(36px,4.6vw,88px)}
 .slide[aria-label="Live"] .slogan.hero p.hoffer{font-size:clamp(26px,2.8vw,52px);margin-top:3vh}
 .slide[aria-label="Live"] .slogan.hero p.hscan{font-size:clamp(16px,1.35vw,24px)}
+
+/* final v7: same type system as the other slides */
+.slide[aria-label="Live"] .slogan.hero{gap:2.6vh}
+.slide[aria-label="Live"] .slogan.hero p.h1.hl{font-size:clamp(40px,5.4vw,100px);font-weight:300;letter-spacing:-0.04em;line-height:1.06;background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--fg)}
+html[data-lang="zh"] .slide[aria-label="Live"] .slogan.hero p.h1.hl{letter-spacing:-0.01em;line-height:1.2}
+.slide[aria-label="Live"] .slogan.hero p.h1.hl .blue{background:linear-gradient(100deg,var(--accent) 10%,var(--accent-2) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.slide[aria-label="Live"] .slogan.hero p.hoffer{font-size:clamp(20px,2vw,36px);font-weight:300;color:var(--muted);margin-top:1vh}
+.slide[aria-label="Live"] .slogan.hero p.hoffer .blue{font-weight:300}
+.slide[aria-label="Live"] .slogan.hero p.hscan{font-size:clamp(14px,1.15vw,20px);color:var(--subtle)}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -785,13 +794,13 @@ body.idle .chrome{opacity:0;pointer-events:none}
 
   <!-- Close: tonight-only double impact + live demo -->
   <section class="slide" aria-label="Live">
-    <div class="glow" aria-hidden="true"></div>
+    <canvas class="field" data-mode="together"></canvas>
     <div class="inner herofinal">
       <div class="slogan hero reveal">
-        <p><span class="zh">AI 不該因為有人付不起，<br>就停止幫忙。</span><span class="en">AI should never stop helping<br>because someone can't afford it.</span></p>
+      <div class="eyebrow">Agent Lab — Compute for Good</div>
+        <p class="h1 hl"><span class="zh">AI 不該因為有人付不起，<br><span class="blue">就停止幫忙。</span></span><span class="en">AI should never stop helping<br><span class="blue">because someone can't afford it.</span></span></p>
         <p class="hoffer"><span class="zh">你捐多少，<span class="blue">影響力就變成兩倍。</span></span><span class="en">Whatever you give, <span class="blue">we double the impact.</span></span></p>
       <p class="hscan"><span class="zh">掃右下角的 QR，看 NGO 的 agent 恢復服務。</span><span class="en">Scan the QR in the corner and watch the NGO's agent come back.</span></p>
-      <span class="tag">Agent Lab — Compute for Good.</span>
       </div>
     <div class="stage">
       <div class="livecol">
