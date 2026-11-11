@@ -1,0 +1,36 @@
+import "server-only";
+import Stripe from "stripe";
+
+let client: Stripe | null = null;
+
+/** Lazily create the Stripe client so builds don't need the secret key. */
+export function stripe(): Stripe {
+  if (!client) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("STRIPE_SECRET_KEY is not set (see .env.example)");
+    client = new Stripe(key, {
+      appInfo: { name: "yc2026-startup-wallet" },
+    });
+  }
+  return client;
+}
+
+export function walletCustomerId(): string {
+  const id = process.env.STRIPE_WALLET_CUSTOMER_ID;
+  if (!id) {
+    throw new Error(
+      "STRIPE_WALLET_CUSTOMER_ID is not set. Run `pnpm wallet:init` to create the wallet customer.",
+    );
+  }
+  return id;
+}
+
+/** Stored-value currency. TWD is a two-decimal currency in the Stripe API (NT$1 = 100). */
+export const CURRENCY = "twd";
+export const MINOR_UNITS = 100;
+export const MIN_TOPUP = 50; // NT$
+export const MAX_TOPUP = 100_000; // NT$
+
+/** Tag for Checkout Sessions created by this flow (shows up in the Stripe Dashboard). */
+export const INTEGRATION_ID = "wallet-topup-qhvmrtzk";
+export const TOPUP_PURPOSE = "wallet_topup";
