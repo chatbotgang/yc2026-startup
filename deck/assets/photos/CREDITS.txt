@@ -1,0 +1,6 @@
+elder.jpg   | A smiling old woman at Lamay Island 20100503.jpg | Hsiung/d6478coke | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:A_smiling_old_woman_at_Lamay_Island_20100503.jpg
+dogs.jpg    | Taiwan 2009 JinGuaShi Historic Gold Mine Stray Dog FRD 8919.jpg | Fred Hsu | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Taiwan_2009_JinGuaShi_Historic_Gold_Mine_Stray_Dog_FRD_8919.jpg
+migrant.jpg | Foreign Care-Giver Using Mobile phone in Central Court of Shin Kong Minsheng Square 20171015.jpg | 玄史生 | CC0 | https://commons.wikimedia.org/wiki/File:Foreign_Care-Giver_Using_Mobile_phone_in_Central_Court_of_Shin_Kong_Minsheng_Square_20171015.jpg
+
+Background plates (../*.webp): Unsplash License — cosmos-field (雙 film), leaves-bokeh (Natalie Kinnear), lavender-soft (Tatyana Rubleva).
+All photos are shown in black and white in the deck and are illustrative; they are unrelated to the NGOs named.
