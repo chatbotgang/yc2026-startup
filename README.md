@@ -23,7 +23,17 @@ pnpm dev
 
 測試卡：`4242 4242 4242 4242`，任意未來到期日與 CVC。
 
+## 部署（Cloud Run）
+
+- GCP 專案：`c0mpiled-18-yc-hackathon`（cresclab.com › ycombinator），服務 `yc2026-wallet`，區域 `asia-east1`
+- 網址：https://yc2026-wallet-310672118987.asia-east1.run.app
+- 密鑰放在 Secret Manager：`stripe-secret-key`、`stripe-webhook-secret`；`STRIPE_WALLET_CUSTOMER_ID` 是一般環境變數
+
+```bash
+gcloud run deploy yc2026-wallet --project=c0mpiled-18-yc-hackathon --region=asia-east1 --source=. --quiet
+```
+
 ## 上線前待辦
 
-- 在 Stripe Dashboard 建立正式 webhook endpoint（`/api/webhooks/stripe`），設定 `STRIPE_WEBHOOK_SECRET`。
+- 目前用的是 Stripe test mode；改收真錢時要換 live key，並在 live mode 另建 webhook endpoint。
 - 處理退款與爭議款（`charge.refunded`、`charge.dispute.created`），從儲值金扣回。
