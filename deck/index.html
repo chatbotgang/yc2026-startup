@@ -23,7 +23,7 @@ document.documentElement.setAttribute('data-lang',l);document.documentElement.la
   --font-sans:"Geist","Noto Sans TC","PingFang TC","Microsoft JhengHei",-apple-system,sans-serif;
   --font-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --bg:#000000; --surface:#111214; --sunken:#17191c; --hover:#1f2226;
-  --fg:#f5f5f3; --muted:#a1a4a8; --subtle:#6e7277; --border:#24272b; --border-strong:#33373c;
+  --fg:#f5f5f3; --muted:#c4c7cb; --subtle:#9a9fa5; --border:#24272b; --border-strong:#33373c;
   --accent:#4586f0; --accent-2:#8fb8ff; --accent-soft:#0c1830; --on-accent:#ffffff;
   --leaf:#b5d88f; --petal:#f0b8cf; --lilac:#b9acec; --sky:#9cc6ee;
   --radius:24px; --pill:999px;
@@ -58,10 +58,10 @@ html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-he
 .plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.75)),rgba(13,26,46,.45);mix-blend-mode:normal}
 .slide>.plate+canvas.field,.slide>.plate~.inner{position:relative}
 .slide>.plate~canvas.field{position:absolute}
-.src{font-family:var(--font-mono);font-size:clamp(11px,.85vw,14px);color:var(--subtle);margin:0;max-width:60em}
+.src{font-family:var(--font-mono);font-size:clamp(12px,1vw,17px);color:var(--subtle);margin:0;max-width:60em}
 .split{display:flex;align-items:flex-end;justify-content:center;gap:4vw;flex-wrap:wrap}
 .bars{width:min(560px,80vw);height:auto;display:block}
-.bars text{font-family:var(--font-mono);font-size:15px;fill:var(--subtle)}
+.bars text{font-family:var(--font-mono);font-size:19px;fill:#c4c7cb}
 .gapdata{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:4vw;align-items:center;width:min(1300px,94vw);text-align:left}
 @media (max-width:900px){.gapdata{grid-template-columns:minmax(0,1fr);text-align:center}}
 .gapdata .bars{width:100%}
@@ -305,7 +305,7 @@ html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
 /* ===== duo charts ===== */
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.4vw;width:min(1400px,94vw)}
 .panel{background:rgba(17,18,20,.85);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(18px,1.8vw,30px);display:flex;flex-direction:column;gap:1.6vh;text-align:left}
-.ptitle{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:clamp(13px,1.15vw,20px);color:var(--muted)}
+.ptitle{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:clamp(16px,1.45vw,26px);color:var(--fg)}
 .ptitle b{font-size:clamp(34px,3.6vw,64px);font-weight:300;letter-spacing:-0.03em;color:var(--fg)}
 .panel .bars{width:100%;max-height:34vh}
 @media (max-width:900px){.duo{grid-template-columns:minmax(0,1fr)}}
@@ -492,7 +492,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <span class="tl"><span class="zh">你看這頁的這幾秒，光 Google 就處理了這麼多 token（約每秒 12 億）</span><span class="en">tokens Google alone processed while you read this (about 1.2 billion per second)</span></span>
       </div>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">我們每一秒，都在用掉大量的 AI。</span><span class="en">Every second, we burn through enormous amounts of AI.</span></p>
   </section>
 
   <!-- 1 Speed-up and the gap, side by side -->
@@ -509,8 +508,8 @@ body.idle .chrome{opacity:0;pointer-events:none}
           <rect x="200" y="221" width="110" height="39" rx="6" fill="#33373c"/>
           <rect x="370" y="0" width="110" height="260" rx="6" fill="url(#gb)"/>
           <defs><linearGradient id="gb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient></defs>
-          <text x="85" y="245" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">9.7T</text>
-          <text x="255" y="210" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">480T</text>
+          <text x="85" y="245" text-anchor="middle" style="fill:#d6d8db;font-size:22px">9.7T</text>
+          <text x="255" y="210" text-anchor="middle" style="fill:#d6d8db;font-size:22px">480T</text>
           <text x="425" y="36" text-anchor="middle" style="fill:#000;font-size:22px;font-weight:600">3.2Q</text>
           <text x="85" y="288" text-anchor="middle">2024</text><text x="255" y="288" text-anchor="middle">2025</text><text x="425" y="288" text-anchor="middle">2026</text>
         </svg>
@@ -524,9 +523,9 @@ body.idle .chrome{opacity:0;pointer-events:none}
           <!-- scale: 1% = 9px -->
           <rect x="40" y="64" width="110" height="206" rx="6" fill="#1e3a66"/><rect x="170" y="48" width="110" height="222" rx="6" fill="url(#gn)"/>
           <rect x="360" y="152" width="110" height="118" rx="6" fill="#26292d"/><rect x="490" y="143" width="110" height="127" rx="6" fill="#4a4e54"/>
-          <text x="95" y="54" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">22.9%</text>
+          <text x="95" y="54" text-anchor="middle" style="fill:#d6d8db;font-size:22px">22.9%</text>
           <text x="225" y="38" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">24.7%</text>
-          <text x="415" y="142" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">13.1%</text>
+          <text x="415" y="142" text-anchor="middle" style="fill:#d6d8db;font-size:22px">13.1%</text>
           <text x="545" y="133" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">14.1%</text>
           <text x="95" y="294" text-anchor="middle">H1</text><text x="225" y="294" text-anchor="middle">H2</text>
           <text x="415" y="294" text-anchor="middle">H1</text><text x="545" y="294" text-anchor="middle">H2</text>
@@ -537,7 +536,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         </div>
       </div>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">AI 讓會用的人加速，也讓沒用到的人被甩得更遠。</span><span class="en">AI speeds up those who have it, and leaves the rest further behind.</span></p>
   </section>
 
   <!-- 3 Who is left behind: Taiwan data + persona -->
@@ -566,7 +564,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <div class="ph-btns"><span class="dec"></span><span class="acc"></span></div>
       </div>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">最需要 AI 幫忙的人，反而用不到 AI。</span><span class="en">The people who need AI most can't reach it.</span></p>
   </section>
 
   <!-- 4 -->
@@ -587,7 +584,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
       </div>
       <p class="sub reveal d2"><span class="zh">把你的 AI 算力，分一份給服務弱勢的 NGO。<br>建置、部署，我們一起送。</span><span class="en">Share a slice of your AI capacity with the NGOs that serve people left behind.<br>We build and deploy the agent for them.</span></p>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">閒置的 AI，可以變成弱勢的幫手。</span><span class="en">Spare AI can become someone's lifeline.</span></p>
   </section>
 
   <!-- How: modules -->
@@ -619,7 +615,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
       </div>
       <p class="sub reveal d3"><span class="zh">NGO 只要提供知識和服務流程，其他我們全包。</span><span class="en">NGOs bring their knowledge and process. We handle the rest.</span></p>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">捐出去的不只是錢，而是一個能上線的 agent。</span><span class="en">Your gift becomes a live agent, not just cash.</span></p>
   </section>
 
   <!-- 4b Three NGOs, three scenarios -->
@@ -655,7 +650,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
       </div>
       <p class="src reveal d2"><span class="zh">NGO 為情境示例，尚未合作。數據：農業部 2024 流浪犬調查、One-Forty 創辦人受訪。照片：Hsiung/d6478coke（CC BY 2.0）、Fred Hsu（CC BY-SA 3.0）、玄史生（CC0），Wikimedia Commons，轉為黑白；照片為示意，與所列 NGO 無關。</span><span class="en">NGOs are illustrative, not partners. Data: MOA 2024 stray dog survey; One-Forty founder interview. Photos: Hsiung/d6478coke (CC BY 2.0), Fred Hsu (CC BY-SA 3.0), 玄史生 (CC0), Wikimedia Commons, converted to black and white; illustrative and unrelated to the NGOs listed.</span></p>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">同一套方法，可以複製到每一種 NGO。</span><span class="en">The same playbook works for every NGO.</span></p>
   </section>
 
   <!-- 6 -->
@@ -689,7 +683,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <ul class="log" id="log" aria-live="polite"></ul>
       </div>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">沒有額度，服務就會中斷。</span><span class="en">No credits, no help.</span></p>
   </section>
 
   <!-- 7 -->
@@ -704,7 +697,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
       </div>
       <div class="qrbox reveal d1"><div class="qr" id="qr"></div><span class="match">×2</span></div>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">你現在掃碼，影響力就加倍。</span><span class="en">Scan now and your impact doubles.</span></p>
   </section>
 
   <!-- 7b Map: from Taipei to every corner -->
@@ -721,7 +713,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
       </div>
       <svg class="twmap reveal d1" id="twmap" viewBox="0 0 560 800" role="img" aria-label="Map of Taiwan with donations flowing from Taipei to rural towns"></svg>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">一個會場的善意，能送到全台灣。</span><span class="en">One room's goodwill reaches all of Taiwan.</span></p>
   </section>
 
   <!-- Final: close + QR + donor card + big tech -->
@@ -748,7 +739,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
       </div>
       <div class="powered reveal d3"><span>Share the Speed · built on</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">Share the Speed：讓 AI 的速度，分給每一個人。</span><span class="en">Share the Speed: AI's speed, for everyone.</span></p>
   </section>
 
   <!-- QA divider -->
