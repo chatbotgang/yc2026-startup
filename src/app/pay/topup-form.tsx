@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { loadStripe, type Stripe, type StripeElementsOptions } from "@stripe/stripe-js";
 import {
@@ -24,6 +24,13 @@ const PRESETS = [100, 500, 1000, 3000];
 const ANONYMOUS = "Anonymous";
 
 type Limits = { min: number; max: number; nameMax: number; messageMax: number };
+
+type Method = "card" | "apple_pay" | "google_pay";
+const METHODS: { id: Method; label: string; hint: string }[] = [
+  { id: "card", label: "Credit card", hint: "" },
+  { id: "apple_pay", label: "Apple Pay", hint: "Use Safari with a card in Wallet" },
+  { id: "google_pay", label: "Google Pay", hint: "Use Chrome with a saved card" },
+];
 
 let stripePromise: Promise<Stripe | null> | null = null;
 const getStripe = (key: string) => (stripePromise ??= loadStripe(key));
@@ -182,8 +189,15 @@ function PayButtons({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
-  const [walletsReady, setWalletsReady] = useState<boolean | null>(null);
+  const [method, setMethod] = useState<Method>("card");
+  // null = still checking this device/browser for Apple Pay / Google Pay.
+  const [wallets, setWallets] = useState<{ applePay: boolean; googlePay: boolean } | null>(null);
   const label = amount ? `NT$${amount.toLocaleString("en-US")}` : "";
+  // If Stripe never answers the wallet check, stop showing "Checking…".
+  useEffect(() => {
+    const id = setTimeout(() => setWallets((w) => w ?? { applePay: false, googlePay: false }), 8000);
+    return () => clearTimeout(id);
+  }, []);
   const donor = name.trim() || ANONYMOUS;
 
   async function pay() {
@@ -232,46 +246,99 @@ function PayButtons({
     }
   }
 
+  const walletButton = (only: "applePay" | "googlePay") => (
+    <ExpressCheckoutElement
+      key={only}
+      options={{
+        buttonHeight: 48,
+        buttonType: { applePay: "donate", googlePay: "donate" },
+        paymentMethods: {
+          applePay: only === "applePay" ? "always" : "never",
+          googlePay: only === "googlePay" ? "always" : "never",
+          link: "never",
+        },
+        layout: { maxColumns: 1, maxRows: 1, overflow: "never" },
+      }}
+      onClick={({ resolve }) => {
+        if (!amount) return setError("Please enter a valid amount first.");
+        resolve({ lineItems: [{ name: `Contribution (${donor})`, amount: amount * 100 }] });
+      }}
+      onConfirm={pay}
+    />
+  );
+
   return (
     <div className="flex flex-col gap-4">
-      {/* Apple Pay / Google Pay */}
-      <div className={walletsReady === false ? "hidden" : ""}>
-        <ExpressCheckoutElement
-          options={{
-            buttonHeight: 48,
-            buttonType: { applePay: "donate", googlePay: "donate" },
-            paymentMethods: { applePay: "always", googlePay: "always", link: "never" },
-            paymentMethodOrder: ["apple_pay", "google_pay"],
-            layout: { maxColumns: 1, maxRows: 2, overflow: "never" },
-          }}
-          onReady={({ availablePaymentMethods }) => setWalletsReady(Boolean(availablePaymentMethods))}
-          onClick={({ resolve }) => {
-            if (!amount) return setError("Please enter a valid amount first.");
-            resolve({ lineItems: [{ name: `Contribution (${donor})`, amount: amount * 100 }] });
-          }}
-          onConfirm={pay}
-        />
-      </div>
-
-      {walletsReady !== false && (
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          or pay with card
-          <span className="h-px flex-1 bg-border" />
+      {/* Invisible probe: asks Stripe which wallets this device/browser can use. */}
+      {wallets === null && (
+        <div aria-hidden className="pointer-events-none absolute -left-[9999px] w-80 opacity-0">
+          <ExpressCheckoutElement
+            options={{ paymentMethods: { applePay: "auto", googlePay: "auto", link: "never" } }}
+            onReady={({ availablePaymentMethods: a }) =>
+              setWallets({ applePay: Boolean(a?.applePay), googlePay: Boolean(a?.googlePay) })
+            }
+            onConfirm={() => {}}
+          />
         </div>
       )}
 
-      {/* Card: number, expiry and CVC only */}
-      <PaymentElement
-        options={{
-          layout: "tabs",
-          wallets: { applePay: "never", googlePay: "never", link: "never" },
-          fields: {
-            billingDetails: { name: "never", email: "never", phone: "never", address: "never" },
-          },
-          terms: { card: "never" },
-        }}
-      />
+      <div className="flex flex-col gap-2">
+        <Label>Payment method</Label>
+        <div role="radiogroup" className="grid grid-cols-3 gap-2">
+          {METHODS.map((m) => {
+            const available =
+              m.id === "card" || (wallets !== null && wallets[m.id === "apple_pay" ? "applePay" : "googlePay"]);
+            const checking = m.id !== "card" && wallets === null;
+            const selected = method === m.id;
+            return (
+              <button
+                key={m.id}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                disabled={!available}
+                onClick={() => {
+                  setError(null);
+                  setMethod(m.id);
+                }}
+                className={`flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-lg border px-2 py-2 text-center text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                  selected
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-input hover:bg-muted"
+                }`}
+              >
+                <span className="flex items-center gap-1.5">
+                  {m.id === "card" && <CreditCard className="size-4" />}
+                  {m.label}
+                </span>
+                {!available && (
+                  <span className="text-[11px] font-normal leading-tight text-muted-foreground">
+                    {checking ? "Checking…" : m.hint}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {method === "card" && (
+        <>
+          {/* Card: number, expiry and CVC only */}
+          <PaymentElement
+            options={{
+              layout: "tabs",
+              wallets: { applePay: "never", googlePay: "never", link: "never" },
+              fields: {
+                billingDetails: { name: "never", email: "never", phone: "never", address: "never" },
+              },
+              terms: { card: "never" },
+            }}
+          />
+        </>
+      )}
+      {method === "apple_pay" && walletButton("applePay")}
+      {method === "google_pay" && walletButton("googlePay")}
 
       {error && (
         <Alert variant="destructive">
@@ -279,25 +346,33 @@ function PayButtons({
         </Alert>
       )}
 
-      <Button
-        type="button"
-        size="lg"
-        onClick={pay}
-        disabled={!stripe || !amount || pending}
-        className="h-12 w-full text-base"
-      >
-        {pending ? (
-          <>
-            <Loader2 className="animate-spin" />
-            Processing…
-          </>
-        ) : (
-          <>
-            <CreditCard />
-            {label ? `Pay ${label} with card` : "Pay with card"}
-          </>
-        )}
-      </Button>
+      {method === "card" && (
+        <Button
+          type="button"
+          size="lg"
+          onClick={pay}
+          disabled={!stripe || !amount || pending}
+          className="h-12 w-full text-base"
+        >
+          {pending ? (
+            <>
+              <Loader2 className="animate-spin" />
+              Processing…
+            </>
+          ) : (
+            <>
+              <CreditCard />
+              {label ? `Pay ${label} with card` : "Pay with card"}
+            </>
+          )}
+        </Button>
+      )}
+      {method !== "card" && pending && (
+        <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="size-4 animate-spin" />
+          Processing…
+        </p>
+      )}
       <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
         <Lock className="size-3" />
         Payments are processed securely by Stripe. We never see your card number.
