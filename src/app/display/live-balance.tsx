@@ -8,7 +8,7 @@ type Snapshot = { balance: number; recent: TopUp[] };
 const POLL_MS = 3_000;
 const ANIMATE_MS = 1_200;
 const FLASH_MS = 6_000;
-const twd = (n: number) => `NT$${Math.round(n).toLocaleString("zh-TW")}`;
+const twd = (n: number) => `NT$${Math.round(n).toLocaleString("en-US")}`;
 
 export function LiveBalance({ initial, qr }: { initial: Snapshot; qr: React.ReactNode }) {
   const [target, setTarget] = useState(initial.balance);
@@ -75,7 +75,7 @@ export function LiveBalance({ initial, qr }: { initial: Snapshot; qr: React.Reac
     <div className="grid w-full max-w-6xl flex-1 grid-cols-1 items-center gap-10 px-6 py-10 lg:grid-cols-[1fr_22rem] lg:gap-16">
       {/* Balance + newest sponsor */}
       <div className="flex min-w-0 flex-col items-center gap-5 text-center lg:items-start lg:text-left">
-        <p className="text-xl text-muted-foreground lg:text-2xl">當前儲值金</p>
+        <p className="text-xl text-muted-foreground lg:text-2xl">Current balance</p>
         <p className="text-6xl font-mono font-semibold tabular-nums tracking-tighter sm:text-7xl lg:text-9xl">
           {twd(shown)}
         </p>
@@ -90,13 +90,13 @@ export function LiveBalance({ initial, qr }: { initial: Snapshot; qr: React.Reac
                 <span className="ml-3 tabular-nums text-primary">+{twd(flash.amount)}</span>
               </p>
               {flash.message && (
-                <p className="mt-1 break-words text-xl text-foreground">「{flash.message}」</p>
+                <p className="mt-1 break-words text-xl text-foreground">“{flash.message}”</p>
               )}
             </div>
           )}
         </div>
         <p className={`text-sm ${stale ? "text-amber-400" : "text-muted-foreground/60"}`}>
-          {stale ? "連線中斷，重新連線中…" : "每 3 秒自動更新"}
+          {stale ? "Connection lost. Reconnecting…" : "Updates every 3 seconds"}
         </p>
       </div>
 

@@ -37,7 +37,7 @@ export const TOPUP_PURPOSE = "wallet_topup";
 
 export const NAME_MAX = 20;
 export const MESSAGE_MAX = 60;
-export const ANONYMOUS = "匿名贊助者";
+export const ANONYMOUS = "Anonymous";
 
 /** Trim, drop control characters/newlines, collapse spaces, cap length (by characters). */
 export function cleanText(value: unknown, max: number): string {

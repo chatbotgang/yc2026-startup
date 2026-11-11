@@ -18,14 +18,13 @@ export async function POST(request: Request) {
   }
 
   switch (event.type) {
-    case "checkout.session.completed":
-    case "checkout.session.async_payment_succeeded": {
+    case "payment_intent.succeeded": {
       const result = await creditTopUp(event.data.object.id);
       console.log(`[wallet] ${event.type} ${event.data.object.id}: ${result.status}`);
       break;
     }
-    case "checkout.session.async_payment_failed":
-      console.warn(`[wallet] async payment failed for ${event.data.object.id}`);
+    case "payment_intent.payment_failed":
+      console.warn(`[wallet] payment failed for ${event.data.object.id}`);
       break;
   }
 

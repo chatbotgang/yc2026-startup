@@ -13,14 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "儲值金",
-  description: "用信用卡儲值，即時顯示當前金額",
+  title: "Top-up Wallet",
+  description: "Contribute by card, Apple Pay or Google Pay and watch the balance update live",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="zh-Hant"
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">{children}</body>

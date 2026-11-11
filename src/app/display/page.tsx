@@ -6,7 +6,7 @@ import { siteOrigin } from "@/lib/origin";
 import { getWalletSnapshot } from "@/lib/wallet";
 import { LiveBalance } from "./live-balance";
 
-export const metadata: Metadata = { title: "儲值金即時看板" };
+export const metadata: Metadata = { title: "Live Board" };
 
 async function Board() {
   await connection();
@@ -23,7 +23,7 @@ async function Board() {
         className="size-40 rounded-2xl bg-card p-4 ring-1 ring-border lg:size-48 [&>svg]:size-full"
         dangerouslySetInnerHTML={{ __html: qrSvg }}
       />
-      <p className="text-muted-foreground">掃描 QR code 贊助</p>
+      <p className="text-muted-foreground">Scan to contribute</p>
     </div>
   );
 
@@ -34,7 +34,7 @@ export default function DisplayPage() {
   return (
     <main className="dark flex min-h-screen flex-col items-center bg-background text-foreground">
       <Suspense
-        fallback={<div className="flex flex-1 items-center justify-center text-muted-foreground">載入中…</div>}
+        fallback={<div className="flex flex-1 items-center justify-center text-muted-foreground">Loading…</div>}
       >
         <Board />
       </Suspense>

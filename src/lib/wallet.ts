@@ -55,25 +55,21 @@ export type CreditResult =
   | { status: "ignored" };
 
 /**
- * Credit a paid top-up Checkout Session to the wallet. Safe to call many times for the
- * same session (webhook retries + success page): the PaymentIntent records which
+ * Credit a succeeded top-up PaymentIntent to the wallet. Safe to call many times for the
+ * same payment (webhook retries + the return page): the PaymentIntent records which
  * balance transaction it produced, and the Stripe idempotency key covers concurrent calls.
  */
-export async function creditTopUp(sessionId: string): Promise<CreditResult> {
+export async function creditTopUp(paymentIntentId: string): Promise<CreditResult> {
   const s = stripe();
-  const session = await s.checkout.sessions.retrieve(sessionId, {
-    expand: ["payment_intent"],
-  });
+  const pi = await s.paymentIntents.retrieve(paymentIntentId);
 
-  if (session.metadata?.purpose !== TOPUP_PURPOSE) return { status: "ignored" };
-  if (session.payment_status === "unpaid") return { status: "not_paid" };
+  if (pi.metadata?.purpose !== TOPUP_PURPOSE) return { status: "ignored" };
+  if (pi.status !== "succeeded") return { status: "not_paid" };
 
-  const pi = session.payment_intent as Stripe.PaymentIntent | null;
-  const amountMinor = session.amount_total;
-  if (!pi || amountMinor == null) throw new Error(`Session ${sessionId} has no payment`);
+  const amountMinor = pi.amount_received || pi.amount;
   const amount = amountMinor / MINOR_UNITS;
-  const name = cleanText(session.metadata?.sponsor_name, NAME_MAX);
-  const message = cleanText(session.metadata?.sponsor_message, MESSAGE_MAX);
+  const name = cleanText(pi.metadata.sponsor_name, NAME_MAX);
+  const message = cleanText(pi.metadata.sponsor_message, MESSAGE_MAX);
 
   if (pi.metadata.wallet_credit_txn) return { status: "already_credited", amount };
 
@@ -83,19 +79,18 @@ export async function creditTopUp(sessionId: string): Promise<CreditResult> {
       walletCustomerId(),
       {
         amount: -amountMinor, // negative = credit
-        currency: session.currency ?? CURRENCY,
-        description: `${name || ANONYMOUS} 儲值`,
+        currency: pi.currency ?? CURRENCY,
+        description: `Top-up from ${name || ANONYMOUS}`,
         metadata: {
-          checkout_session: session.id,
           payment_intent: pi.id,
           sponsor_name: name,
           sponsor_message: message,
         },
       },
-      { idempotencyKey: `wallet-credit-${session.id}` },
+      { idempotencyKey: `wallet-credit-${pi.id}` },
     );
   } catch (err) {
-    // Another call for this session is in flight right now; it will finish the credit.
+    // Another call for this payment is in flight right now; it will finish the credit.
     if (err instanceof Stripe.errors.StripeIdempotencyError) {
       return { status: "already_credited", amount };
     }

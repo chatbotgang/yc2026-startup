@@ -22,6 +22,7 @@
 | `STRIPE_SECRET_KEY` | Secret Manager | `stripe-secret-key:latest` |
 | `STRIPE_WEBHOOK_SECRET` | Secret Manager | `stripe-webhook-secret:latest` |
 | `STRIPE_WALLET_CUSTOMER_ID` | 一般環境變數 | 儲值金所在的 Stripe customer ID |
+| `STRIPE_PUBLISHABLE_KEY` | 一般環境變數 | 前端付款元件用的 publishable key（公開的，不是機密） |
 | `STRIPE_PAYMENT_METHOD_CONFIG` | 一般環境變數 | 付款方式設定（只開信用卡、Apple Pay、Google Pay）；test / live 是不同的 ID |
 
 公開存取（`allUsers` 有 `roles/run.invoker`）也已經設好，路人不用登入就能開。
@@ -131,5 +132,6 @@ gcloud run services describe yc2026-wallet --region=asia-east1 \
 
 ## Stripe 相關
 
-- 線上的 webhook endpoint（test mode）：`https://yc2026-wallet-310672118987.asia-east1.run.app/api/webhooks/stripe`，監聽 `checkout.session.completed`、`checkout.session.async_payment_succeeded`、`checkout.session.async_payment_failed`。
+- 線上的 webhook endpoint（test mode）：`https://yc2026-wallet-310672118987.asia-east1.run.app/api/webhooks/stripe`，監聽 `payment_intent.succeeded`、`payment_intent.payment_failed`。
+- Apple Pay 需要註冊網域（Stripe Payment method domains），換網址時要重新註冊。
 - 目前只收測試卡，不會有真的錢。改收真錢前要：換成 live key、在 live mode 另建 webhook endpoint、補上退款/爭議款從儲值金扣回的處理。

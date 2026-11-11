@@ -1,156 +1,307 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { loadStripe, type Stripe, type StripeElementsOptions } from "@stripe/stripe-js";
+import {
+  Elements,
+  ExpressCheckoutElement,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { startTopUp, type TopUpState } from "./actions";
+import { createTopUpPayment } from "./actions";
 
 const PRESETS = [100, 500, 1000, 3000];
+const ANONYMOUS = "Anonymous";
+
+type Limits = { min: number; max: number; nameMax: number; messageMax: number };
+
+let stripePromise: Promise<Stripe | null> | null = null;
+const getStripe = (key: string) => (stripePromise ??= loadStripe(key));
 
 export function TopUpForm({
-  min,
-  max,
-  nameMax,
-  messageMax,
-}: {
-  min: number;
-  max: number;
-  nameMax: number;
-  messageMax: number;
-}) {
-  const [state, action, pending] = useActionState<TopUpState, FormData>(startTopUp, {});
+  publishableKey,
+  paymentMethodConfiguration,
+  ...limits
+}: Limits & { publishableKey: string | null; paymentMethodConfiguration: string | null }) {
   const [amount, setAmount] = useState("500");
+  const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+
   const amountNumber = Number(amount);
-  const amountLabel =
-    Number.isInteger(amountNumber) && amountNumber >= min && amountNumber <= max
-      ? `NT$${amountNumber.toLocaleString("zh-TW")}`
-      : null;
+  const amountValid =
+    Number.isInteger(amountNumber) && amountNumber >= limits.min && amountNumber <= limits.max;
+  // Stripe needs a positive amount to render wallets; keep the last valid value while typing.
+  const [elementsAmount, setElementsAmount] = useState(500);
+  if (amountValid && amountNumber !== elementsAmount) setElementsAmount(amountNumber);
+
+  const options = useMemo<StripeElementsOptions>(
+    () => ({
+      mode: "payment",
+      amount: elementsAmount * 100,
+      currency: "twd",
+      ...(paymentMethodConfiguration && { paymentMethodConfiguration }),
+      appearance: {
+        theme: "stripe",
+        variables: {
+          colorPrimary: "#059669",
+          borderRadius: "8px",
+          fontFamily: '"Geist", system-ui, sans-serif',
+          spacingUnit: "4px",
+        },
+      },
+      locale: "en",
+    }),
+    [elementsAmount, paymentMethodConfiguration],
+  );
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">贊助儲值</CardTitle>
-        <CardDescription>選擇金額，留下名字和想說的話，會顯示在看板上。</CardDescription>
+        <CardTitle className="text-lg">Make a contribution</CardTitle>
+        <CardDescription>Pick an amount and leave your name and a message for the live board.</CardDescription>
       </CardHeader>
 
-      <form action={action}>
-        <CardContent className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="amount">金額</Label>
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              size="lg"
-              spacing={2}
-              value={PRESETS.includes(amountNumber) ? amount : ""}
-              onValueChange={(v) => v && setAmount(v)}
-              className="grid w-full grid-cols-4"
-            >
-              {PRESETS.map((p) => (
-                <ToggleGroupItem
-                  key={p}
-                  value={String(p)}
-                  className="h-11 font-mono tabular-nums data-[state=on]:border-primary data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
-                >
-                  {p.toLocaleString("zh-TW")}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-            <div className="relative">
-              <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-muted-foreground">
-                NT$
-              </span>
-              <Input
-                id="amount"
-                name="amount"
-                type="number"
-                inputMode="numeric"
-                min={min}
-                max={max}
-                step={1}
-                required
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="h-11 pl-11 font-mono text-base tabular-nums"
-                aria-describedby="amount-hint"
-              />
-            </div>
-            <p id="amount-hint" className="text-xs text-muted-foreground">
-              自訂金額 NT${min.toLocaleString("zh-TW")}–{max.toLocaleString("zh-TW")}
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="name">
-              你的名字
-              <span className="font-normal text-muted-foreground">（選填）</span>
-            </Label>
+      <CardContent className="flex flex-col gap-6">
+        {/* Amount */}
+        <div className="flex flex-col gap-3">
+          <Label htmlFor="amount">Amount</Label>
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            size="lg"
+            spacing={2}
+            value={PRESETS.includes(amountNumber) ? amount : ""}
+            onValueChange={(v) => v && setAmount(v)}
+            className="grid w-full grid-cols-4"
+          >
+            {PRESETS.map((p) => (
+              <ToggleGroupItem
+                key={p}
+                value={String(p)}
+                className="h-11 font-mono tabular-nums data-[state=on]:border-primary data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
+              >
+                {p.toLocaleString("en-US")}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+          <div className="relative">
+            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-muted-foreground">
+              NT$
+            </span>
             <Input
-              id="name"
-              name="name"
-              maxLength={nameMax}
-              autoComplete="nickname"
-              placeholder="匿名贊助者"
-              className="h-11"
+              id="amount"
+              type="number"
+              inputMode="numeric"
+              min={limits.min}
+              max={limits.max}
+              step={1}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="h-11 pl-11 font-mono text-base tabular-nums"
+              aria-invalid={!amountValid}
             />
           </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex items-baseline justify-between">
-              <Label htmlFor="message">
-                想說的話
-                <span className="font-normal text-muted-foreground">（選填）</span>
-              </Label>
-              <span className="font-mono text-xs tabular-nums text-muted-foreground">
-                {Array.from(message).length}/{messageMax}
-              </span>
-            </div>
-            <Textarea
-              id="message"
-              name="message"
-              rows={3}
-              maxLength={messageMax}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="加油！"
-              className="resize-none"
-            />
-          </div>
-
-          {state.error && (
-            <Alert variant="destructive">
-              <AlertDescription>{state.error}</AlertDescription>
-            </Alert>
-          )}
-        </CardContent>
-
-        <CardFooter className="mt-6 flex flex-col gap-3">
-          <Button type="submit" size="lg" disabled={pending} className="h-12 w-full text-base">
-            {pending ? (
-              <>
-                <Loader2 className="animate-spin" />
-                前往付款頁面…
-              </>
-            ) : (
-              <>
-                <CreditCard />
-                {amountLabel ? `用信用卡贊助 ${amountLabel}` : "用信用卡贊助"}
-              </>
-            )}
-          </Button>
-          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Lock className="size-3" />
-            付款由 Stripe 安全處理，本站不會接觸你的卡號
+          <p className={`text-xs ${amountValid ? "text-muted-foreground" : "text-destructive"}`}>
+            Custom amount: NT${limits.min.toLocaleString("en-US")}–{limits.max.toLocaleString("en-US")}
           </p>
-        </CardFooter>
-      </form>
+        </div>
+
+        {/* Donor name */}
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="name">
+            Donor name<span className="font-normal text-muted-foreground"> (optional)</span>
+          </Label>
+          <Input
+            id="name"
+            maxLength={limits.nameMax}
+            autoComplete="nickname"
+            placeholder={ANONYMOUS}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="h-11"
+          />
+        </div>
+
+        {/* Message */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-baseline justify-between">
+            <Label htmlFor="message">
+              Message<span className="font-normal text-muted-foreground"> (optional)</span>
+            </Label>
+            <span className="font-mono text-xs tabular-nums text-muted-foreground">
+              {Array.from(message).length}/{limits.messageMax}
+            </span>
+          </div>
+          <Textarea
+            id="message"
+            rows={2}
+            maxLength={limits.messageMax}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Good luck!"
+            className="resize-none"
+          />
+        </div>
+
+        {/* Payment */}
+        {publishableKey ? (
+          <Elements stripe={getStripe(publishableKey)} options={options}>
+            <PayButtons amount={amountValid ? amountNumber : null} name={name} message={message} />
+          </Elements>
+        ) : (
+          <Alert>
+            <AlertDescription>Payments are not configured (missing STRIPE_PUBLISHABLE_KEY).</AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
     </Card>
+  );
+}
+
+function PayButtons({
+  amount,
+  name,
+  message,
+}: {
+  amount: number | null;
+  name: string;
+  message: string;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const [walletsReady, setWalletsReady] = useState<boolean | null>(null);
+  const label = amount ? `NT$${amount.toLocaleString("en-US")}` : "";
+  const donor = name.trim() || ANONYMOUS;
+
+  async function pay() {
+    if (!stripe || !elements || !amount) return;
+    setError(null);
+    setPending(true);
+    try {
+      const { error: submitError } = await elements.submit();
+      if (submitError) throw new Error(submitError.message);
+
+      const created = await createTopUpPayment({ amount, name, message });
+      if (!created.ok) throw new Error(created.error);
+
+      const returnUrl = `${window.location.origin}/`;
+      const { error: confirmError } = await stripe.confirmPayment({
+        elements,
+        clientSecret: created.clientSecret,
+        redirect: "if_required",
+        confirmParams: {
+          return_url: returnUrl,
+          // The card form doesn't ask for these; the donor name doubles as cardholder name.
+          payment_method_data: {
+            billing_details: {
+              name: donor,
+              email: null,
+              phone: null,
+              address: {
+                country: "TW",
+                postal_code: null,
+                state: null,
+                city: null,
+                line1: null,
+                line2: null,
+              },
+            },
+          },
+        },
+      });
+      if (confirmError) throw new Error(confirmError.message);
+
+      router.push(`/?payment_intent=${created.paymentIntentId}`);
+      setPending(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Payment failed. Please try again.");
+      setPending(false);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      {/* Apple Pay / Google Pay */}
+      <div className={walletsReady === false ? "hidden" : ""}>
+        <ExpressCheckoutElement
+          options={{
+            buttonHeight: 48,
+            buttonType: { applePay: "donate", googlePay: "donate" },
+            paymentMethods: { applePay: "always", googlePay: "always", link: "never" },
+            paymentMethodOrder: ["apple_pay", "google_pay"],
+            layout: { maxColumns: 1, maxRows: 2, overflow: "never" },
+          }}
+          onReady={({ availablePaymentMethods }) => setWalletsReady(Boolean(availablePaymentMethods))}
+          onClick={({ resolve }) => {
+            if (!amount) return setError("Please enter a valid amount first.");
+            resolve({ lineItems: [{ name: `Contribution (${donor})`, amount: amount * 100 }] });
+          }}
+          onConfirm={pay}
+        />
+      </div>
+
+      {walletsReady !== false && (
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          or pay with card
+          <span className="h-px flex-1 bg-border" />
+        </div>
+      )}
+
+      {/* Card: number, expiry and CVC only */}
+      <PaymentElement
+        options={{
+          layout: "tabs",
+          wallets: { applePay: "never", googlePay: "never", link: "never" },
+          fields: {
+            billingDetails: { name: "never", email: "never", phone: "never", address: "never" },
+          },
+          terms: { card: "never" },
+        }}
+      />
+
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      <Button
+        type="button"
+        size="lg"
+        onClick={pay}
+        disabled={!stripe || !amount || pending}
+        className="h-12 w-full text-base"
+      >
+        {pending ? (
+          <>
+            <Loader2 className="animate-spin" />
+            Processing…
+          </>
+        ) : (
+          <>
+            <CreditCard />
+            {label ? `Pay ${label} with card` : "Pay with card"}
+          </>
+        )}
+      </Button>
+      <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+        <Lock className="size-3" />
+        Payments are processed securely by Stripe. We never see your card number.
+      </p>
+    </div>
   );
 }
