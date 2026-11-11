@@ -301,6 +301,14 @@ html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
 .takeaway{transition:opacity .9s var(--ease) 1.4s,transform .9s var(--ease) 1.4s}
 .js .slide:not(.seen) .takeaway{opacity:0;transform:translate(-50%,16px)}
 @media (max-width:900px){.takeaway{white-space:normal;border-radius:18px;width:90vw}}
+
+/* ===== duo charts ===== */
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.4vw;width:min(1400px,94vw)}
+.panel{background:rgba(17,18,20,.85);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(18px,1.8vw,30px);display:flex;flex-direction:column;gap:1.6vh;text-align:left}
+.ptitle{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:clamp(13px,1.15vw,20px);color:var(--muted)}
+.ptitle b{font-size:clamp(34px,3.6vw,64px);font-weight:300;letter-spacing:-0.03em;color:var(--fg)}
+.panel .bars{width:100%;max-height:34vh}
+@media (max-width:900px){.duo{grid-template-columns:minmax(0,1fr)}}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -481,14 +489,15 @@ body.idle .chrome{opacity:0;pointer-events:none}
     <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">我們每一秒，都在用掉大量的 AI。</span><span class="en">Every second, we burn through enormous amounts of AI.</span></p>
   </section>
 
-  <!-- 1 Hook: real token growth -->
+  <!-- 1 Speed-up and the gap, side by side -->
   <section class="slide" aria-label="1">
     <canvas class="field" data-mode="fast"></canvas>
     <div class="inner">
-      <p class="h2 reveal"><span class="zh">AI 讓我們每個人，都被加速了。</span><span class="en">AI has sped every one of us up.</span></p>
-      <div class="split reveal d1">
-        <div class="mega"><span class="blue">330×</span></div>
-        <svg class="bars" viewBox="0 0 520 300" role="img" aria-label="Google monthly tokens: 9.7 trillion in 2024, 480 trillion in 2025, 3.2 quadrillion in 2026">
+      <p class="h2 reveal"><span class="zh">AI 讓我們加速了 330 倍，<br><span class="blue">也把世界的差距拉得更開。</span></span><span class="en">AI sped us up 330 times,<br><span class="blue">and pulled the world further apart.</span></span></p>
+      <div class="duo reveal d1">
+        <div class="panel">
+          <span class="ptitle"><b class="blue">330×</b><span class="zh">Google 每月處理的 token，兩年成長</span><span class="en">growth in Google's monthly tokens, in two years</span></span>
+          <svg class="bars" viewBox="0 0 520 300" role="img" aria-label="Google monthly tokens: 9.7 trillion in 2024, 480 trillion in 2025, 3.2 quadrillion in 2026">
           <line x1="0" y1="260" x2="520" y2="260" stroke="#24272b"/>
           <rect x="30" y="258" width="110" height="2" fill="#6e7277"/>
           <rect x="200" y="221" width="110" height="39" rx="6" fill="#33373c"/>
@@ -499,11 +508,30 @@ body.idle .chrome{opacity:0;pointer-events:none}
           <text x="425" y="36" text-anchor="middle" style="fill:#000;font-size:22px;font-weight:600">3.2Q</text>
           <text x="85" y="288" text-anchor="middle">2024</text><text x="255" y="288" text-anchor="middle">2025</text><text x="425" y="288" text-anchor="middle">2026</text>
         </svg>
+          <span class="src"><span class="zh">資料：Google I/O 2024–2026</span><span class="en">Source: Google I/O 2024–2026</span></span>
+        </div>
+        <div class="panel">
+          <span class="ptitle"><b>9.8 → 10.6</b><span class="zh">已開發與開發中國家的 AI 使用率差距（百分點），半年內又擴大</span><span class="en">percentage-point AI gap between developed and developing countries, widening in six months</span></span>
+          <svg class="bars" viewBox="0 0 640 320" role="img" aria-label="AI user share: Global North 22.9% to 24.7%, Global South 13.1% to 14.1% in 2025">
+          <line x1="0" y1="270" x2="640" y2="270" stroke="#24272b"/>
+          <defs><linearGradient id="gn" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient></defs>
+          <!-- scale: 1% = 9px -->
+          <rect x="40" y="64" width="110" height="206" rx="6" fill="#1e3a66"/><rect x="170" y="48" width="110" height="222" rx="6" fill="url(#gn)"/>
+          <rect x="360" y="152" width="110" height="118" rx="6" fill="#26292d"/><rect x="490" y="143" width="110" height="127" rx="6" fill="#4a4e54"/>
+          <text x="95" y="54" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">22.9%</text>
+          <text x="225" y="38" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">24.7%</text>
+          <text x="415" y="142" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">13.1%</text>
+          <text x="545" y="133" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">14.1%</text>
+          <text x="95" y="294" text-anchor="middle">H1</text><text x="225" y="294" text-anchor="middle">H2</text>
+          <text x="415" y="294" text-anchor="middle">H1</text><text x="545" y="294" text-anchor="middle">H2</text>
+          <text x="160" y="316" text-anchor="middle" style="fill:#8fb8ff"><tspan class="zh">已開發國家</tspan><tspan class="en">Developed countries</tspan></text>
+          <text x="480" y="316" text-anchor="middle"><tspan class="zh">開發中國家</tspan><tspan class="en">Developing countries</tspan></text>
+        </svg>
+          <span class="src"><span class="zh">資料：Microsoft AI Diffusion Report 2025 H2</span><span class="en">Source: Microsoft AI Diffusion Report 2025 H2</span></span>
+        </div>
       </div>
-      <p class="sub reveal d2"><span class="zh">Google 每月處理的 token，兩年成長 330 倍。今晚這個會場，就是證明。</span><span class="en">Monthly tokens processed by Google grew 330× in two years. Tonight, this room is the proof.</span></p>
-      <p class="src reveal d3"><span class="zh">資料：Google I/O 2024–2026，Sundar Pichai 公開數字</span><span class="en">Source: Google I/O 2024–2026, figures stated by Sundar Pichai</span></p>
     </div>
-    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">會用 AI 的人，正在被大幅加速。</span><span class="en">People with AI are speeding far ahead.</span></p>
+    <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">AI 讓會用的人加速，也讓沒用到的人被甩得更遠。</span><span class="en">AI speeds up those who have it, and leaves the rest further behind.</span></p>
   </section>
 
   <!-- 3 Who is left behind: Taiwan data + persona -->
@@ -746,99 +774,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         </div>
         <span class="lbl"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe between them</span></span>
       </div>
-    </div>
-  </section>
-
-  <!-- 6b Donor cards -->
-  <section class="slide" aria-label="Donors">
-    <div class="inner">
-      <p class="h2 reveal"><span class="zh">每一份算力，都有名字。</span><span class="en">Every bit of shared compute has a name.</span></p>
-      <div class="donors reveal d1">
-        <article class="dcard">
-          <div class="dtop"><span class="who"><span class="zh">開發者</span><span class="en">Developer</span></span><span class="dot"></span></div>
-          <div class="amt">2.4M <small>tokens</small></div>
-          <div class="dl"><span class="zh">本月分享給</span><span class="en">Shared this month with</span> <span class="ngo inline"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/huashan.jpg" alt="華山基金會"></span><b><span class="zh">華山基金會</span><span class="en">Hwa Shan Foundation</span></b></span></div>
-          <div class="dstats">
-            <div><b>1,240</b><span><span class="zh">次對話</span><span class="en">conversations</span></span></div>
-            <div><b>86</b><span><span class="zh">位長者</span><span class="en">elders</span></span></div>
-            <div><b>3</b><span><span class="zh">次轉介社工</span><span class="en">caseworker handoffs</span></span></div>
-          </div>
-          <div class="by">Donated by <b>@your-name</b></div>
-        </article>
-        <article class="dcard corp">
-          <div class="dtop"><span class="who"><span class="zh">企業</span><span class="en">Company</span></span><img src="assets/agentlab-logo-dark.svg" alt="" class="mini"></div>
-          <div class="amt">50M <small>tokens</small></div>
-          <div class="dl"><span class="zh">今年支持</span><span class="en">This year supporting</span> <span class="ngo inline stack"><span class="mono logo-mini"><img src="assets/ngo/huashan.jpg" alt=""></span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt=""></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt=""></span><b><span class="zh">3 個 NGO</span><span class="en">3 NGOs</span></b></span></div>
-          <div class="dstats">
-            <div><b>41,800</b><span><span class="zh">次對話</span><span class="en">conversations</span></span></div>
-            <div><b>2,310</b><span><span class="zh">人受益</span><span class="en">people helped</span></span></div>
-            <div><b>S · G</b><span><span class="zh">ESG 可稽核</span><span class="en">ESG auditable</span></span></div>
-          </div>
-          <div class="by">Donated by <b><span class="zh">你的公司</span><span class="en">Your Company</span></b></div>
-        </article>
-      </div>
-      <p class="src reveal d2"><span class="zh">卡片數字為示意。每張卡的數字都來自 Gateway 的用量紀錄與 NGO 確認的服務成果，可以分享，也可以放進 ESG 報告。</span><span class="en">Card figures are illustrative. Real cards are generated from Gateway usage records and NGO-verified outcomes, ready to share or put in an ESG report.</span></p>
-    </div>
-  </section>
-
-  <!-- 10 Close + business path + logo -->
-  <section class="slide" aria-label="10">
-    <div class="plate" style="--img:url('assets/leaves-bokeh.webp')" aria-hidden="true"></div>
-    <canvas class="field" data-mode="together"></canvas>
-    <div class="inner">
-      <p class="h1 reveal"><span class="zh">不只我們被加速。<br><span class="blue">讓整個世界一起被加速。</span></span><span class="en">Not just us.<br><span class="blue">Let's speed up the whole world.</span></span></p>
-      <div class="path small reveal d1">
-        <div class="step"><span class="w"><span class="zh">個人</span><span class="en">People</span></span><p><span class="zh">今晚現場捐款</span><span class="en">Give live tonight</span></p></div>
-        <span class="arrow">→</span>
-        <div class="step"><span class="w"><span class="zh">企業</span><span class="en">Companies</span></span><p><span class="zh">CSR 與閒置額度，換 ESG 影響數據</span><span class="en">CSR and spare capacity, for ESG impact data</span></p></div>
-        <span class="arrow">→</span>
-        <div class="step"><span class="w blue">Agent Lab</span><p><span class="zh">商業客戶付費，NGO 免費使用</span><span class="en">Businesses pay, NGOs use it free</span></p></div>
-      </div>
-      <div class="offer reveal d2"><span class="zh">今晚你捐一份，Agent Lab 加碼一份。</span><span class="en">Tonight, every gift is matched by Agent Lab.</span></div>
-      <div class="powered reveal d3"><span>Share the Speed · Agent Lab by</span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
-    </div>
-  </section>
-
-  <!-- 2 The gap: real adoption data -->
-  <section class="slide" aria-label="2">
-    <div class="inner">
-      <p class="h1 reveal"><span class="zh">但世界的差距，<span class="blue">也被拉開了。</span></span><span class="en">But the gap <span class="blue">is getting wider.</span></span></p>
-      <div class="gapdata reveal d1">
-        <svg class="bars" viewBox="0 0 640 320" role="img" aria-label="AI user share: Global North 22.9% to 24.7%, Global South 13.1% to 14.1% in 2025">
-          <line x1="0" y1="270" x2="640" y2="270" stroke="#24272b"/>
-          <defs><linearGradient id="gn" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient></defs>
-          <!-- scale: 1% = 9px -->
-          <rect x="40" y="64" width="110" height="206" rx="6" fill="#1e3a66"/><rect x="170" y="48" width="110" height="222" rx="6" fill="url(#gn)"/>
-          <rect x="360" y="152" width="110" height="118" rx="6" fill="#26292d"/><rect x="490" y="143" width="110" height="127" rx="6" fill="#4a4e54"/>
-          <text x="95" y="54" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">22.9%</text>
-          <text x="225" y="38" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">24.7%</text>
-          <text x="415" y="142" text-anchor="middle" style="fill:#a1a4a8;font-size:20px">13.1%</text>
-          <text x="545" y="133" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">14.1%</text>
-          <text x="95" y="294" text-anchor="middle">H1</text><text x="225" y="294" text-anchor="middle">H2</text>
-          <text x="415" y="294" text-anchor="middle">H1</text><text x="545" y="294" text-anchor="middle">H2</text>
-          <text x="160" y="316" text-anchor="middle" style="fill:#8fb8ff"><tspan class="zh">已開發國家</tspan><tspan class="en">Developed countries</tspan></text>
-          <text x="480" y="316" text-anchor="middle"><tspan class="zh">開發中國家</tspan><tspan class="en">Developing countries</tspan></text>
-        </svg>
-        <div class="kpis">
-          <div class="kpi"><span class="n blue">9.8 → 10.6</span><span class="l"><span class="zh">個百分點：已開發與開發中國家的 AI 使用率差距，半年內又擴大</span><span class="en">percentage points: the AI gap between developed and developing countries widened in six months</span></span></div>
-          <div class="kpi"><span class="n">~4B</span><span class="l"><span class="zh">人缺乏電力、網路或數位技能，連用 AI 的前提都沒有</span><span class="en">people lack the power, connectivity or skills to use AI at all</span></span></div>
-        </div>
-      </div>
-      <p class="src reveal d2"><span class="zh">資料：Microsoft AI Diffusion Report 2025 H2（2026 年 1 月）</span><span class="en">Source: Microsoft AI Diffusion Report 2025 H2 (Jan 2026)</span></p>
-    </div>
-  </section>
-
-  <!-- 5 -->
-  <section class="slide" aria-label="5">
-    <div class="inner">
-      <div class="eyebrow reveal"><span class="zh">為什麼不直接捐錢？</span><span class="en">Why not just donate cash?</span></div>
-      <p class="h2 reveal d1"><span class="zh">捐了錢，NGO 還是做不出 agent。<br><span class="blue">我們連建置、部署一起送。</span></span><span class="en">Cash alone won't build an agent.<br><span class="blue">We deliver the build and the deploy too.</span></span></p>
-      <div class="pillars reveal d1">
-        <div class="pillar"><span class="w"><span class="zh">額度</span><span class="en">Credits</span></span><p><span class="zh">你分出來的 AI 算力，由 Gateway 分配、計量</span><span class="en">Your shared AI capacity, allocated and metered by Gateway</span></p></div>
-        <div class="pillar on"><span class="w"><span class="zh">建置</span><span class="en">Build</span></span><p><span class="zh">NGO 不寫程式，就能做出自己的 agent</span><span class="en">NGOs build their own agent with no code</span></p></div>
-        <div class="pillar on"><span class="w"><span class="zh">部署</span><span class="en">Deploy</span></span><p><span class="zh">一鍵上線到 LINE、網頁、語音</span><span class="en">One click to LINE, web and voice</span></p></div>
-      </div>
-      <div class="powered reveal d2"><span><span class="zh">全部跑在正式環境運作中的 Agent Lab，by</span><span class="en">All running in production on Agent Lab, by</span></span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
     </div>
   </section>
 
