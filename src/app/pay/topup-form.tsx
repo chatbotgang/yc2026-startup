@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { loadStripe, type Stripe, type StripeElementsOptions } from "@stripe/stripe-js";
+import {
+  loadStripe,
+  type Stripe,
+  type StripeElementsOptions,
+} from "@stripe/stripe-js";
 import {
   Elements,
   ExpressCheckoutElement,
@@ -13,7 +17,13 @@ import {
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,10 +36,25 @@ const ANONYMOUS = "Anonymous";
 type Limits = { min: number; max: number; nameMax: number; messageMax: number };
 
 type Method = "card" | "apple_pay" | "google_pay";
-const METHODS: { id: Method; label: string; hint: string }[] = [
-  { id: "card", label: "Credit card", hint: "" },
-  { id: "apple_pay", label: "Apple Pay", hint: "Use Safari with a card in Wallet" },
-  { id: "google_pay", label: "Google Pay", hint: "Use Chrome with a saved card" },
+const METHODS: {
+  id: Method;
+  key: "applePay" | "googlePay" | null;
+  label: string;
+  hint: string;
+}[] = [
+  { id: "card", key: null, label: "Credit card", hint: "" },
+  {
+    id: "apple_pay",
+    key: "applePay",
+    label: "Apple Pay",
+    hint: "Apple Pay isn't available here. Use Safari with a card in Apple Wallet.",
+  },
+  {
+    id: "google_pay",
+    key: "googlePay",
+    label: "Google Pay",
+    hint: "Google Pay isn't available here. Use Chrome with a card saved to Google Pay.",
+  },
 ];
 
 let stripePromise: Promise<Stripe | null> | null = null;
@@ -39,17 +64,23 @@ export function TopUpForm({
   publishableKey,
   paymentMethodConfiguration,
   ...limits
-}: Limits & { publishableKey: string | null; paymentMethodConfiguration: string | null }) {
+}: Limits & {
+  publishableKey: string | null;
+  paymentMethodConfiguration: string | null;
+}) {
   const [amount, setAmount] = useState("500");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
 
   const amountNumber = Number(amount);
   const amountValid =
-    Number.isInteger(amountNumber) && amountNumber >= limits.min && amountNumber <= limits.max;
+    Number.isInteger(amountNumber) &&
+    amountNumber >= limits.min &&
+    amountNumber <= limits.max;
   // Stripe needs a positive amount to render wallets; keep the last valid value while typing.
   const [elementsAmount, setElementsAmount] = useState(500);
-  if (amountValid && amountNumber !== elementsAmount) setElementsAmount(amountNumber);
+  if (amountValid && amountNumber !== elementsAmount)
+    setElementsAmount(amountNumber);
 
   const options = useMemo<StripeElementsOptions>(
     () => ({
@@ -75,7 +106,9 @@ export function TopUpForm({
     <Card>
       <CardHeader>
         <CardTitle className="text-lg">Make a contribution</CardTitle>
-        <CardDescription>Pick an amount and leave your name and a message for the live board.</CardDescription>
+        <CardDescription>
+          Pick an amount and leave your name and a message for the live board.
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-6">
@@ -118,15 +151,22 @@ export function TopUpForm({
               aria-invalid={!amountValid}
             />
           </div>
-          <p className={`text-xs ${amountValid ? "text-muted-foreground" : "text-destructive"}`}>
-            Custom amount: NT${limits.min.toLocaleString("en-US")}–{limits.max.toLocaleString("en-US")}
+          <p
+            className={`text-xs ${amountValid ? "text-muted-foreground" : "text-destructive"}`}
+          >
+            Custom amount: NT${limits.min.toLocaleString("en-US")}–
+            {limits.max.toLocaleString("en-US")}
           </p>
         </div>
 
         {/* Donor name */}
         <div className="flex flex-col gap-2">
           <Label htmlFor="name">
-            Donor name<span className="font-normal text-muted-foreground"> (optional)</span>
+            Donor name
+            <span className="font-normal text-muted-foreground">
+              {" "}
+              (optional)
+            </span>
           </Label>
           <Input
             id="name"
@@ -143,7 +183,11 @@ export function TopUpForm({
         <div className="flex flex-col gap-2">
           <div className="flex items-baseline justify-between">
             <Label htmlFor="message">
-              Message<span className="font-normal text-muted-foreground"> (optional)</span>
+              Message
+              <span className="font-normal text-muted-foreground">
+                {" "}
+                (optional)
+              </span>
             </Label>
             <span className="font-mono text-xs tabular-nums text-muted-foreground">
               {Array.from(message).length}/{limits.messageMax}
@@ -163,11 +207,17 @@ export function TopUpForm({
         {/* Payment */}
         {publishableKey ? (
           <Elements stripe={getStripe(publishableKey)} options={options}>
-            <PayButtons amount={amountValid ? amountNumber : null} name={name} message={message} />
+            <PayButtons
+              amount={amountValid ? amountNumber : null}
+              name={name}
+              message={message}
+            />
           </Elements>
         ) : (
           <Alert>
-            <AlertDescription>Payments are not configured (missing STRIPE_PUBLISHABLE_KEY).</AlertDescription>
+            <AlertDescription>
+              Payments are not configured (missing STRIPE_PUBLISHABLE_KEY).
+            </AlertDescription>
           </Alert>
         )}
       </CardContent>
@@ -190,17 +240,20 @@ function PayButtons({
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [method, setMethod] = useState<Method>("card");
-  // null = still checking this device/browser for Apple Pay / Google Pay.
-  const [wallets, setWallets] = useState<{ applePay: boolean; googlePay: boolean } | null>(null);
+  // Per wallet: true = usable here, false = Stripe says this device/browser can't, null = unknown.
+  // Unknown stays selectable; we only disable a wallet once Stripe confirms it's unavailable.
+  const [wallets, setWallets] = useState<{
+    applePay: boolean | null;
+    googlePay: boolean | null;
+  }>({
+    applePay: null,
+    googlePay: null,
+  });
+  const [probed, setProbed] = useState(false);
   const label = amount ? `NT$${amount.toLocaleString("en-US")}` : "";
-  // If Stripe never answers the wallet check, stop showing "Checking…".
-  useEffect(() => {
-    const id = setTimeout(() => setWallets((w) => w ?? { applePay: false, googlePay: false }), 8000);
-    return () => clearTimeout(id);
-  }, []);
   const donor = name.trim() || ANONYMOUS;
 
-  async function pay() {
+  async function pay(via: "card" | "wallet" = "card") {
     if (!stripe || !elements || !amount) return;
     setError(null);
     setPending(true);
@@ -219,21 +272,24 @@ function PayButtons({
         confirmParams: {
           return_url: returnUrl,
           // The card form doesn't ask for these; the donor name doubles as cardholder name.
-          payment_method_data: {
-            billing_details: {
-              name: donor,
-              email: null,
-              phone: null,
-              address: {
-                country: "TW",
-                postal_code: null,
-                state: null,
-                city: null,
-                line1: null,
-                line2: null,
+          // Wallets (Apple Pay / Google Pay) supply their own billing details.
+          ...(via === "card" && {
+            payment_method_data: {
+              billing_details: {
+                name: donor,
+                email: null,
+                phone: null,
+                address: {
+                  country: "TW",
+                  postal_code: null,
+                  state: null,
+                  city: null,
+                  line1: null,
+                  line2: null,
+                },
               },
             },
-          },
+          }),
         },
       });
       if (confirmError) throw new Error(confirmError.message);
@@ -241,7 +297,11 @@ function PayButtons({
       router.push(`/pay?payment_intent=${created.paymentIntentId}`);
       setPending(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Payment failed. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Payment failed. Please try again.",
+      );
       setPending(false);
     }
   }
@@ -259,24 +319,46 @@ function PayButtons({
         },
         layout: { maxColumns: 1, maxRows: 1, overflow: "never" },
       }}
+      onReady={({ availablePaymentMethods: a }) => {
+        const ok = Boolean(a?.[only]);
+        setWallets((w) => ({ ...w, [only]: ok }));
+        if (!ok) setError(METHODS.find((m) => m.key === only)?.hint ?? null);
+      }}
       onClick={({ resolve }) => {
         if (!amount) return setError("Please enter a valid amount first.");
-        resolve({ lineItems: [{ name: `Contribution (${donor})`, amount: amount * 100 }] });
+        resolve({
+          lineItems: [
+            { name: `Contribution (${donor})`, amount: amount * 100 },
+          ],
+        });
       }}
-      onConfirm={pay}
+      onConfirm={() => pay("wallet")}
     />
   );
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Invisible probe: asks Stripe which wallets this device/browser can use. */}
-      {wallets === null && (
-        <div aria-hidden className="pointer-events-none absolute -left-[9999px] w-80 opacity-0">
+    <div className="relative flex flex-col gap-4">
+      {/* Invisible probe (kept on-screen so mobile browsers load it): which wallets work here? */}
+      {!probed && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-12 opacity-0"
+        >
           <ExpressCheckoutElement
-            options={{ paymentMethods: { applePay: "auto", googlePay: "auto", link: "never" } }}
-            onReady={({ availablePaymentMethods: a }) =>
-              setWallets({ applePay: Boolean(a?.applePay), googlePay: Boolean(a?.googlePay) })
-            }
+            options={{
+              paymentMethods: {
+                applePay: "auto",
+                googlePay: "auto",
+                link: "never",
+              },
+            }}
+            onReady={({ availablePaymentMethods: a }) => {
+              setWallets({
+                applePay: Boolean(a?.applePay),
+                googlePay: Boolean(a?.googlePay),
+              });
+              setProbed(true);
+            }}
             onConfirm={() => {}}
           />
         </div>
@@ -286,9 +368,7 @@ function PayButtons({
         <Label>Payment method</Label>
         <div role="radiogroup" className="grid grid-cols-3 gap-2">
           {METHODS.map((m) => {
-            const available =
-              m.id === "card" || (wallets !== null && wallets[m.id === "apple_pay" ? "applePay" : "googlePay"]);
-            const checking = m.id !== "card" && wallets === null;
+            const available = !m.key || wallets[m.key] !== false;
             const selected = method === m.id;
             return (
               <button
@@ -313,7 +393,7 @@ function PayButtons({
                 </span>
                 {!available && (
                   <span className="text-[11px] font-normal leading-tight text-muted-foreground">
-                    {checking ? "Checking…" : m.hint}
+                    Not available on this device
                   </span>
                 )}
               </button>
@@ -330,7 +410,12 @@ function PayButtons({
               layout: "tabs",
               wallets: { applePay: "never", googlePay: "never", link: "never" },
               fields: {
-                billingDetails: { name: "never", email: "never", phone: "never", address: "never" },
+                billingDetails: {
+                  name: "never",
+                  email: "never",
+                  phone: "never",
+                  address: "never",
+                },
               },
               terms: { card: "never" },
             }}
@@ -350,7 +435,7 @@ function PayButtons({
         <Button
           type="button"
           size="lg"
-          onClick={pay}
+          onClick={() => pay("card")}
           disabled={!stripe || !amount || pending}
           className="h-12 w-full text-base"
         >
@@ -375,7 +460,8 @@ function PayButtons({
       )}
       <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
         <Lock className="size-3" />
-        Payments are processed securely by Stripe. We never see your card number.
+        Payments are processed securely by Stripe. We never see your card
+        number.
       </p>
     </div>
   );
