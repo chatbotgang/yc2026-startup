@@ -25,6 +25,8 @@ pnpm dev
 
 ## 部署（Cloud Run）
 
+完整步驟、權限與排錯見 [docs/DEPLOY.md](docs/DEPLOY.md)。
+
 - GCP 專案：`c0mpiled-18-yc-hackathon`（cresclab.com › ycombinator），服務 `yc2026-wallet`，區域 `asia-east1`
 - 網址：https://yc2026-wallet-310672118987.asia-east1.run.app
 - 密鑰放在 Secret Manager：`stripe-secret-key`、`stripe-webhook-secret`；`STRIPE_WALLET_CUSTOMER_ID` 是一般環境變數
