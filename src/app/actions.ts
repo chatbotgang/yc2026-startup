@@ -6,8 +6,11 @@ import {
   INTEGRATION_ID,
   MAX_TOPUP,
   MIN_TOPUP,
+  MESSAGE_MAX,
   MINOR_UNITS,
+  NAME_MAX,
   TOPUP_PURPOSE,
+  cleanText,
   stripe,
 } from "@/lib/stripe";
 import { siteOrigin } from "@/lib/origin";
@@ -25,6 +28,9 @@ export async function startTopUp(
     };
   }
 
+  const name = cleanText(formData.get("name"), NAME_MAX);
+  const message = cleanText(formData.get("message"), MESSAGE_MAX);
+
   const origin = await siteOrigin();
   const session = await stripe().checkout.sessions.create({
     mode: "payment",
@@ -34,13 +40,25 @@ export async function startTopUp(
         price_data: {
           currency: CURRENCY,
           unit_amount: amount * MINOR_UNITS,
-          product_data: { name: "儲值金" },
+          product_data: {
+            name: "儲值金贊助",
+            description: [name || "匿名贊助者", message && `「${message}」`].filter(Boolean).join(" "),
+          },
         },
       },
     ],
-    metadata: { purpose: TOPUP_PURPOSE },
+    metadata: { purpose: TOPUP_PURPOSE, sponsor_name: name, sponsor_message: message },
     payment_intent_data: { metadata: { purpose: TOPUP_PURPOSE } },
     integration_identifier: INTEGRATION_ID,
+    submit_type: "donate",
+    branding_settings: {
+      button_color: "#059669",
+      border_style: "rounded",
+      font_family: "noto_sans",
+    },
+    custom_text: {
+      submit: { message: "謝謝你的贊助！付款完成後，你的名字和留言會出現在看板上。" },
+    },
     success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/?canceled=1`,
   });
