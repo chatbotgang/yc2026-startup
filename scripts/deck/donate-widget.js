@@ -30,6 +30,8 @@
 .dw-total.bump .n{animation:dw-bump 1.2s var(--ease)}
 @keyframes dw-bump{30%{filter:drop-shadow(0 0 10px rgba(69,134,240,.9))}}
 @media (prefers-reduced-motion: reduce){.dw-toast,.dw-toast.out,.dw-qr .code,.dw-total.bump .n{animation:none}}
+/* Keep the corner QR on every slide, including ones that hide it via body.bigqr in index.html. */
+html body #dw #dw-qr{opacity:1!important;visibility:visible!important}
 `;
 
   var MARKUP = `
