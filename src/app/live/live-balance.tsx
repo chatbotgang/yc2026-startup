@@ -18,6 +18,8 @@ export function LiveBalance({ initial, qr }: { initial: Snapshot | null; qr: Rea
   const [stale, setStale] = useState(initial === null);
   const latestId = useRef(initial?.recent[0]?.id ?? null);
   const shownRef = useRef(initial?.balance ?? 0);
+  // Without a server snapshot, the first successful poll is the baseline, not a new gift.
+  const seeded = useRef(initial !== null);
 
   // Poll the balance and sponsor feed.
   useEffect(() => {
@@ -29,9 +31,17 @@ export function LiveBalance({ initial, qr }: { initial: Snapshot | null; qr: Rea
         const data: Snapshot = await res.json();
         if (!alive) return;
         setStale(false);
-        setTarget(data.balance);
         setRecent(data.recent);
         const newest = data.recent[0];
+        if (!seeded.current) {
+          seeded.current = true;
+          latestId.current = newest?.id ?? null;
+          shownRef.current = data.balance;
+          setShown(data.balance);
+          setTarget(data.balance);
+          return;
+        }
+        setTarget(data.balance);
         if (newest && newest.id !== latestId.current) {
           latestId.current = newest.id;
           setFlash(newest);
@@ -88,7 +98,7 @@ export function LiveBalance({ initial, qr }: { initial: Snapshot | null; qr: Rea
           {flash && (
             <div
               key={flash.id}
-              className="animate-[pop_0.4s_ease-out] rounded-[24px] border border-[#4586f0] bg-[radial-gradient(120%_90%_at_100%_0%,rgb(143_184_255/0.30),transparent_60%),#0c1830] px-6 py-4 text-left"
+              className="animate-[pop_0.4s_ease-out] rounded-[24px] border border-[#4586f0] bg-[#0c1830] bg-[radial-gradient(120%_90%_at_100%_0%,rgb(143_184_255/0.30),transparent_60%)] px-6 py-4 text-left"
             >
               <p className="font-mono text-[clamp(11px,.9vw,15px)] tracking-[.1em] text-[#8fb8ff] uppercase">
                 Just donated

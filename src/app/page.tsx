@@ -160,7 +160,7 @@ export default function Home({ searchParams }: PageProps<"/">) {
           <p className="text-muted-foreground">任何人都可以用信用卡贊助，金額會即時顯示在看板上。</p>
         </div>
         <Button variant="outline" asChild>
-          <a href="/display" target="_blank" rel="noopener">
+          <a href="/live" target="_blank" rel="noopener">
             <MonitorPlay />
             開啟看板
           </a>

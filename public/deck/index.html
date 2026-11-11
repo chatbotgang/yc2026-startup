@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="zh-Hant" data-lang="zh">
+<head>
+<base href="/deck/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Share the Speed</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
+<script>
+/* ====== 現場設定：把 Stripe Payment Link 貼在這裡（或網址加 ?donate=連結）====== */
+window.DONATE_URL = 'https://ngo.cresclab.com/';
+window.DONATE_API = location.origin;
+(function(){var l='zh';try{var s=localStorage.getItem('deck-lang');if(s==='zh'||s==='en')l=s;}catch(e){}
+var q=/[?#&]lang=(zh|en)/.exec(location.href);if(q)l=q[1];
+var d=/[?&]donate=([^&#]+)/.exec(location.search);if(d)window.DONATE_URL=decodeURIComponent(d[1]);
+document.documentElement.setAttribute('data-lang',l);document.documentElement.lang=l==='zh'?'zh-Hant':'en';})();
+</script>
+<style>
+/* Layout: keynote stage — black, centered, one statement per slide, type sized to the projector (vw-based); Signal Field dot texture with a single blue signal */
+:root{
+  color-scheme:dark;
+  --font-sans:"Geist","Noto Sans TC","PingFang TC","Microsoft JhengHei",-apple-system,sans-serif;
+  --font-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --bg:#000000; --surface:#111214; --sunken:#17191c; --hover:#1f2226;
+  --fg:#f5f5f3; --muted:#c4c7cb; --subtle:#9a9fa5; --border:#24272b; --border-strong:#33373c;
+  --accent:#4586f0; --accent-2:#8fb8ff; --accent-soft:#0c1830; --on-accent:#ffffff;
+  --leaf:#b5d88f; --petal:#f0b8cf; --lilac:#b9acec; --sky:#9cc6ee;
+  --radius:24px; --pill:999px;
+  --ease:cubic-bezier(0.16,1,0.3,1); --reveal:900ms;
+}
+@media (prefers-reduced-motion: reduce){:root{--reveal:.01ms}}
+html[data-lang="en"] .zh, html[data-lang="zh"] .en{display:none!important}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+.deck{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.deck::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion: reduce){.deck{scroll-behavior:auto}}
+.slide{height:100%;min-height:100%;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;text-align:center;
+  padding-block:6vh 8vh;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.slide>canvas.field{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.inner{position:relative;width:100%;max-width:1400px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:3.2vh}
+
+/* keynote type: sized to the screen, not the page */
+.eyebrow{font-family:var(--font-mono);font-size:clamp(12px,1vw,16px);letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+.mega{font-size:clamp(80px,13vw,220px);font-weight:300;letter-spacing:-0.06em;line-height:.88}
+.h1{font-size:clamp(36px,4.6vw,84px);font-weight:300;letter-spacing:-0.04em;line-height:1.04;text-wrap:balance;margin:0}
+.h2{font-size:clamp(28px,3.4vw,60px);font-weight:300;letter-spacing:-0.035em;line-height:1.08;text-wrap:balance;margin:0}
+.sub{font-size:clamp(17px,1.55vw,28px);font-weight:300;color:var(--muted);line-height:1.4;max-width:30em;text-wrap:balance;margin:0}
+html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-height:1.2}
+.blue{background:linear-gradient(100deg,var(--accent) 10%,var(--accent-2) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dim{color:var(--subtle)}
+
+/* material plates: photo, blurred, tinted blue, sampled through a dot screen */
+.plate{position:absolute;inset:0;pointer-events:none;background-image:var(--img);background-size:cover;background-position:center;filter:blur(18px) saturate(.9) brightness(.55);transform:scale(1.1);opacity:.55}
+.plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.75)),rgba(13,26,46,.45);mix-blend-mode:normal}
+.slide>.plate+canvas.field,.slide>.plate~.inner{position:relative}
+.slide>.plate~canvas.field{position:absolute}
+.src{font-family:var(--font-mono);font-size:clamp(12px,1vw,17px);color:var(--subtle);margin:0;max-width:60em}
+.split{display:flex;align-items:flex-end;justify-content:center;gap:4vw;flex-wrap:wrap}
+.bars{width:min(560px,80vw);height:auto;display:block}
+.bars text{font-family:var(--font-mono);font-size:19px;fill:#c4c7cb}
+.gapdata{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:4vw;align-items:center;width:min(1300px,94vw);text-align:left}
+@media (max-width:900px){.gapdata{grid-template-columns:minmax(0,1fr);text-align:center}}
+.gapdata .bars{width:100%}
+.kpis{display:flex;flex-direction:column;gap:4vh}
+.kpi{display:flex;flex-direction:column;gap:.8vh}
+.kpi .n{font-size:clamp(36px,3.8vw,72px);font-weight:300;letter-spacing:-0.04em;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:clamp(15px,1.3vw,24px);color:var(--muted);max-width:22em}
+.nums.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.num .n small{font-size:.45em;letter-spacing:0;margin-left:.1em}
+@media (max-width:900px){.nums.three{grid-template-columns:minmax(0,1fr)}}
+
+.powered{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-family:var(--font-mono);font-size:clamp(12px,1vw,16px);letter-spacing:.06em;color:var(--subtle)}
+.powered img{height:clamp(28px,3vw,52px);width:auto;display:block}
+.path.small .w{font-size:clamp(26px,2.8vw,52px)}
+.path.small p{font-size:clamp(13px,1.05vw,18px)}
+
+/* scenarios */
+.scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.6vw;width:min(1500px,95vw);text-align:left}
+@media (max-width:900px){.scen{grid-template-columns:minmax(0,1fr)}}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.sc .ph{aspect-ratio:16/10;background-size:cover;background-color:var(--sunken);filter:saturate(.85)}
+.sc .tx{padding:clamp(14px,1.4vw,24px);display:flex;flex-direction:column;gap:1vh}
+.sc .tag{font-family:var(--font-mono);font-size:clamp(11px,.9vw,15px);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2)}
+.sc h3{margin:0;font-size:clamp(18px,1.6vw,28px);font-weight:500;letter-spacing:-0.02em}
+.sc p{margin:0;font-size:clamp(13px,1.05vw,18px);color:var(--muted);line-height:1.55}
+
+/* donor cards */
+.donors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.4vw;width:min(1200px,94vw);text-align:left}
+@media (max-width:900px){.donors{grid-template-columns:minmax(0,1fr)}}
+.dcard{position:relative;border-radius:28px;padding:clamp(20px,2.2vw,36px);display:flex;flex-direction:column;gap:2vh;overflow:hidden;
+  background:radial-gradient(120% 90% at 100% 0%,rgba(69,134,240,.28),transparent 60%),var(--surface);border:1px solid var(--border-strong)}
+.dcard::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(245,245,243,.10) 1.2px,transparent 1.8px);background-size:8px 8px;
+  -webkit-mask-image:linear-gradient(135deg,transparent 40%,#000);mask-image:linear-gradient(135deg,transparent 40%,#000)}
+.dcard.corp{background:radial-gradient(120% 90% at 100% 0%,rgba(143,184,255,.30),transparent 60%),#0c1830;border-color:var(--accent)}
+.dtop{display:flex;justify-content:space-between;align-items:center}
+.who{font-family:var(--font-mono);font-size:clamp(11px,.95vw,16px);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mini{height:clamp(18px,1.6vw,28px);width:auto;opacity:.9}
+.amt{font-size:clamp(48px,5.6vw,104px);font-weight:300;letter-spacing:-0.04em;line-height:1;font-variant-numeric:tabular-nums}
+.amt small{font-size:.32em;letter-spacing:0;color:var(--muted);margin-left:.2em}
+.dl{font-size:clamp(14px,1.2vw,21px);color:var(--muted)}
+.dl b{color:var(--fg);font-weight:500}
+.dstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;border-top:1px solid var(--border-strong);padding-top:1.6vh}
+.dstats b{display:block;font-size:clamp(20px,2vw,36px);font-weight:300;font-variant-numeric:tabular-nums}
+.dstats span{font-size:clamp(11px,.9vw,15px);color:var(--subtle)}
+.by{font-family:var(--font-mono);font-size:clamp(12px,1vw,17px);color:var(--muted)}
+.by b{color:var(--accent-2);font-weight:500}
+
+
+
+/* ===== map ===== */
+.mapstage{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.twmap{width:100%;max-height:82vh;height:auto;display:block;overflow:visible}
+.twmap .land{fill:#101215;stroke:#3a3f46;stroke-width:1.2}
+.twmap .grid{fill:none;stroke:#1a1d21;stroke-width:1}
+.twmap .arc{fill:none;stroke:url(#arcg);stroke-width:2;stroke-linecap:round;opacity:.9}
+.twmap .dest{fill:#8fb8ff}
+.twmap .ring{fill:none;stroke:#8fb8ff;stroke-width:1.5;opacity:0}
+.twmap .origin{fill:#4586f0}
+.twmap .oring{fill:none;stroke:#4586f0;stroke-width:2}
+.twmap .lbl{font-family:var(--font-sans);font-size:15px;fill:#a1a4a8}
+.twmap .lbl.o{fill:#f5f5f3;font-weight:500;font-size:16px}
+.twmap .spark{fill:#fff;filter:drop-shadow(0 0 6px #8fb8ff)}
+.mapkpi{display:flex;gap:4vw;flex-wrap:wrap}
+.mapkpi .n{display:block;font-size:clamp(44px,5vw,92px);font-weight:300;letter-spacing:-0.04em;line-height:1;font-variant-numeric:tabular-nums}
+.mapkpi .l{font-size:clamp(14px,1.2vw,21px);color:var(--muted)}
+.twmap .oring{animation:opulse 2.2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes opulse{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+.twmap .ring.hit{animation:hit 1.4s ease-out}
+@keyframes hit{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(4)}}
+.twmap .ring{transform-box:fill-box;transform-origin:center}
+
+
+.logo-chip{display:inline-flex;align-items:center;background:#fff;border-radius:10px;padding:4px 8px;flex:none}
+.logo-chip img{height:clamp(22px,1.8vw,34px);width:auto;max-width:none;display:block}
+.mono.logo-mini{background:#fff;padding:3px;overflow:hidden}
+.logo-chip.sq{padding:0;background:none;border-radius:8px;overflow:hidden}
+.mono.logo-mini img{width:clamp(22px,1.9vw,36px);height:clamp(22px,1.9vw,36px);object-fit:contain;display:block;border-radius:50%}
+
+.bleed{position:absolute;inset:0;pointer-events:none;background-image:var(--img);background-size:cover;background-position:70% 30%;filter:grayscale(1) contrast(1.1) brightness(.3);
+  -webkit-mask-image:linear-gradient(90deg,transparent 15%,#000 70%);mask-image:linear-gradient(90deg,transparent 15%,#000 70%)}
+.slide.seen .bleed{animation:kb 16s var(--ease) both}
+.slide>.bleed~.inner,.slide>.bleed~.stage{position:relative;z-index:1}
+.qrbox{position:relative}
+.match{position:absolute;top:-22px;right:-22px;display:grid;place-items:center;width:clamp(64px,6vw,108px);aspect-ratio:1;border-radius:50%;background:var(--accent);color:#fff;
+  font-size:clamp(24px,2.4vw,44px);font-weight:500;letter-spacing:-0.03em;box-shadow:0 10px 40px -8px rgba(69,134,240,.8)}
+.slide.seen .match{animation:pop 1s cubic-bezier(.2,1.6,.4,1) .8s both}
+@keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+@keyframes wob{0%,100%{transform:rotate(0)}50%{transform:rotate(-8deg) scale(1.06)}}
+.offer{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:var(--pill);background:var(--accent);color:#fff;font-weight:500;font-size:clamp(15px,1.4vw,24px)}
+
+.brands{display:flex;flex-direction:column;align-items:center;gap:2vh;margin-top:1vh}
+.brands .lbl{font-size:clamp(14px,1.2vw,21px);color:var(--muted)}
+.brands .lbl:last-child{color:var(--accent-2)}
+.brands .row{display:flex;align-items:center;justify-content:center;gap:clamp(24px,3.6vw,64px);flex-wrap:wrap}
+.brands img{height:clamp(20px,2vw,36px);width:auto;filter:brightness(0) invert(1);opacity:.85}
+.brands img[alt="Anthropic"]{height:clamp(13px,1.25vw,22px)}
+.brands img[alt="NVIDIA"]{height:clamp(17px,1.7vw,30px)}
+.js .slide:not(.seen) .brands img{opacity:0;transform:translateY(16px)}
+.brands img{transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.brands img:nth-child(2){transition-delay:.1s}.brands img:nth-child(3){transition-delay:.2s}.brands img:nth-child(4){transition-delay:.3s}.brands img:nth-child(5){transition-delay:.4s}
+
+.s3{grid-template-columns:minmax(0,1.5fr) minmax(0,.6fr)}
+.s3 .h2{white-space:nowrap;text-wrap:nowrap}
+.s3 .phone{width:min(280px,90%)}
+.facts{display:flex;gap:3vw;flex-wrap:wrap}
+.facts .n{display:block;font-size:clamp(30px,3vw,56px);font-weight:300;letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums}
+.facts .n small{font-size:.42em;margin-left:.15em;letter-spacing:0;color:var(--muted)}
+.facts .l{font-size:clamp(12px,1vw,17px);color:var(--subtle)}
+.phone{justify-self:center;width:min(320px,80%);aspect-ratio:9/18.5;border-radius:42px;background:linear-gradient(180deg,#16181c,#0b0c0e);border:1px solid var(--border-strong);
+  box-shadow:0 40px 100px -30px rgba(0,0,0,.9),inset 0 0 0 6px #0a0b0d;padding:28px 22px;display:flex;flex-direction:column;gap:22px;text-align:center}
+.ph-top{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.ph-call{display:flex;flex-direction:column;gap:6px;margin-top:6vh}
+.ph-sub{font-size:13px;color:var(--muted)}
+.ph-name{font-size:clamp(20px,1.7vw,28px);font-weight:500}
+.ph-num{font-family:var(--font-mono);font-size:13px;color:var(--subtle)}
+.ph-msg{margin-top:auto;font-size:clamp(13px,1.05vw,16px);line-height:1.5;color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--border-strong);border-radius:16px;padding:12px 14px;text-align:left}
+.ph-btns{display:flex;justify-content:space-around}
+.ph-btns span{width:56px;height:56px;border-radius:50%}
+.ph-btns .dec{background:#e5484d}.ph-btns .acc{background:#46a758}
+.slide.seen .phone{animation:ring .5s ease-in-out 1.4s 4}
+@keyframes ring{0%,100%{transform:rotate(0)}25%{transform:rotate(-2.5deg)}75%{transform:rotate(2.5deg)}}
+@media (max-width:900px){.s3{grid-template-columns:minmax(0,1fr)}.phone{width:min(260px,70%)}}
+
+/* ===== how it works ===== */
+.flowline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4vw;width:min(1400px,94vw);position:relative;text-align:left}
+.flowline::before{content:"";position:absolute;left:4%;right:4%;top:calc(clamp(18px,1.6vw,26px) + clamp(22px,2.2vw,40px));height:2px;background:linear-gradient(90deg,var(--border-strong),var(--accent),var(--accent),var(--border-strong));
+  transform-origin:left;transform:scaleX(1);transition:transform 1.6s var(--ease) .4s;z-index:0}
+.js .slide:not(.seen) .flowline::before{transform:scaleX(0)}
+.mod{position:relative;z-index:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(18px,1.6vw,26px);display:flex;flex-direction:column;gap:1.2vh;min-width:0;
+  transition:opacity .9s var(--ease),transform 1s var(--ease)}
+.js .slide:not(.seen) .mod{opacity:0;transform:translateY(30px)}
+.mod:nth-child(2){transition-delay:.55s}.mod:nth-child(3){transition-delay:.8s}.mod:nth-child(4){transition-delay:1.05s}.mod:nth-child(1){transition-delay:.3s}
+.mod.hot{border-color:var(--accent);background:linear-gradient(180deg,#0c1830,var(--surface))}
+.mod .ico{width:clamp(44px,4.4vw,80px);aspect-ratio:1;border-radius:18px;display:grid;place-items:center;background:var(--sunken);border:1px solid var(--border-strong)}
+.mod.hot .ico{background:var(--accent);border-color:var(--accent)}
+.mod .ico svg{width:55%;height:55%;fill:none;stroke:var(--fg);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mod .tag{font-family:var(--font-mono);font-size:clamp(10px,.8vw,13px);letter-spacing:.06em;width:fit-content;padding:3px 10px;border-radius:var(--pill);border:1px solid var(--border-strong);color:var(--muted)}
+.mod .tag.prod{border-color:var(--accent);color:var(--accent-2)}
+.mod h3{margin:0;font-size:clamp(20px,1.9vw,34px);font-weight:500;letter-spacing:-0.02em}
+.mod p{margin:0;font-size:clamp(13px,1.1vw,19px);color:var(--muted);line-height:1.5}
+@media (max-width:900px){.flowline{grid-template-columns:repeat(2,minmax(0,1fr))}.flowline::before{display:none}}
+
+/* ===== solution cards ===== */
+.ps{display:flex;flex-direction:column;gap:4px}
+.ps .k{font-family:var(--font-mono);font-size:clamp(10px,.8vw,13px);letter-spacing:.08em;text-transform:uppercase;width:fit-content}
+.ps .k.pain{color:var(--petal)}
+.ps .k.fix{color:var(--accent-2)}
+.ps p{margin:0}
+/* ===== final ===== */
+.fin{gap:3.4vh}
+.fgrid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1fr);gap:2.4vw;width:min(1400px,94vw);align-items:center}
+.fcol{display:flex;flex-direction:column;align-items:center;gap:2vh}
+.qcol .qr{width:clamp(180px,15vw,280px)}
+.dcard.dmini{gap:1.4vh;text-align:left}
+.dcard.dmini .amt{font-size:clamp(40px,4vw,72px)}
+.bcol .lbl{font-size:clamp(13px,1.1vw,19px);color:var(--muted);text-align:center}
+.bcol .lbl.hi{color:var(--accent-2)}
+.blogos{display:grid;grid-template-columns:repeat(2,auto);gap:2.2vh 2.4vw;justify-content:center;align-items:center}
+.blogos img{height:clamp(18px,1.7vw,30px);width:auto;filter:brightness(0) invert(1);opacity:.85}
+.blogos img[alt="Anthropic"]{height:clamp(12px,1.1vw,20px)}
+.blogos img:last-child{grid-column:1 / -1;justify-self:center}
+@media (max-width:1000px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== how slide: key, blue ===== */
+.howblue{background:radial-gradient(70% 60% at 50% 35%,rgba(69,134,240,.30),transparent 70%),radial-gradient(50% 40% at 50% 100%,rgba(143,184,255,.12),transparent 70%),var(--bg)}
+.howblue .mod{border-color:rgba(69,134,240,.55);background:linear-gradient(180deg,rgba(12,24,48,.95),rgba(17,18,20,.95))}
+.howblue .mod.hot{border-color:var(--accent);background:linear-gradient(180deg,#123067,#0c1830);box-shadow:0 30px 80px -30px rgba(69,134,240,.7)}
+.howblue .mod .ico{background:rgba(69,134,240,.15);border-color:rgba(69,134,240,.5)}
+.brandpill{display:inline-flex;align-items:center;gap:8px;width:fit-content;background:#fff;color:#1f49a3;border-radius:var(--pill);padding:5px 12px 5px 6px;font-weight:600;font-size:clamp(11px,.9vw,15px)}
+.brandpill img{width:clamp(18px,1.5vw,26px);height:auto;display:block}
+.shot{aspect-ratio:1200/630;border-radius:12px;background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.12)}
+
+/* ===== final v2 ===== */
+.fin2{gap:3.6vh}
+.fmain{display:flex;align-items:center;justify-content:center;gap:4.5vw;flex-wrap:wrap}
+.fmain .qr{width:clamp(200px,17vw,320px)}
+.fcopy{display:flex;flex-direction:column;align-items:flex-start;gap:2vh;text-align:left}
+.foffer{margin:0;font-size:clamp(30px,3.4vw,62px);font-weight:300;letter-spacing:-0.03em;line-height:1.15}
+html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
+.fngos{display:flex;flex-direction:column;gap:1.2vh}
+.fngos .lbl{font-size:clamp(12px,1vw,17px);color:var(--subtle)}
+.fngos .row{display:flex;gap:12px;align-items:center}
+.fstrip{display:flex;align-items:center;justify-content:center;gap:clamp(14px,2vw,36px);flex-wrap:wrap;padding:1.6vh 2.4vw;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.fstrip .lbl{font-size:clamp(12px,1vw,17px);color:var(--muted)}
+.fstrip .lbl.hi{color:var(--accent-2)}
+.fstrip img{height:clamp(14px,1.3vw,22px);width:auto;filter:brightness(0) invert(1);opacity:.75}
+.fstrip img.anth{height:clamp(10px,.85vw,15px)}
+@media (max-width:900px){.fcopy{align-items:center;text-align:center}}
+
+/* ===== 90-point upgrades ===== */
+.ticker{display:flex;flex-direction:column;align-items:center;gap:1vh;margin-top:2vh}
+.tnum{font-family:var(--font-mono);font-size:clamp(34px,4.2vw,80px);font-weight:400;letter-spacing:-0.02em;color:var(--accent-2);font-variant-numeric:tabular-nums}
+.ticker .tl{font-size:clamp(13px,1.1vw,19px);color:var(--subtle);max-width:40em}
+.sflow{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr auto;align-items:center;gap:1vw;width:min(1300px,94vw);margin:2vh auto 0}
+.node{display:flex;flex-direction:column;align-items:center;gap:1.2vh;min-width:0}
+.node b{font-weight:500;font-size:clamp(13px,1.1vw,19px);color:var(--fg);white-space:nowrap}
+.node.you .dotsq{width:clamp(70px,6vw,110px);aspect-ratio:1;border-radius:18px;border:1px dashed var(--border-strong);
+  background-image:radial-gradient(circle,var(--accent-2) 2px,transparent 2.6px);background-size:12px 12px;opacity:.9}
+.node.lab img{width:clamp(70px,6vw,110px);height:auto;background:#fff;border-radius:22px;padding:10px;box-shadow:0 0 0 6px rgba(69,134,240,.25),0 20px 60px -20px rgba(69,134,240,.8)}
+.node.ngo .trio{display:flex;flex-direction:column;gap:6px;align-items:center}
+.node.ppl .faces{display:flex}
+.node.ppl .faces span{width:clamp(48px,4vw,74px);aspect-ratio:1;border-radius:50%;background-size:cover;filter:grayscale(1) contrast(1.1);border:3px solid var(--bg);margin-left:-14px}
+.node.ppl .faces span:first-child{margin-left:0}
+.pipe{position:relative;height:2px;background:var(--border-strong);overflow:visible}
+.pipe i{position:absolute;top:-4px;left:0;width:10px;height:10px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 14px var(--accent-2);opacity:0}
+.slide.seen .pipe i{animation:travel 3.2s cubic-bezier(.45,0,.55,1) infinite}
+.slide.seen .pipe:nth-of-type(4) i{animation-delay:1s}.slide.seen .pipe:nth-of-type(6) i{animation-delay:2s}
+@keyframes travel{0%{left:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:calc(100% - 10px);opacity:0}}
+@media (max-width:900px){.sflow{grid-template-columns:minmax(0,1fr)}.pipe{height:28px;width:2px;justify-self:center}}
+.chat{display:flex;flex-direction:column;gap:1.4vh;max-width:30em}
+.bub{padding:12px 16px;border-radius:18px;font-size:clamp(14px,1.2vw,20px);line-height:1.45;max-width:92%}
+.bub.me{background:var(--sunken);border:1px solid var(--border-strong);align-self:flex-start;border-bottom-left-radius:6px}
+.bub.ai{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:6px}
+.js .slide:not(.seen) .bub{opacity:0;transform:translateY(16px)}
+.bub{transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.bub.me{transition-delay:.6s}.bub.ai{transition-delay:1.6s}
+
+.fmain{gap:5vw}
+.fq{display:flex;flex-direction:column;align-items:center;gap:2.4vh;text-align:center}
+.fq .foffer{font-size:clamp(24px,2.4vw,44px)}
+.dcard.big{width:min(640px,40vw);gap:2.4vh;text-align:left;padding:clamp(26px,3vw,52px)}
+.dcard.big .who{font-size:clamp(13px,1.2vw,22px)}
+.dcard.big .amt{font-size:clamp(64px,7vw,128px)}
+.dcard.big .dl{font-size:clamp(18px,1.7vw,30px);display:flex;align-items:center;gap:14px}
+.dcard.big .mono.logo-mini{min-width:clamp(48px,4.2vw,76px);height:clamp(48px,4.2vw,76px)}
+.dcard.big .mono.logo-mini img{width:clamp(40px,3.6vw,66px);height:clamp(40px,3.6vw,66px)}
+.dcard.big .ngo.stack .mono+.mono{margin-left:-10px}
+.dcard.big .by{font-size:clamp(15px,1.4vw,24px)}
+@media (max-width:900px){.dcard.big{width:100%}}
+
+/* ===== takeaway bar ===== */
+.slide:has(> .takeaway){padding-bottom:calc(8vh + 64px)}
+.takeaway{position:absolute;left:50%;bottom:max(4.5vh,28px);transform:translateX(-50%);z-index:2;margin:0;display:inline-flex;align-items:center;gap:14px;
+  max-width:min(1200px,90vw);padding:12px 22px 12px 12px;border-radius:999px;background:rgba(17,18,20,.9);border:1px solid rgba(69,134,240,.6);
+  font-size:clamp(15px,1.45vw,26px);color:var(--fg);box-shadow:0 20px 60px -20px rgba(69,134,240,.6);white-space:nowrap}
+.takeaway .tk{flex:none;font-family:var(--font-mono);font-size:clamp(11px,.85vw,14px);letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:#fff;border-radius:999px;padding:5px 12px}
+.takeaway{transition:opacity .9s var(--ease) 1.4s,transform .9s var(--ease) 1.4s}
+.js .slide:not(.seen) .takeaway{opacity:0;transform:translate(-50%,16px)}
+@media (max-width:900px){.takeaway{white-space:normal;border-radius:18px;width:90vw}}
+
+/* ===== duo charts ===== */
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.4vw;width:min(1400px,94vw)}
+.panel{background:rgba(17,18,20,.85);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(18px,1.8vw,30px);display:flex;flex-direction:column;gap:1.6vh;text-align:left}
+.ptitle{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:clamp(16px,1.45vw,26px);color:var(--fg)}
+.ptitle b{font-size:clamp(34px,3.6vw,64px);font-weight:300;letter-spacing:-0.03em;color:var(--fg)}
+.panel .bars{width:100%;max-height:34vh}
+@media (max-width:900px){.duo{grid-template-columns:minmax(0,1fr)}}
+
+.lockup{display:inline-flex;align-items:center;gap:10px;color:var(--fg)}
+.lockup img{height:clamp(24px,2.2vw,40px);width:auto}
+.lockup b{font-family:var(--font-sans);font-weight:600;font-size:clamp(18px,1.7vw,30px);letter-spacing:-0.02em}
+.lockup small{font-family:var(--font-mono);font-size:clamp(10px,.8vw,13px);color:var(--subtle);letter-spacing:.04em;align-self:flex-end;margin-bottom:.3em}
+.dtop .lockup b{font-size:clamp(13px,1.1vw,18px)}
+
+.liverow{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:clamp(13px,1vw,18px);color:var(--muted)}
+.liverow b{color:var(--fg);font-weight:500;font-variant-numeric:tabular-nums}
+.lv{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:clamp(11px,.85vw,14px);color:var(--subtle)}
+.lv i{width:8px;height:8px;border-radius:50%;border:1.5px dashed currentColor}
+.lv.on{color:#ff6b6b}.lv.on i{background:currentColor;border-style:solid;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.3}}
+
+/* one QR per slide: hide the corner widget QR where the slide has its own big QR */
+#dw-qr{transition:opacity .4s ease,visibility .4s}
+body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none!important}
+/* ===== NGO badges ===== */
+.ngo{display:inline-flex;align-items:center;gap:10px}
+.ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
+  background:var(--fg);color:var(--bg);font-weight:600;font-size:clamp(11px,.95vw,16px);letter-spacing:-0.02em;flex:none}
+.ngo h3{margin:0}
+.ngo.inline{vertical-align:middle;margin-left:6px}
+.ngo.stack .mono+.mono{margin-left:-14px;box-shadow:0 0 0 2px var(--surface)}
+.ngos{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;font-size:clamp(13px,1.05vw,18px);color:var(--fg)}
+.ngos .lbl{font-family:var(--font-mono);font-size:clamp(11px,.9vw,15px);letter-spacing:.08em;text-transform:uppercase;color:var(--subtle);width:100%}
+@media (max-width:900px){.ngos{justify-content:center}}
+
+/* ===== photos: black and white, slow Ken Burns ===== */
+.sc .ph{position:relative;overflow:hidden;background:none}
+.sc .ph i{position:absolute;inset:0;background-size:cover;filter:grayscale(1) contrast(1.15) brightness(.92);transform:scale(1.08)}
+.slide.seen .sc .ph i{animation:kb 14s var(--ease) both}
+.slide.seen .sc:nth-child(2) .ph i{animation-delay:.3s}
+.slide.seen .sc:nth-child(3) .ph i{animation-delay:.6s}
+@keyframes kb{from{transform:scale(1.22) translate(2%,1%)}to{transform:scale(1.04) translate(0,0)}}
+.plate{filter:grayscale(1) blur(18px) brightness(.5)!important}
+
+/* ===== stronger entrances ===== */
+.js .slide:not(.seen) .reveal{opacity:0;transform:translateY(48px) scale(.97);filter:blur(10px)}
+.reveal{transition:opacity 1s var(--ease),transform 1.1s var(--ease),filter 1s var(--ease)}
+.reveal.d1{transition-delay:.18s}.reveal.d2{transition-delay:.38s}.reveal.d3{transition-delay:.58s}
+.js .slide:not(.seen) .lines li,.js .slide:not(.seen) .pillar,.js .slide:not(.seen) .sc,.js .slide:not(.seen) .num,.js .slide:not(.seen) .dcard,.js .slide:not(.seen) .kpi,.js .slide:not(.seen) .step{opacity:0;transform:translateY(40px)}
+.lines li,.pillar,.sc,.num,.dcard,.kpi,.step{transition:opacity .9s var(--ease),transform 1s var(--ease)}
+.lines li:nth-child(2),.pillar:nth-child(2),.sc:nth-child(2),.num:nth-child(2),.dcard:nth-child(2),.kpi:nth-child(2),.step:nth-child(3){transition-delay:.5s}
+.lines li:nth-child(3),.pillar:nth-child(3),.sc:nth-child(3),.num:nth-child(3),.step:nth-child(5){transition-delay:.7s}
+.num:nth-child(4){transition-delay:.9s}
+.lines li:nth-child(1),.pillar:nth-child(1),.sc:nth-child(1),.num:nth-child(1),.dcard:nth-child(1),.kpi:nth-child(1),.step:nth-child(1){transition-delay:.3s}
+
+/* bars grow */
+.bars rect{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(1);transition:transform 1.4s var(--ease)}
+.js .slide:not(.seen) .bars rect{transform:scaleY(0)}
+.bars rect:nth-of-type(2){transition-delay:.25s}.bars rect:nth-of-type(3){transition-delay:.5s}.bars rect:nth-of-type(4){transition-delay:.75s}
+
+/* mega glow */
+.slide.seen .mega .blue{animation:none}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 0 rgba(69,134,240,0))}50%{filter:drop-shadow(0 0 36px rgba(69,134,240,.55))}}
+
+/* pillars: build + deploy breathe */
+.slide.seen .pillar.on{animation:breathe 2.4s ease-in-out 1.2s 1}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(69,134,240,0)}50%{box-shadow:0 0 0 6px rgba(69,134,240,.18),0 20px 60px -20px rgba(69,134,240,.6)}}
+
+/* donor cards float + shimmer */
+.slide.seen .dcard{animation:none}
+.slide.seen .dcard.corp{animation-delay:2.2s}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -10px}}
+.dcard::before{content:"";position:absolute;inset:-40% auto -40% -60%;width:40%;transform:rotate(18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);pointer-events:none}
+.slide.seen .dcard::before{animation:shine 2.4s ease-in-out 1.4s 1}
+@keyframes shine{0%{left:-60%}45%,100%{left:130%}}
+
+/* QR pulse */
+.slide.seen .qr:not(.empty){animation:pulse 2.6s ease-out 3}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(69,134,240,.55),0 30px 90px -20px rgba(69,134,240,.55)}100%{box-shadow:0 0 0 28px rgba(69,134,240,0),0 30px 90px -20px rgba(69,134,240,.55)}}
+
+/* console glow when restored */
+.console.flash{animation:flash 1.2s var(--ease)}
+@keyframes flash{0%{box-shadow:0 0 0 0 rgba(181,216,143,.7)}100%{box-shadow:0 0 0 30px rgba(181,216,143,0),0 30px 80px -30px rgba(69,134,240,.35)}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before{animation:none!important;transition:none!important}
+  .js .slide:not(.seen) .reveal,.js .slide:not(.seen) .lines li,.js .slide:not(.seen) .pillar,.js .slide:not(.seen) .sc,.js .slide:not(.seen) .num,.js .slide:not(.seen) .dcard,.js .slide:not(.seen) .kpi,.js .slide:not(.seen) .step,.js .slide:not(.seen) .bars rect{opacity:1;transform:none;filter:none}
+}
+
+/* gap chart */
+.chart{width:min(1100px,92vw);height:auto;display:block}
+.chart text{font-family:var(--font-mono);font-size:15px;fill:var(--subtle)}
+
+/* persona */
+.lines{display:flex;flex-direction:column;gap:2.2vh;margin:0;padding:0;list-style:none}
+.lines li{font-size:clamp(17px,1.6vw,30px);font-weight:300;color:var(--muted)}
+.lines li b{color:var(--fg);font-weight:400}
+
+/* three pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.4vw;width:min(1300px,94vw)}
+.pillar{display:flex;flex-direction:column;align-items:center;gap:1.4vh;padding:4vh 2vw;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)}
+.pillar .w{font-size:clamp(40px,5.2vw,96px);font-weight:300;letter-spacing:-0.04em;line-height:1}
+.pillar p{margin:0;font-size:clamp(15px,1.4vw,24px);color:var(--muted);text-wrap:balance}
+.pillar.on{border-color:var(--accent);background:var(--accent-soft)}
+@media (max-width:700px){.pillars{grid-template-columns:minmax(0,1fr)}}
+
+/* console */
+.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4vw;align-items:center;width:min(1280px,90vw);text-align:left}
+@media (max-width:900px){.stage{grid-template-columns:minmax(0,1fr);text-align:center}}
+.console{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius);padding:clamp(18px,2vw,32px);display:flex;flex-direction:column;gap:2vh;box-shadow:0 30px 80px -30px rgba(69,134,240,.35)}
+.console .top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:clamp(14px,1.2vw,20px)}
+.console .ttl{display:flex;gap:10px;align-items:center;font-weight:500}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent);flex:none}
+.pill{font-family:var(--font-mono);font-size:clamp(11px,.9vw,15px);padding:4px 12px;border-radius:var(--pill);border:1px solid var(--leaf);color:var(--leaf);display:inline-flex;gap:8px;align-items:center}
+.pill i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.pill.off{border-color:var(--petal);color:var(--petal)}
+.pill.off i{background:transparent;border:1.5px dashed currentColor}
+.meter{background:var(--sunken);border-radius:16px;padding:clamp(14px,1.4vw,24px);display:flex;flex-direction:column;gap:1.2vh}
+.meter .row{display:flex;justify-content:space-between;color:var(--muted);font-size:clamp(13px,1vw,18px)}
+.credits{font-size:clamp(48px,5.4vw,96px);font-weight:300;letter-spacing:-0.04em;line-height:1;font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:var(--pill);background:var(--border)}
+.bar i{display:block;height:100%;width:35%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 700ms var(--ease)}
+.bar.low i{background:var(--petal)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kv span{display:block;font-size:clamp(12px,.95vw,16px);color:var(--subtle)}
+.kv b{font-size:clamp(24px,2.2vw,40px);font-weight:300;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{all:unset;cursor:pointer;padding:clamp(10px,1vw,16px) clamp(16px,1.6vw,28px);border-radius:var(--pill);border:1px solid var(--border-strong);font-weight:500;font-size:clamp(14px,1.1vw,19px);transition:background 140ms}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{background:#5d97f2}
+.btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-family:var(--font-mono);font-size:clamp(12px,.95vw,16px);color:var(--muted);min-height:6em}
+.log li{display:flex;gap:10px;align-items:center}
+.log li::before{content:"";width:8px;height:8px;border-radius:50%;border:1.5px solid var(--subtle);flex:none}
+.log li.new::before{background:var(--accent);border-color:var(--accent)}
+
+/* donate */
+.qrwrap{display:flex;gap:5vw;max-width:1300px;margin:0 auto;align-items:center;justify-content:center;flex-wrap:wrap}
+.qr{width:clamp(220px,22vw,380px);aspect-ratio:1;max-width:100%;border-radius:28px;background:#fff;padding:clamp(14px,1.4vw,24px);display:grid;place-items:center;box-shadow:0 0 0 1px var(--border),0 30px 90px -20px rgba(69,134,240,.55)}
+.qr img,.qr canvas{width:100%!important;height:auto!important;display:block}
+.qr.empty{background:var(--surface);color:var(--subtle);font-family:var(--font-mono);font-size:clamp(12px,1vw,16px);text-align:center;border:1px dashed var(--border-strong);box-shadow:none;
+  background-image:radial-gradient(circle,var(--border-strong) 1.5px,transparent 2px);background-size:10px 10px}
+.qr.empty span{background:var(--bg);padding:6px 10px;border-radius:6px;line-height:1.5}
+.donate-copy{display:flex;flex-direction:column;gap:2vh;align-items:flex-start;text-align:left;max-width:min(40em,46vw)}
+@media (max-width:900px){.donate-copy{align-items:center;text-align:center}}
+.amounts{display:flex;gap:10px;flex-wrap:wrap}
+.amounts span{font-family:var(--font-mono);font-size:clamp(14px,1.2vw,20px);padding:8px 16px;border-radius:var(--pill);border:1px solid var(--border-strong);color:var(--fg)}
+.url{font-family:var(--font-mono);font-size:clamp(12px,.95vw,16px);color:var(--subtle);word-break:break-all}
+
+/* numbers */
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3vw;width:min(1400px,94vw)}
+.num{display:flex;flex-direction:column;align-items:center;gap:1vh}
+.num .n{font-size:clamp(44px,5vw,96px);font-weight:300;letter-spacing:-0.05em;line-height:1;font-variant-numeric:tabular-nums}
+.num .l{font-size:clamp(14px,1.25vw,22px);color:var(--muted);text-wrap:balance;max-width:16em}
+@media (max-width:900px){.nums{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* path: person -> company -> platform */
+.path{display:flex;align-items:center;justify-content:center;gap:2vw;flex-wrap:wrap}
+.step{display:flex;flex-direction:column;align-items:center;gap:1vh;min-width:12em}
+.step .w{font-size:clamp(36px,4.4vw,80px);font-weight:300;letter-spacing:-0.035em;line-height:1}
+.step p{margin:0;font-size:clamp(14px,1.25vw,22px);color:var(--muted)}
+.arrow{font-size:clamp(28px,3vw,56px);color:var(--subtle);font-weight:200}
+
+.reveal{transition:opacity var(--reveal) var(--ease),transform var(--reveal) var(--ease)}
+.js .slide:not(.seen) .reveal{opacity:.001;transform:translateY(24px)}
+.reveal.d1{transition-delay:120ms}.reveal.d2{transition-delay:260ms}.reveal.d3{transition-delay:400ms}
+
+/* chrome hides while presenting; appears on mouse move */
+.chrome{transition:opacity 400ms}
+body.idle .chrome{opacity:0;pointer-events:none}
+.hud{position:fixed;z-index:5;bottom:max(16px,env(safe-area-inset-bottom,0px));right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--pill);padding:4px}
+.hud button{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--fg);font-size:16px}
+.hud button:hover{background:var(--hover)}
+.hud button:focus-visible,.lang button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.hud .count{font-family:var(--font-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;padding:0 6px;min-width:58px;text-align:center}
+.lang{position:fixed;z-index:5;top:max(12px,env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));display:flex;padding:3px;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:var(--pill)}
+.lang button{all:unset;cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:4px 12px;border-radius:var(--pill);color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.mark{position:fixed;z-index:4;top:max(16px,env(safe-area-inset-top,0px));left:max(20px,env(safe-area-inset-left,0px));font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--subtle);display:flex;gap:10px;align-items:center}
+</style>
+</head>
+<body>
+<div class="mark chrome"><span class="dot"></span>Share the Speed · Agent Lab</div>
+<div class="lang chrome" role="group" aria-label="Language">
+  <button type="button" data-set-lang="zh" aria-pressed="true">中文</button>
+  <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+</div>
+
+<main class="deck" id="deck">
+  <!-- 0 Opening question -->
+  <section class="slide" aria-label="Opening">
+    <canvas class="field" data-mode="fast"></canvas>
+    <div class="inner">
+      <div class="eyebrow reveal">c0mpiled-18 · YC Startup School Hackathon · Taipei</div>
+      <p class="h1 reveal d1"><span class="zh">今天晚上，<br>你用了多少 <span class="blue">token</span>？</span><span class="en">How many <span class="blue">tokens</span><br>did you use tonight?</span></p>
+      <div class="ticker reveal d2">
+        <span class="tnum" id="tick">0</span>
+        <span class="tl"><span class="zh">你看這頁的這幾秒，光 Google 就處理了這麼多 token（約每秒 12 億）</span><span class="en">tokens Google alone processed while you read this (about 1.2 billion per second)</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 Speed-up and the gap, side by side -->
+  <section class="slide" aria-label="1">
+    <canvas class="field" data-mode="fast"></canvas>
+    <div class="inner">
+      <p class="h2 reveal"><span class="zh">AI 讓我們加速了 330 倍，<br><span class="blue">也把世界的差距拉得更開。</span></span><span class="en">AI sped us up 330 times,<br><span class="blue">and pulled the world further apart.</span></span></p>
+      <div class="duo reveal d1">
+        <div class="panel">
+          <span class="ptitle"><b class="blue">330×</b><span class="zh">Google 每月處理的 token，兩年成長</span><span class="en">growth in Google's monthly tokens, in two years</span></span>
+          <svg class="bars" viewBox="0 0 520 300" role="img" aria-label="Google monthly tokens: 9.7 trillion in 2024, 480 trillion in 2025, 3.2 quadrillion in 2026">
+          <line x1="0" y1="260" x2="520" y2="260" stroke="#24272b"/>
+          <rect x="30" y="258" width="110" height="2" fill="#6e7277"/>
+          <rect x="200" y="221" width="110" height="39" rx="6" fill="#33373c"/>
+          <rect x="370" y="0" width="110" height="260" rx="6" fill="url(#gb)"/>
+          <defs><linearGradient id="gb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient></defs>
+          <text x="85" y="245" text-anchor="middle" style="fill:#d6d8db;font-size:22px">9.7T</text>
+          <text x="255" y="210" text-anchor="middle" style="fill:#d6d8db;font-size:22px">480T</text>
+          <text x="425" y="36" text-anchor="middle" style="fill:#000;font-size:22px;font-weight:600">3.2Q</text>
+          <text x="85" y="288" text-anchor="middle">2024</text><text x="255" y="288" text-anchor="middle">2025</text><text x="425" y="288" text-anchor="middle">2026</text>
+        </svg>
+          <span class="src"><span class="zh">資料：Google I/O 2024–2026</span><span class="en">Source: Google I/O 2024–2026</span></span>
+        </div>
+        <div class="panel">
+          <span class="ptitle"><b>9.8 → 10.6</b><span class="zh">已開發與開發中國家的 AI 使用率差距（百分點），半年內又擴大</span><span class="en">percentage-point AI gap between developed and developing countries, widening in six months</span></span>
+          <svg class="bars" viewBox="0 0 640 320" role="img" aria-label="AI user share: Global North 22.9% to 24.7%, Global South 13.1% to 14.1% in 2025">
+          <line x1="0" y1="270" x2="640" y2="270" stroke="#24272b"/>
+          <defs><linearGradient id="gn" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient></defs>
+          <!-- scale: 1% = 9px -->
+          <rect x="40" y="64" width="110" height="206" rx="6" fill="#1e3a66"/><rect x="170" y="48" width="110" height="222" rx="6" fill="url(#gn)"/>
+          <rect x="360" y="152" width="110" height="118" rx="6" fill="#26292d"/><rect x="490" y="143" width="110" height="127" rx="6" fill="#4a4e54"/>
+          <text x="95" y="54" text-anchor="middle" style="fill:#d6d8db;font-size:22px">22.9%</text>
+          <text x="225" y="38" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">24.7%</text>
+          <text x="415" y="142" text-anchor="middle" style="fill:#d6d8db;font-size:22px">13.1%</text>
+          <text x="545" y="133" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">14.1%</text>
+          <text x="95" y="294" text-anchor="middle">H1</text><text x="225" y="294" text-anchor="middle">H2</text>
+          <text x="415" y="294" text-anchor="middle">H1</text><text x="545" y="294" text-anchor="middle">H2</text>
+          <text x="160" y="316" text-anchor="middle" style="fill:#8fb8ff"><tspan class="zh">已開發國家</tspan><tspan class="en">Developed countries</tspan></text>
+          <text x="480" y="316" text-anchor="middle"><tspan class="zh">開發中國家</tspan><tspan class="en">Developing countries</tspan></text>
+        </svg>
+          <span class="src"><span class="zh">資料：Microsoft AI Diffusion Report 2025 H2</span><span class="en">Source: Microsoft AI Diffusion Report 2025 H2</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 Who is left behind: Taiwan data + persona -->
+  <section class="slide" aria-label="3">
+    <div class="bleed" style="--img:url('assets/photos/elder.jpg')" aria-hidden="true"></div>
+    <div class="stage s3">
+      <div style="display:flex;flex-direction:column;gap:2.4vh">
+        <div class="eyebrow reveal"><span class="zh">晚上 9:47 · 在台灣每天都在發生</span><span class="en">9:47 pm · Happening in Taiwan every day</span></div>
+        <p class="h2 reveal d1"><span class="zh">獨居的阿嬤接到詐騙電話，<br><span class="blue">身邊卻沒有一個人可以問。</span></span><span class="en">Grandma gets a scam call,<br><span class="blue">and there's no one to ask.</span></span></p>
+        <p class="sub reveal d2"><span class="zh">「健保局」說她的卡被盜用、要她轉帳。社工下班了，孩子在台北。</span><span class="en">"The health bureau" says her card was stolen and she must transfer money. Her caseworker is off. Her kids are in Taipei.</span></p>
+        <div class="facts reveal d3">
+          <div><span class="n">1 / 4</span><span class="l"><span class="zh">長者獨居</span><span class="en">elders live alone</span></span></div>
+          <div><span class="n">16.2<small><span class="zh">萬件</span><span class="en">K</span></small></span><span class="l"><span class="zh">2025 詐騙案</span><span class="en">scam cases in 2025</span></span></div>
+          <div><span class="n">893<small><span class="zh">億</span><span class="en">×100M</span></small></span><span class="l"><span class="zh">2025 詐騙財損（新台幣）</span><span class="en">NT$ lost to scams in 2025</span></span></div>
+        </div>
+        <p class="src reveal d3"><span class="zh">資料：內政部（2025 年底）、TVBS 引內政部獨居數據、警政署 165 打詐儀表板。阿梅阿嬤為示意人物。</span><span class="en">Sources: Ministry of the Interior (end of 2025), TVBS citing MOI, NPA 165 anti-fraud dashboard. Grandma Mei is illustrative.</span></p>
+      </div>
+      <div class="phone reveal d2" aria-label="Incoming call mock">
+        <div class="ph-top"><span>21:47</span><span>●●●</span></div>
+        <div class="ph-call">
+          <span class="ph-sub"><span class="zh">來電</span><span class="en">Incoming call</span></span>
+          <span class="ph-name"><span class="zh">健保局 客服中心</span><span class="en">Health Bureau Service</span></span>
+          <span class="ph-num">+886 2 2xxx xxxx</span>
+        </div>
+        <div class="ph-msg"><span class="zh">「您的健保卡遭到盜用，請立即將存款轉到安全帳戶……」</span><span class="en">"Your health card has been stolen. Move your savings to a safe account now..."</span></div>
+        <div class="ph-btns"><span class="dec"></span><span class="acc"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" aria-label="4">
+    <div class="plate" style="--img:url('assets/cosmos-field.webp')" aria-hidden="true"></div>
+    <canvas class="field" data-mode="share"></canvas>
+    <div class="inner">
+      <div class="eyebrow reveal">Share the Speed · <span class="zh">我們的解法</span><span class="en">our answer</span></div>
+      <p class="h1 reveal d1"><span class="zh">把你用不完的 AI，<br><span class="blue">分給被留下的弱勢。</span></span><span class="en">Share your spare AI<br><span class="blue">with the people left behind.</span></span></p>
+      <div class="sflow reveal d2" aria-label="Your spare AI flows through Agent Lab to NGO agents and the people they serve">
+        <div class="node you"><div class="dotsq"></div><b><span class="zh">你的閒置 AI 額度</span><span class="en">Your spare AI</span></b></div>
+        <div class="pipe"><i></i></div>
+        <div class="node lab"><img src="assets/agentlab/app-icon-512.png" alt=""><b>Agent Lab</b></div>
+        <div class="pipe"><i></i></div>
+        <div class="node ngo"><div class="trio"><span class="logo-chip"><img src="assets/ngo/huashan.jpg" alt=""></span><span class="logo-chip"><img src="assets/ngo/art.png" alt=""></span><span class="logo-chip sq"><img src="assets/ngo/oneforty.png" alt=""></span></div><b><span class="zh">NGO 的 AI agent</span><span class="en">NGO agents</span></b></div>
+        <div class="pipe"><i></i></div>
+        <div class="node ppl"><div class="faces"><span style="background-image:url('assets/photos/elder.jpg');background-position:52% 25%"></span><span style="background-image:url('assets/photos/dogs.jpg');background-position:60% 40%"></span><span style="background-image:url('assets/photos/migrant.jpg');background-position:58% 50%"></span></div><b><span class="zh">被留下的人</span><span class="en">People left behind</span></b></div>
+      </div>
+      <p class="sub reveal d2"><span class="zh">把你的 AI 算力，分一份給服務弱勢的 NGO。<br>建置、部署，我們一起送。</span><span class="en">Share a slice of your AI capacity with the NGOs that serve people left behind.<br>We build and deploy the agent for them.</span></p>
+    </div>
+  </section>
+
+  <!-- How: modules -->
+  <section class="slide howblue" aria-label="How">
+    <div class="inner">
+      <div class="eyebrow reveal"><span class="zh">解法 · 怎麼做到</span><span class="en">How it works</span></div>
+      <p class="h2 reveal d1"><span class="zh">你的一筆捐款，<br><span class="blue">走完這四步，變成一個會動的 agent。</span></span><span class="en">Your gift<br><span class="blue">takes four steps to become a working agent.</span></span></p>
+      <div class="flowline reveal d2">
+        <div class="mod">
+          <div class="ico"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3"/><path d="M5 14h22M10 19h5"/></svg></div>
+          <h3><span class="zh">捐贈池</span><span class="en">Donation pool</span></h3>
+          <p><span class="zh">個人刷卡、企業撥出閒置額度，統一進到 NGO 的 AI 帳戶</span><span class="en">People pay by card, companies set aside spare capacity, all into the NGO's AI account</span></p>
+        </div>
+        <div class="mod hot">
+          <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span>Agent Lab · AI Gateway</span></div>
+          <h3>AI Gateway</h3>
+          <p><span class="zh">分配預算、自動選模型、計量每一次呼叫；額度用完就暫停</span><span class="en">Allocates budget, routes models, meters every call; pauses when credits run out</span></p>
+        </div>
+        <div class="mod hot">
+          <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span><span class="zh">Agent Lab · 部署</span><span class="en">Agent Lab · Deploy</span></span></div>
+          <h3>Deployment</h3>
+          <p><span class="zh">NGO 不寫程式，一鍵把 agent 上線到 LINE、網頁、語音</span><span class="en">No code: one click puts the agent on LINE, web and voice</span></p>
+        </div>
+        <div class="mod">
+          <div class="ico"><svg viewBox="0 0 32 32"><path d="M6 25V7M6 25h20"/><path d="M10 20l5-5 4 3 6-7"/></svg></div>
+          <h3><span class="zh">成效回報</span><span class="en">Impact report</span></h3>
+          <p><span class="zh">服務了誰、花了多少，回到每一位捐贈者手上</span><span class="en">Who was served and at what cost, back to every donor</span></p>
+        </div>
+      </div>
+      <p class="sub reveal d3"><span class="zh">NGO 只要提供知識和服務流程，其他我們全包。</span><span class="en">NGOs bring their knowledge and process. We handle the rest.</span></p>
+    </div>
+  </section>
+
+  <!-- 4b Three NGOs, three scenarios -->
+  <section class="slide" aria-label="Scenarios">
+    <div class="inner">
+      <div class="eyebrow reveal">Solution</div>
+      <p class="h2 reveal d1"><span class="zh">每個 NGO，都有自己的 <span class="blue">AI agent</span>。</span><span class="en">Every NGO gets its own <span class="blue">AI agent</span>.</span></p>
+      <div class="scen reveal d1">
+        <article class="sc">
+          <div class="ph"><i style="background-image:url('assets/photos/elder.jpg');background-position:52% 30%"></i></div>
+          <div class="tx">
+            <span class="tag"><span class="zh">偏鄉長者</span><span class="en">Rural elders</span></span>
+            <div class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/huashan.jpg" alt="華山基金會"></span><h3><span class="zh">例如：華山基金會</span><span class="en">e.g. Hwa Shan Foundation</span></h3></div>
+            <div class="ps"><span class="k pain"><span class="zh">痛點</span><span class="en">Problem</span></span><p><span class="zh">長輩分不出詐騙、看不懂通知，社工一個人顧幾十位。</span><span class="en">Elders can't spot scams or read notices; one caseworker covers dozens.</span></p></div><div class="ps"><span class="k fix"><span class="zh">Agent 怎麼解</span><span class="en">Agent solution</span></span><p><span class="zh">24 小時接長輩的問題，判斷詐騙、讀懂通知，異常立刻通知社工。</span><span class="en">Answers elders 24/7, flags scams, explains notices, alerts the caseworker.</span></p></div>
+          </div>
+        </article>
+        <article class="sc">
+          <div class="ph"><i style="background-image:url('assets/photos/dogs.jpg');background-position:62% 60%"></i></div>
+          <div class="tx">
+            <span class="tag"><span class="zh">流浪動物</span><span class="en">Stray animals</span></span>
+            <div class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><h3><span class="zh">例如：台灣動物緊急救援小組</span><span class="en">e.g. Animal Rescue Team Taiwan</span></h3></div>
+            <div class="ps"><span class="k pain"><span class="zh">痛點</span><span class="en">Problem</span></span><p><span class="zh">約 14 萬隻流浪狗，通報和認養詢問塞爆志工的手機。</span><span class="en">About 141,500 stray dogs; reports and adoption questions flood volunteers.</span></p></div><div class="ps"><span class="k fix"><span class="zh">Agent 怎麼解</span><span class="en">Agent solution</span></span><p><span class="zh">自動分流救援通報、回答認養問題、排志工班，人力留給現場。</span><span class="en">Triages reports, answers adoption questions, schedules volunteers.</span></p></div>
+          </div>
+        </article>
+        <article class="sc">
+          <div class="ph"><i style="background-image:url('assets/photos/migrant.jpg');background-position:50% 52%"></i></div>
+          <div class="tx">
+            <span class="tag"><span class="zh">移工翻譯</span><span class="en">Migrant workers</span></span>
+            <div class="ngo"><span class="logo-chip sq"><img class="ngo-logo" src="assets/ngo/oneforty.png" alt="One-Forty"></span><h3><span class="zh">例如：One-Forty 四十分之一</span><span class="en">e.g. One-Forty</span></h3></div>
+            <div class="ps"><span class="k pain"><span class="zh">痛點</span><span class="en">Problem</span></span><p><span class="zh">近 90 萬移工，語言不通，看不懂契約、找不到求助管道。</span><span class="en">Nearly 900,000 migrant workers who can't read contracts or find help.</span></p></div><div class="ps"><span class="k fix"><span class="zh">Agent 怎麼解</span><span class="en">Agent solution</span></span><p><span class="zh">用母語解釋契約與就醫流程，法律或安全問題轉給社工。</span><span class="en">Explains contracts and clinics in their language; hands legal or safety issues to staff.</span></p></div>
+          </div>
+        </article>
+      </div>
+      <p class="src reveal d2"><span class="zh">NGO 為情境示例，尚未合作。數據：農業部 2024 流浪犬調查、One-Forty 創辦人受訪。照片：Hsiung/d6478coke（CC BY 2.0）、Fred Hsu（CC BY-SA 3.0）、玄史生（CC0），Wikimedia Commons，轉為黑白；照片為示意，與所列 NGO 無關。</span><span class="en">NGOs are illustrative, not partners. Data: MOA 2024 stray dog survey; One-Forty founder interview. Photos: Hsiung/d6478coke (CC BY 2.0), Fred Hsu (CC BY-SA 3.0), 玄史生 (CC0), Wikimedia Commons, converted to black and white; illustrative and unrelated to the NGOs listed.</span></p>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" aria-label="6">
+    <div class="stage">
+      <div style="display:flex;flex-direction:column;gap:2.6vh">
+        <div class="eyebrow reveal"><span class="zh">現場 Demo</span><span class="en">Live demo</span></div>
+        <p class="h2 reveal d1"><span class="zh">每一次回答，<br><span class="blue">都在用捐來的額度。</span></span><span class="en">Every answer<br><span class="blue">uses a little donated credit.</span></span></p>
+        <div class="chat reveal d2">
+          <div class="bub me"><span class="zh">剛剛「健保局」打來說我的卡被盜用，要我轉帳，是真的嗎？</span><span class="en">"The health bureau" says my card was stolen and I must transfer money. Is it real?</span></div>
+          <div class="bub ai"><span class="zh">這是詐騙，請不要轉帳。我已經通知你的社工林小姐。</span><span class="en">It's a scam. Don't transfer anything. I've alerted your caseworker.</span></div>
+        </div>
+        <p class="sub reveal d3"><span class="zh">額度歸零，阿嬤的 agent 就會停下來。</span><span class="en">When credits hit zero, Grandma's agent stops.</span></p>
+      </div>
+      <div class="console reveal d2" id="console">
+        <div class="top"><span class="ttl"><span class="dot"></span>Agent Lab Impact Console</span><span class="pill" id="status"><i></i><span class="zh">服務中</span><span class="en">Online</span></span></div>
+        <div class="meter">
+          <div class="row"><span><span class="zh">贊助 AI 額度</span><span class="en">Sponsored AI credits</span></span><span>/ 2,000</span></div>
+          <div class="credits" id="credits">150</div>
+          <div class="bar" id="bar"><i></i></div>
+        </div>
+        <div class="liverow" id="liverow"><span class="lv" id="lv"><i></i><span class="zh">模擬</span><span class="en">Simulated</span></span><span><span class="zh">現場已捐</span><span class="en">Raised live</span> <b id="raised">NT$0</b></span></div>
+        <div class="kv">
+          <div><span><span class="zh">已服務次數</span><span class="en">Requests served</span></span><b id="served">12</b></div>
+          <div><span><span class="zh">每次成本</span><span class="en">Cost per request</span></span><b>50</b></div>
+        </div>
+        <div class="btns">
+          <button class="btn" type="button" id="ask"><span class="zh">阿嬤提問</span><span class="en">Ask agent</span></button>
+          <button class="btn primary" type="button" id="sponsor"><span class="zh">捐 +1,000 ×2</span><span class="en">Give +1,000 ×2</span></button>
+          <button class="btn" type="button" id="reset" style="margin-left:auto"><span class="zh">重設</span><span class="en">Reset</span></button>
+        </div>
+        <ul class="log" id="log" aria-live="polite"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide" aria-label="7">
+    <div class="qrwrap">
+      <div class="donate-copy">
+        <div class="eyebrow reveal"><span class="zh">今晚限定 · 加倍配捐</span><span class="en">Tonight only · Matched giving</span></div>
+        <p class="h1 reveal d1"><span class="zh">你捐一份，<br><span class="blue">我們加碼一份。</span></span><span class="en">You give one.<br><span class="blue">We match it.</span></span></p>
+        <p class="sub reveal d2"><span class="zh">今晚每一筆捐款，Agent Lab 都加碼同等算力給 NGO。掃碼之後，看台上的阿嬤恢復服務。</span><span class="en">Tonight, Agent Lab matches every gift with the same amount of AI credits for the NGO. Scan, then watch Grandma's agent come back.</span></p>
+        <div class="ngos reveal d3"><span class="lbl"><span class="zh">這筆捐款支持</span><span class="en">Your gift supports</span></span><span class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/huashan.jpg" alt="華山基金會"></span><span><span class="zh">華山基金會</span><span class="en">Hwa Shan Foundation</span></span></span><span class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><span><span class="zh">台灣動物緊急救援小組</span><span class="en">Animal Rescue Team Taiwan</span></span></span><span class="ngo"><span class="logo-chip sq"><img class="ngo-logo" src="assets/ngo/oneforty.png" alt="One-Forty"></span><span>One-Forty</span></span></div>
+        <p class="url reveal d3" id="donate-url"></p>
+      </div>
+      <div class="qrbox reveal d1"><div class="qr" id="qr"></div><span class="match">×2</span></div>
+    </div>
+  </section>
+
+  <!-- 7b Map: from Taipei to every corner -->
+  <section class="slide" aria-label="Map">
+    <div class="stage mapstage">
+      <div style="display:flex;flex-direction:column;gap:2.6vh">
+        <div class="eyebrow reveal"><span class="zh">你的捐款去了哪裡</span><span class="en">Where your gift goes</span></div>
+        <p class="h2 reveal d1"><span class="zh">從南京東路，<br><span class="blue">送到台灣每個角落。</span></span><span class="en">From Nanjing East Road<br><span class="blue">to every corner of Taiwan.</span></span></p>
+        <div class="mapkpi reveal d2">
+          <div><span class="n" id="mk-places">0</span><span class="l"><span class="zh">個偏鄉據點</span><span class="en">rural sites reached</span></span></div>
+          <div><span class="n" id="mk-credits">0</span><span class="l"><span class="zh">credits 已送出</span><span class="en">credits delivered</span></span></div>
+        </div>
+        <p class="src reveal d3"><span class="zh">起點：台北市中山區南京東路三段 8 號（今晚會場）。據點與數字為示意。</span><span class="en">Origin: No. 8, Sec. 3, Nanjing E. Rd., Taipei (tonight's venue). Sites and figures are illustrative.</span></p>
+      </div>
+      <svg class="twmap reveal d1" id="twmap" viewBox="0 0 560 800" role="img" aria-label="Map of Taiwan with donations flowing from Taipei to rural towns"></svg>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide" aria-label="8">
+    <div class="inner">
+      <p class="h2 reveal"><span class="zh">每一塊都有人做過，<br><span class="dim">還沒有人把它們接起來。</span></span><span class="en">Every piece has been proven.<br><span class="dim">Nobody has connected them.</span></span></p>
+      <div class="nums reveal d1">
+        <div class="num"><span class="n blue">28</span><span class="l"><span class="zh">家企業與機構，把算力捐進美國 NAIRR</span><span class="en">organizations pooled compute in the US NAIRR pilot</span></span></div>
+        <div class="num"><span class="n">50+</span><span class="l"><span class="zh">種語言，IRC Signpost 用 AI 服務難民</span><span class="en">languages served by IRC Signpost's AI for refugees</span></span></div>
+        <div class="num"><span class="n">120+</span><span class="l"><span class="zh">個公益組織，獲得科技公司 AI 協助</span><span class="en">nonprofits got pro bono AI help from tech companies</span></span></div>
+        <div class="num"><span class="n blue">0</span><span class="l"><span class="zh">個中立平台，把閒置算力接給 NGO</span><span class="en">neutral platforms connect spare AI to NGOs</span></span></div>
+      </div>
+      <div class="brands reveal d2">
+        <span class="lbl"><span class="zh">大公司都在捐 AI 給 NGO，但各捐各的</span><span class="en">Big tech already gives AI to NGOs, each on its own</span></span>
+        <div class="row">
+          <img src="assets/brands/microsoft.svg" alt="Microsoft">
+          <img src="assets/brands/google.svg" alt="Google">
+          <img src="assets/brands/openai.svg" alt="OpenAI">
+          <img src="assets/brands/anthropic.svg" alt="Anthropic">
+          <img src="assets/brands/nvidia.svg" alt="NVIDIA">
+        </div>
+        <span class="lbl"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe between them</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final: close + QR + donor card + big tech -->
+  <section class="slide" aria-label="Final">
+    <div class="plate" style="--img:url('assets/leaves-bokeh.webp')" aria-hidden="true"></div>
+    <div class="inner fin2">
+      <p class="h2 reveal"><span class="zh">不只我們被加速，<br><span class="blue">讓整個世界一起被加速。</span></span><span class="en">Not just us.<br><span class="blue">Let's speed up the whole world.</span></span></p>
+      <div class="fmain reveal d1">
+        <div class="fq">
+          <div class="qrbox"><div class="qr" id="qr2"></div><span class="match">×2</span></div>
+          <p class="foffer"><span class="zh">你捐一份，<br><span class="blue">Agent Lab 加碼一份。</span></span><span class="en">You give one.<br><span class="blue">Agent Lab matches it.</span></span></p>
+        </div>
+        <article class="dcard corp big" id="bigcard">
+          <div class="dtop"><span class="who"><span class="zh">你的名字會在這裡</span><span class="en">Your name goes here</span></span></div>
+          <div class="amt" id="bigamt">2,000 <small>credits</small></div>
+          <div class="dl"><span class="zh">支持</span><span class="en">Supporting</span> <span class="ngo inline stack"><span class="mono logo-mini"><img src="assets/ngo/huashan.jpg" alt="華山基金會"></span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt="One-Forty"></span></span></div>
+          <div class="by">Donated by <b id="bigby"><span class="zh">你</span><span class="en">you</span></b></div>
+        </article>
+      </div>
+      <div class="fstrip reveal d2">
+        <span class="lbl"><span class="zh">大公司各捐各的</span><span class="en">Big tech gives on its own</span></span>
+        <img src="assets/brands/microsoft.svg" alt="Microsoft"><img src="assets/brands/google.svg" alt="Google"><img src="assets/brands/openai.svg" alt="OpenAI"><img src="assets/brands/anthropic.svg" alt="Anthropic" class="anth"><img src="assets/brands/nvidia.svg" alt="NVIDIA">
+        <span class="lbl hi"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe</span></span>
+      </div>
+      <div class="powered reveal d3"><span>Share the Speed · built on</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
+    </div>
+  </section>
+
+</main>
+
+<nav class="hud chrome" aria-label="Slide navigation">
+  <button type="button" id="prev" aria-label="Previous slide">↑</button>
+  <span class="count" id="count" aria-live="polite">01 / 10</span>
+  <button type="button" id="next" aria-label="Next slide">↓</button>
+  <button type="button" id="fs" aria-label="Full screen" title="全螢幕 (F)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path id="fs-ico" d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+  var root=document.documentElement;root.classList.add('js');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* language */
+  var langBtns=[].slice.call(document.querySelectorAll('[data-set-lang]'));
+  function setLang(l){root.setAttribute('data-lang',l);root.lang=l==='zh'?'zh-Hant':'en';
+    langBtns.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-set-lang')===l))});
+    try{localStorage.setItem('deck-lang',l)}catch(e){} renderLog(); renderDonate();}
+  langBtns.forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-set-lang'))})});
+
+  /* chrome auto-hide */
+  var idleT;function wake(){document.body.classList.remove('idle');clearTimeout(idleT);idleT=setTimeout(function(){document.body.classList.add('idle')},2500);}
+  ['mousemove','touchstart','keydown'].forEach(function(ev){document.addEventListener(ev,wake,{passive:true})});wake();
+
+  /* dot fields */
+  var fields=[].slice.call(document.querySelectorAll('canvas.field')).map(function(c){
+    var ctx=c.getContext('2d'),mode=c.dataset.mode,dots=[],w=0,h=0,t=0,on=false;
+    function size(){var r=c.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);w=r.width;h=r.height;c.width=w*d;c.height=h*d;ctx.setTransform(d,0,0,d,0,0);seed();}
+    function seed(){dots=[];var n=Math.round(w*h/2400);for(var i=0;i<n;i++){
+      var sp=mode==='fast'?0.15+Math.random()*0.45:mode==='share'?0.08+Math.random()*0.18:0.12+Math.random()*0.3;
+      dots.push({x:Math.random()*w,y:Math.random()*h,s:sp,hot:Math.random()<(mode==='share'?0.1:0.04)});}}
+    function draw(){ctx.clearRect(0,0,w,h);
+      for(var i=0;i<dots.length;i++){var d=dots[i];
+        if(!reduce){d.x+=d.s;if(d.x>w+4)d.x=-4;}
+        var r=1.2;
+        if(d.hot){ctx.fillStyle='rgba(69,134,240,.95)';r=2.1;}
+        else{ctx.fillStyle=mode==='together'?'rgba(143,184,255,.18)':'rgba(245,245,243,.12)';}
+        ctx.beginPath();ctx.arc(d.x,d.y,r,0,6.283);ctx.fill();
+        if(false){ctx.fillStyle=d.hot?'rgba(69,134,240,.18)':'rgba(245,245,243,.05)';ctx.fillRect(d.x-d.s*12,d.y-.6,d.s*12,1.2);}
+      }
+      /* soft vignette so the center text stays clean */
+      var g=ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*.15,w/2,h/2,Math.max(w,h)*.6);
+      g.addColorStop(0,'rgba(0,0,0,.96)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);t++;}
+    function loop(){if(!on)return;draw();requestAnimationFrame(loop);}
+    size();draw();
+    return {el:c,start:function(){if(on||reduce)return;on=true;loop();},stop:function(){on=false;},size:function(){size();draw();}};
+  });
+  window.addEventListener('resize',function(){fields.forEach(function(f){f.size()})});
+
+  /* slides */
+  var deck=document.getElementById('deck'),slides=[].slice.call(document.querySelectorAll('.slide')),count=document.getElementById('count'),cur=0,total=slides.length;
+  function pad(n){return (n<10?'0':'')+n}
+  function go(i){i=Math.max(0,Math.min(total-1,i));slides[i].scrollIntoView({block:'start'});}
+  slides[0].classList.add('seen');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      var f=fields.filter(function(x){return e.target.contains(x.el)})[0];
+      if(e.isIntersecting){e.target.classList.add('seen');if(f)f.start();
+        if(e.intersectionRatio>=.5){cur=slides.indexOf(e.target);count.textContent=pad(cur+1)+' / '+pad(total);document.body.classList.toggle('bigqr',/^(7|Final)$/.test(e.target.getAttribute('aria-label')||''));}}
+      else if(f)f.stop();});},{root:deck,threshold:[0,.15,.5]});
+    slides.forEach(function(s){io.observe(s)});
+  } else {slides.forEach(function(s){s.classList.add('seen')});}
+  document.getElementById('prev').addEventListener('click',function(){go(cur-1)});
+  document.getElementById('next').addEventListener('click',function(){go(cur+1)});
+  document.addEventListener('keydown',function(e){
+    if(e.target.closest&&e.target.closest('button')&&(e.key===' '||e.key==='Enter'))return;
+    if(['ArrowDown','PageDown',' ','ArrowRight'].indexOf(e.key)>-1){e.preventDefault();go(cur+1);}
+    else if(['ArrowUp','PageUp','ArrowLeft'].indexOf(e.key)>-1){e.preventDefault();go(cur-1);}
+    else if(e.key==='Home'){e.preventDefault();go(0);}else if(e.key==='End'){e.preventDefault();go(total-1);}
+    else if(e.key==='l'||e.key==='L'){setLang(root.getAttribute('data-lang')==='zh'?'en':'zh');}
+    else if(e.key==='s'||e.key==='S'){sponsor();}
+  });
+
+  /* impact console simulation (keyboard S = sponsor, for the stage) */
+  var S={credits:150,served:12,log:[]},MAX=2000,COST=50;
+  var el={credits:document.getElementById('credits'),bar:document.getElementById('bar'),served:document.getElementById('served'),status:document.getElementById('status'),log:document.getElementById('log')};
+  var T={deployed:['Agent 部署完成','Agent deployed'],gw:['Gateway 已連線','Gateway connected'],pool:['贊助池已建立','Sponsorship pool ready'],
+    ask:['阿嬤提問：這通電話是詐騙嗎？已回答','Grandma asked: is this call a scam? Answered'],
+    paused:['額度用完，AI 服務暫停','Credits ran out. AI support paused'],
+    sponsor:['現場捐 +1,000，Agent Lab 加碼 +1,000，服務恢復','+1,000 from the room, +1,000 matched by Agent Lab. Support restored'],
+    blocked:['額度不足，等待贊助','Not enough credits. Waiting for a sponsor']};
+  function L(){return root.getAttribute('data-lang')==='en'?1:0}
+  function push(k){S.log.unshift(k);S.log=S.log.slice(0,4);renderLog(true);}
+  function renderLog(fresh){if(!el.log)return;el.log.innerHTML='';S.log.forEach(function(k,i){var li=document.createElement('li');li.textContent=T[k][L()];if(i===0&&fresh)li.className='new';el.log.appendChild(li);});}
+  function render(){el.credits.textContent=S.credits.toLocaleString('en-US');el.served.textContent=S.served;
+    el.bar.querySelector('i').style.width=Math.min(100,S.credits/MAX*100)+'%';var off=S.credits<COST;el.bar.classList.toggle('low',off);
+    el.status.classList.toggle('off',off);el.status.innerHTML='<i></i>'+(off?'<span class="zh">已暫停</span><span class="en">Paused</span>':'<span class="zh">服務中</span><span class="en">Online</span>');}
+  function sponsor(){S.credits=MAX;push('sponsor');render();}
+  T.live=['', ''];
+  window.__liveGift=function(gift,who){
+    S.credits=Math.min(S.credits+gift*2,MAX*50);if(S.credits>MAX)MAX=S.credits;
+    var nm=who||(L()?'Someone':'有人');
+    T.live=[nm+' 捐了 NT$'+gift.toLocaleString('en-US')+'，Agent Lab 加碼 NT$'+gift.toLocaleString('en-US'),nm+' gave NT$'+gift.toLocaleString('en-US')+', matched by Agent Lab'];
+    push('live');render();var c=document.getElementById('console');c.classList.remove('flash');void c.offsetWidth;c.classList.add('flash');
+    if(window.__mapWave)window.__mapWave();
+  };
+  document.getElementById('ask').addEventListener('click',function(){if(S.credits<COST){push('blocked');return;}S.credits-=COST;S.served++;push('ask');if(S.credits<COST)push('paused');render();});
+  document.getElementById('sponsor').addEventListener('click',sponsor);
+  document.getElementById('reset').addEventListener('click',function(){S={credits:150,served:12,log:['pool','gw','deployed']};render();renderLog();});
+  S.log=['pool','gw','deployed'];render();
+
+  /* donate QR */
+  var qrBox=document.getElementById('qr'),urlEl=document.getElementById('donate-url'),qrDone=false;
+  function renderDonate(){
+    var u=window.DONATE_URL;
+    if(!u){qrBox.className='qr empty reveal d1';qrBox.innerHTML='<span>'+(L()?'Paste the Stripe Payment Link<br>into DONATE_URL':'把 Stripe 付款連結<br>貼進 DONATE_URL')+'</span>';urlEl.textContent='';return;}
+    urlEl.textContent=u.replace(/^https?:\/\//,'');
+    if(qrDone)return;
+    if(window.QRCode){qrBox.className='qr reveal d1';qrBox.innerHTML='';new QRCode(qrBox,{text:u,width:512,height:512,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});qrDone=true;}
+    else{qrBox.className='qr empty reveal d1';qrBox.innerHTML='<span>'+(L()?'QR library failed to load. Show the link instead.':'QR 產生器沒載入，請改用下方連結')+'</span>';}
+  }
+
+
+  /* ===== Taiwan donation map ===== */
+  (function(){
+    var svg=document.getElementById('twmap'); if(!svg) return;
+    var NS='http://www.w3.org/2000/svg';
+    function P(lat,lon){return [ (lon-119.35)*0.917*220+10, (25.45-lat)*220+10 ];}
+    var coast=[[25.30,121.54],[25.27,121.64],[25.15,121.75],[25.12,121.87],[25.01,122.00],[24.86,121.83],[24.75,121.85],[24.59,121.86],[24.36,121.75],[24.10,121.63],[23.98,121.62],[23.60,121.50],[23.30,121.43],[23.10,121.38],[22.90,121.25],[22.75,121.15],[22.55,120.98],[22.35,120.90],[22.10,120.88],[21.90,120.85],[21.93,120.72],[22.10,120.70],[22.37,120.59],[22.46,120.45],[22.62,120.27],[22.80,120.22],[23.00,120.13],[23.13,120.06],[23.38,120.15],[23.55,120.13],[23.70,120.15],[23.88,120.27],[24.06,120.42],[24.27,120.50],[24.44,120.62],[24.62,120.76],[24.85,120.92],[24.95,121.00],[25.05,121.08],[25.12,121.25],[25.18,121.40],[25.29,121.56]];
+    function el(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;}
+    var defs=el('defs',{});defs.innerHTML='<linearGradient id="arcg" x1="0" x2="1"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient>';
+    for(var gy=40;gy<800;gy+=40)el('line',{x1:0,y1:gy,x2:560,y2:gy,class:'grid'});
+    el('path',{class:'land',d:'M'+coast.map(function(c){return P(c[0],c[1]).join(',')}).join(' L')+' Z'});
+    var pengh=P(23.57,119.58);el('circle',{cx:pengh[0],cy:pengh[1],r:9,class:'land'});
+    var O=P(25.052,121.534);
+    var dests=[
+      {n:['宜蘭 南澳','Nan-ao, Yilan'],ll:[24.47,121.80],t:'elder'},
+      {n:['花蓮 豐濱','Fengbin, Hualien'],ll:[23.60,121.52],t:'elder'},
+      {n:['台東 達仁','Daren, Taitung'],ll:[22.30,120.88],t:'elder'},
+      {n:['屏東 枋山','Fangshan, Pingtung'],ll:[22.26,120.66],t:'dog'},
+      {n:['嘉義 東石','Dongshi, Chiayi'],ll:[23.46,120.15],t:'migrant'},
+      {n:['雲林 口湖','Kouhu, Yunlin'],ll:[23.58,120.18],t:'elder'},
+      {n:['南投 信義','Xinyi, Nantou'],ll:[23.70,120.85],t:'dog'},
+      {n:['苗栗 泰安','Tai-an, Miaoli'],ll:[24.44,120.92],t:'elder'},
+      {n:['澎湖','Penghu'],ll:[23.57,119.58],t:'migrant'}
+    ];
+    var arcs=[],rings=[];
+    dests.forEach(function(d,i){
+      var D=P(d.ll[0],d.ll[1]);
+      var mx=(O[0]+D[0])/2+(D[0]<O[0]?-60:60), my=(O[1]+D[1])/2-40;
+      var a=el('path',{class:'arc',d:'M'+O.join(',')+' Q'+mx+','+my+' '+D.join(',')});
+      var L=a.getTotalLength();a.style.strokeDasharray=L;a.style.strokeDashoffset=L;a.dataset.len=L;
+      arcs.push(a);
+      el('circle',{cx:D[0],cy:D[1],r:4.5,class:'dest'});
+      rings.push(el('circle',{cx:D[0],cy:D[1],r:5,class:'ring'}));
+      var right=D[0]>O[0]-40 && d.ll[1]>121.2;
+      var t=el('text',{x:D[0]+(right?-10:10),y:D[1]+5,class:'lbl','text-anchor':right?'end':'start'});
+      t.innerHTML='<tspan class="zh">'+d.n[0]+'</tspan><tspan class="en">'+d.n[1]+'</tspan>';
+    });
+    el('circle',{cx:O[0],cy:O[1],r:7,class:'oring'});
+    el('circle',{cx:O[0],cy:O[1],r:7,class:'origin'});
+    var ot=el('text',{x:O[0]+14,y:O[1]-10,class:'lbl o'});ot.innerHTML='<tspan class="zh">南京東路三段 8 號</tspan><tspan class="en">Nanjing E. Rd. Sec. 3, No. 8</tspan>';
+
+    var sparks=[],places=0,credits=0,running=false,started=false;
+    var elP=document.getElementById('mk-places'),elC=document.getElementById('mk-credits');
+    function launch(i,delay){
+      setTimeout(function(){
+        var a=arcs[i],L=+a.dataset.len;
+        a.style.transition='stroke-dashoffset 1.6s cubic-bezier(.16,1,.3,1)';a.style.strokeDashoffset=0;
+        sparks.push({a:a,L:L,t:0,i:i,dot:el('circle',{r:3.5,class:'spark'})});
+      },delay);
+    }
+    function wave(){dests.forEach(function(_,i){launch(i,i*260)});}
+    function tick(){
+      if(!running)return;
+      for(var k=sparks.length-1;k>=0;k--){var s=sparks[k];s.t+=0.012;
+        var pt=s.a.getPointAtLength(Math.min(1,s.t)*s.L);s.dot.setAttribute('cx',pt.x);s.dot.setAttribute('cy',pt.y);
+        if(s.t>=1){s.dot.remove();sparks.splice(k,1);var r=rings[s.i];r.classList.remove('hit');void r.getBBox();r.classList.add('hit');
+          credits+=2000;elC.textContent=credits.toLocaleString('en-US');if(!r.dataset.reached){r.dataset.reached=1;places++;elP.textContent=places;}}}
+      requestAnimationFrame(tick);
+    }
+    var loopT;
+    var io2=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting&&e.intersectionRatio>.5){ if(!running){running=true;tick();}
+        if(!started){started=true;setTimeout(wave,700);} clearInterval(loopT); loopT=setInterval(wave,6000);}
+      else if(!e.isIntersecting){running=false;clearInterval(loopT);}
+    })},{root:document.getElementById('deck'),threshold:[0,.5]});
+    io2.observe(svg.closest('.slide'));
+    window.__mapWave=wave;
+  })();
+
+
+  /* full screen: button or F */
+  var fsBtn=document.getElementById('fs'),fsIco=document.getElementById('fs-ico');
+  function toggleFS(){
+    var d=document,el=d.documentElement;
+    if(!(d.fullscreenElement||d.webkitFullscreenElement)){
+      var r=(el.requestFullscreen||el.webkitRequestFullscreen);if(r){var p=r.call(el);if(p&&p.catch)p.catch(function(){});}
+    }else{var x=(d.exitFullscreen||d.webkitExitFullscreen);if(x)x.call(d);}
+  }
+  function syncFS(){var on=!!(document.fullscreenElement||document.webkitFullscreenElement);
+    fsIco.setAttribute('d',on?'M6 2v4H2M14 6h-4V2M10 14v-4h4M2 10h4v4':'M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4');
+    fsBtn.setAttribute('aria-label',on?'Exit full screen':'Full screen');}
+  fsBtn.addEventListener('click',toggleFS);
+  document.addEventListener('fullscreenchange',syncFS);document.addEventListener('webkitfullscreenchange',syncFS);
+  document.addEventListener('keydown',function(e){if((e.key==='f'||e.key==='F')&&!e.metaKey&&!e.ctrlKey){toggleFS();}});
+  if(!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen))fsBtn.hidden=true;
+
+
+  /* second QR on the final slide */
+  (function(){var b=document.getElementById('qr2');if(!b)return;var u=window.DONATE_URL;
+    if(u&&window.QRCode){new QRCode(b,{text:u,width:400,height:400,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}
+    else{b.className='qr empty';b.innerHTML='<span>DONATE_URL</span>';}})();
+
+
+  /* opening ticker: Google ~3.2 quadrillion tokens / month ~= 1.23e9 per second */
+  (function(){var el=document.getElementById('tick');if(!el)return;var rate=1.23e9,t0=null,on=false;
+    function f(ts){if(!on)return;if(!t0)t0=ts;el.textContent=Math.floor((ts-t0)/1000*rate).toLocaleString('en-US');requestAnimationFrame(f);}
+    var sl=el.closest('.slide');new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!on){on=true;t0=null;requestAnimationFrame(f);}}else{on=false;}})},{root:document.getElementById('deck'),threshold:.5}).observe(sl);})();
+
+
+  /* ===== live donations from the wallet API (falls back to simulation) ===== */
+  (function(){
+    var API=(window.DONATE_API||window.DONATE_URL||'').replace(/\/$/,'')+'/api/balance';
+    if(!window.DONATE_URL)return;
+    var lv=document.getElementById('lv'),raised=document.getElementById('raised'),last=null,seen={};
+    function setLive(on){lv.classList.toggle('on',on);lv.innerHTML='<i></i>'+(on?'<span class="zh">即時</span><span class="en">Live</span>':'<span class="zh">模擬</span><span class="en">Simulated</span>');}
+    function poll(){
+      fetch(API,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+        setLive(true);
+        var bal=Math.round(Number(d.balance)||0);
+        raised.textContent='NT$'+bal.toLocaleString('en-US');
+        var recent=(d.recent||[]);
+        if(last!==null&&bal>last){
+          var gift=bal-last, who=(recent[0]&&recent[0].name)||'';
+          window.__liveGift&&window.__liveGift(gift,who);
+          var by=document.getElementById('bigby'),amt=document.getElementById('bigamt');
+          if(by&&who)by.textContent=who;
+          if(amt)amt.innerHTML=(gift*2).toLocaleString('en-US')+' <small>credits</small>';
+        }
+        last=bal;
+      }).catch(function(){setLive(false);});
+    }
+    poll();setInterval(poll,3000);
+  })();
+
+  /* count-up numbers when a slide enters */
+  function countUp(el){
+    if(el.dataset.done||reduce)return; el.dataset.done=1;
+    var tn=[].slice.call(el.childNodes).filter(function(n){return n.nodeType===3&&/\d/.test(n.nodeValue)})[0]; if(!tn)return;
+    var m=/^(\D*?)(\d[\d,]*\.?\d*)(.*)$/s.exec(tn.nodeValue); if(!m)return;
+    var raw=m[2],target=parseFloat(raw.replace(/,/g,'')),dec=(raw.split('.')[1]||'').length,comma=raw.indexOf(',')>-1,t0=null,D=1600;
+    function fmt(v){var s=v.toFixed(dec);if(comma)s=Number(s).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});return m[1]+s+m[3];}
+    function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/D),e=1-Math.pow(1-p,4);tn.nodeValue=fmt(target*e);if(p<1)requestAnimationFrame(step);}
+    tn.nodeValue=fmt(0);setTimeout(function(){requestAnimationFrame(step)},350);
+  }
+  var cuSel='.num .n,.amt,.dstats b,.credits';
+  var cuIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&e.intersectionRatio>.4){[].forEach.call(e.target.querySelectorAll(cuSel),function(n){if(n.id!=='credits')countUp(n)});}})},{root:document.getElementById('deck'),threshold:[.45]});
+  [].forEach.call(document.querySelectorAll('.slide'),function(s){cuIO.observe(s)});
+  document.getElementById('sponsor').addEventListener('click',function(){var c=document.getElementById('console');c.classList.remove('flash');void c.offsetWidth;c.classList.add('flash');});
+
+  setLang(root.getAttribute('data-lang')||'zh');
+})();
+</script>
+
+<script src="donate-widget.js" defer></script>
+</body>
+</html>

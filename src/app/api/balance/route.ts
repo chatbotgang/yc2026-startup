@@ -1,7 +1,7 @@
 import { connection } from "next/server";
 import { getWalletSnapshot } from "@/lib/wallet";
 
-// Public, read-only data (also shown on /display), polled by the deck on another origin.
+// Public, read-only data (also shown on /live and the /display deck).
 const headers = { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" };
 
 export async function GET() {
