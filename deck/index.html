@@ -309,6 +309,12 @@ html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
 .ptitle b{font-size:clamp(34px,3.6vw,64px);font-weight:300;letter-spacing:-0.03em;color:var(--fg)}
 .panel .bars{width:100%;max-height:34vh}
 @media (max-width:900px){.duo{grid-template-columns:minmax(0,1fr)}}
+
+.lockup{display:inline-flex;align-items:center;gap:10px;color:var(--fg)}
+.lockup img{height:clamp(24px,2.2vw,40px);width:auto}
+.lockup b{font-family:var(--font-sans);font-weight:600;font-size:clamp(18px,1.7vw,30px);letter-spacing:-0.02em}
+.lockup small{font-family:var(--font-mono);font-size:clamp(10px,.8vw,13px);color:var(--subtle);letter-spacing:.04em;align-self:flex-end;margin-bottom:.3em}
+.dtop .lockup b{font-size:clamp(13px,1.1vw,18px)}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -740,7 +746,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <img src="assets/brands/microsoft.svg" alt="Microsoft"><img src="assets/brands/google.svg" alt="Google"><img src="assets/brands/openai.svg" alt="OpenAI"><img src="assets/brands/anthropic.svg" alt="Anthropic" class="anth"><img src="assets/brands/nvidia.svg" alt="NVIDIA">
         <span class="lbl hi"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe</span></span>
       </div>
-      <div class="powered reveal d3"><span>Share the Speed · Agent Lab by</span><img src="assets/agentlab-logo-dark.svg" alt="Crescendo Lab"></div>
+      <div class="powered reveal d3"><span>Share the Speed · built on</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
     </div>
     <p class="takeaway"><span class="tk"><span class="zh">結論</span><span class="en">Takeaway</span></span><span class="zh">Share the Speed：讓 AI 的速度，分給每一個人。</span><span class="en">Share the Speed: AI's speed, for everyone.</span></p>
   </section>
