@@ -8,7 +8,7 @@ import { LiveBalance } from "./live-balance";
 export const metadata: Metadata = { title: "Share the Speed · Live" };
 
 // Where the QR sends people. Separate from SITE_URL, which Checkout redirects depend on.
-const DONATE_PAGE_URL = process.env.DONATE_PAGE_URL ?? "https://ngo.cresclab.com/";
+const DONATE_PAGE_URL = process.env.DONATE_PAGE_URL ?? "https://ngo.cresclab.com/pay";
 
 async function Board() {
   await connection();
