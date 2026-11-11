@@ -351,6 +351,37 @@ body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none
 
 .gwtag{font-family:var(--font-mono);font-size:clamp(11px,.9vw,15px);letter-spacing:.06em;color:#fff;background:var(--accent);border-radius:999px;padding:4px 12px;box-shadow:0 8px 24px -8px rgba(69,134,240,.8)}
 .sub b.blue{font-weight:500}
+
+/* ===== product slide ===== */
+.prod{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1.15fr) 48px minmax(0,1fr);align-items:stretch;width:min(1400px,calc(100vw - 2 * (var(--dwq) + 80px)));text-align:left}
+.pstep{position:relative;display:flex;flex-direction:column;min-width:0}
+.pnum{position:absolute;top:-16px;left:18px;z-index:2;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--fg);color:var(--bg);font-weight:600;font-family:var(--font-mono)}
+.pstep.gw .pnum{background:var(--accent);color:#fff}
+.pcard{flex:1;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius);padding:clamp(22px,1.8vw,30px) clamp(16px,1.4vw,24px) clamp(16px,1.4vw,24px);display:flex;flex-direction:column;gap:1.6vh}
+.pstep.gw .pcard{border-color:var(--accent);background:linear-gradient(180deg,#123067,#0c1830);box-shadow:0 30px 80px -30px rgba(69,134,240,.7)}
+.plabel{font-family:var(--font-mono);font-size:clamp(11px,.9vw,15px);letter-spacing:.06em;text-transform:uppercase;color:var(--accent-2)}
+.pdonate{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.pdonate b{font-size:clamp(26px,2.4vw,44px);font-weight:300;letter-spacing:-0.03em}
+.pdonate small{font-size:.45em;color:var(--muted)}
+.pdonate span{color:var(--muted);font-size:clamp(18px,1.6vw,28px)}
+.pnote{font-size:clamp(12px,1vw,17px);color:var(--muted);margin-top:auto}
+.alloc{display:flex;flex-direction:column;gap:1.2vh}
+.arow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px}
+.arow .logo-chip img{height:clamp(18px,1.4vw,26px)}
+.abar{height:10px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden}
+.abar i{display:block;height:100%;width:var(--w);border-radius:inherit;background:linear-gradient(90deg,var(--accent),var(--accent-2));transform-origin:left;transition:transform 1.2s var(--ease) .8s}
+.js .slide:not(.seen) .abar i{transform:scaleX(0)}
+.arow b{font-family:var(--font-mono);font-weight:400;font-size:clamp(13px,1.05vw,18px);font-variant-numeric:tabular-nums}
+.parrow{align-self:center;height:2px;background:linear-gradient(90deg,var(--border-strong),var(--accent));position:relative}
+.parrow::after{content:"";position:absolute;right:-2px;top:-5px;border:6px solid transparent;border-left-color:var(--accent)}
+.chatcard .chead{display:flex;align-items:center;gap:10px}
+.chatcard .chead b{font-weight:500;font-size:clamp(14px,1.15vw,20px)}
+.chatcard .chead .pill{margin-left:auto}
+.chatcard .bub{font-size:clamp(12px,1vw,17px);padding:10px 14px}
+@media (max-width:900px){.prod{grid-template-columns:minmax(0,1fr)}.parrow{height:28px;width:2px;justify-self:center}.parrow::after{display:none}}
+
+.h2.closer{font-size:clamp(22px,2.2vw,40px);color:var(--fg)}
+.slide[aria-label="Live"] .stage{width:min(1280px,calc(100vw - 2 * (var(--dwq) + 80px)))}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -534,13 +565,54 @@ body.idle .chrome{opacity:0;pointer-events:none}
   <section class="slide" aria-label="1">
     <canvas class="field" data-mode="fast"></canvas>
     <div class="inner">
-      <p class="h1 reveal"><span class="zh">AI 加速了，<br><span class="blue">但世界是不公平的。</span></span><span class="en">AI sped us up.<br><span class="blue">But the world isn't fair.</span></span></p>
+      <p class="h1 reveal"><span class="zh">AI 加速了，但世界不公平。<br><span class="blue">最需要 AI 的 NGO，反而用不到。</span></span><span class="en">AI sped us up, but it isn't fair.<br><span class="blue">The NGOs who need AI most can't use it.</span></span></p>
       <div class="vs reveal d1">
         <div class="vsn"><b class="blue">330×</b><span><span class="zh">Google 每月處理的 token，兩年成長</span><span class="en">growth in Google's monthly tokens in two years</span></span></div>
         <div class="vsdiv" aria-hidden="true"></div>
         <div class="vsn"><b>10.6<small>pt</small></b><span><span class="zh">已開發與開發中國家的 AI 使用率差距，還在擴大</span><span class="en">AI adoption gap between developed and developing countries, and growing</span></span></div>
       </div>
       <p class="src reveal d2"><span class="zh">資料：Google I/O 2024–2026；Microsoft AI Diffusion Report 2025 H2</span><span class="en">Sources: Google I/O 2024–2026; Microsoft AI Diffusion Report 2025 H2</span></p>
+    </div>
+  </section>
+
+  <!-- Product: Crescendo AI Gateway -->
+  <section class="slide" aria-label="Product">
+    <div class="inner">
+      <div class="eyebrow reveal"><span class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span>Crescendo AI Gateway</span></span></div>
+      <p class="h2 reveal d1"><span class="zh">你捐款，AI Gateway 換成 credits，<br><span class="blue">我們幫 NGO 建好 AI agent。</span></span><span class="en">You donate. AI Gateway turns it into credits.<br><span class="blue">We build the NGO its AI agent.</span></span></p>
+      <div class="prod reveal d2">
+        <div class="pstep">
+          <span class="pnum">1</span>
+          <div class="pcard">
+            <span class="plabel"><span class="zh">你捐款</span><span class="en">You donate</span></span>
+            <div class="pdonate"><b>NT$1,000</b><span>→</span><b class="blue">2,000 <small>credits</small></b></div>
+            <span class="pnote"><span class="zh">今晚加倍配捐</span><span class="en">Matched ×2 tonight</span></span>
+          </div>
+        </div>
+        <div class="parrow" aria-hidden="true"></div>
+        <div class="pstep gw">
+          <span class="pnum">2</span>
+          <div class="pcard">
+            <span class="plabel">AI Gateway · <span class="zh">分配與計量</span><span class="en">allocate &amp; meter</span></span>
+            <div class="alloc">
+              <div class="arow"><span class="logo-chip"><img src="assets/ngo/huashan.jpg" alt="華山基金會"></span><div class="abar"><i style="--w:60%"></i></div><b>1,200</b></div>
+              <div class="arow"><span class="logo-chip"><img src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><div class="abar"><i style="--w:25%"></i></div><b>500</b></div>
+              <div class="arow"><span class="logo-chip sq"><img src="assets/ngo/oneforty.png" alt="One-Forty"></span><div class="abar"><i style="--w:15%"></i></div><b>300</b></div>
+            </div>
+            <span class="pnote"><span class="zh">每一次 AI 呼叫都計量，可稽核</span><span class="en">Every AI call metered and auditable</span></span>
+          </div>
+        </div>
+        <div class="parrow" aria-hidden="true"></div>
+        <div class="pstep">
+          <span class="pnum">3</span>
+          <div class="pcard chatcard">
+            <div class="chead"><span class="logo-chip"><img src="assets/ngo/huashan.jpg" alt=""></span><b><span class="zh">長者關懷助理</span><span class="en">Elder care agent</span></b><span class="pill"><i></i><span class="zh">上線中</span><span class="en">Live</span></span></div>
+            <div class="bub me"><span class="zh">「健保局」要我轉帳，是真的嗎？</span><span class="en">"The health bureau" wants a transfer. Real?</span></div>
+            <div class="bub ai"><span class="zh">這是詐騙，請不要轉帳。已通知社工。</span><span class="en">It's a scam. Don't pay. Caseworker alerted.</span></div>
+            <span class="pnote"><span class="zh">NGO 不寫程式，我們建置、部署到 LINE</span><span class="en">No code for the NGO: we build and deploy to LINE</span></span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -599,33 +671,15 @@ body.idle .chrome{opacity:0;pointer-events:none}
     </div>
   </section>
 
-  <!-- 7b Map: from Taipei to every corner -->
-  <section class="slide" aria-label="Map">
-    <div class="stage mapstage">
-      <div style="display:flex;flex-direction:column;gap:2.6vh">
-        <div class="eyebrow reveal"><span class="zh">你的捐款去了哪裡</span><span class="en">Where your gift goes</span></div>
-        <p class="h2 reveal d1"><span class="zh">從南京東路，<br><span class="blue">送到台灣每個角落。</span></span><span class="en">From Nanjing East Road<br><span class="blue">to every corner of Taiwan.</span></span></p>
-        <div class="mapkpi reveal d2">
-          <div><span class="n" id="mk-places">0</span><span class="l"><span class="zh">個偏鄉據點</span><span class="en">rural sites reached</span></span></div>
-          <div><span class="n" id="mk-credits">0</span><span class="l"><span class="zh">credits 已送出</span><span class="en">credits delivered</span></span></div>
-        </div>
-        <p class="src reveal d3"><span class="zh">起點：台北市中山區南京東路三段 8 號（今晚會場）。據點與數字為示意。</span><span class="en">Origin: No. 8, Sec. 3, Nanjing E. Rd., Taipei (tonight's venue). Sites and figures are illustrative.</span></p>
-      </div>
-      <svg class="twmap reveal d1" id="twmap" viewBox="0 0 560 800" role="img" aria-label="Map of Taiwan with donations flowing from Taipei to rural towns"></svg>
-    </div>
-  </section>
-
-  <!-- Live: tonight-only double giving + demo -->
+  <!-- Close: tonight-only double impact + live demo -->
   <section class="slide" aria-label="Live">
     <div class="stage">
       <div class="livecol">
-        <div class="eyebrow reveal"><span class="zh">只有今晚 · 兩倍捐贈</span><span class="en">Tonight only · Double your gift</span></div>
+        <div class="eyebrow reveal"><span class="zh">只有今晚 · 兩倍捐贈</span><span class="en">Tonight only · Double the impact</span></div>
         <p class="h2 reveal d1"><span class="zh">你捐多少，<br><span class="blue">影響力就變成兩倍。</span></span><span class="en">Whatever you give,<br><span class="blue">we double the impact.</span></span></p>
-        <div class="liveqr reveal d2">
-          <div class="qrbox"><div class="qr" id="qr"></div><span class="match">×2</span></div>
-          <p class="sub"><span class="zh">掃碼捐款，<br>看右邊阿嬤的 agent 恢復服務。</span><span class="en">Scan to give,<br>and watch Grandma's agent come back.</span></p>
-        </div>
-        <p class="url" id="donate-url" hidden></p>
+        <p class="h2 closer reveal d2"><span class="zh">你捐贈，我們把幫助送到。</span><span class="en">You give. We make it help.</span></p>
+        <p class="sub reveal d2"><span class="zh">掃右下角的 QR，看阿嬤的 agent 恢復服務。</span><span class="en">Scan the QR in the corner and watch Grandma's agent come back.</span></p>
+        <div class="powered reveal d3" style="justify-content:flex-start"><span>Share the Speed · Crescendo AI Gateway ·</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
       </div>
       <div class="console reveal d2" id="console">
         <div class="top"><span class="ttl"><span class="dot"></span>Agent Lab Impact Console</span><span class="pill" id="status"><i></i><span class="zh">服務中</span><span class="en">Online</span></span></div>
@@ -646,32 +700,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         </div>
         <ul class="log" id="log" aria-live="polite"></ul>
       </div>
-    </div>
-  </section>
-
-  <!-- Final: close + QR + donor card + big tech -->
-  <section class="slide" aria-label="Final">
-    <div class="plate" style="--img:url('assets/leaves-bokeh.webp')" aria-hidden="true"></div>
-    <div class="inner fin2">
-      <p class="h2 reveal"><span class="zh">你捐贈，<br><span class="blue">我們把幫助送到。</span></span><span class="en">You give.<br><span class="blue">We make it help.</span></span></p>
-      <div class="fmain reveal d1">
-        <div class="fq">
-          <div class="qrbox"><div class="qr" id="qr2"></div><span class="match">×2</span></div>
-          <p class="foffer"><span class="zh">你捐多少，<br><span class="blue">影響力 ×2。</span></span><span class="en">Whatever you give,<br><span class="blue">double the impact.</span></span></p>
-        </div>
-        <article class="dcard corp big" id="bigcard">
-          <div class="dtop"><span class="who"><span class="zh">你的名字會在這裡</span><span class="en">Your name goes here</span></span></div>
-          <div class="amt" id="bigamt">2,000 <small>credits</small></div>
-          <div class="dl"><span class="zh">支持</span><span class="en">Supporting</span> <span class="ngo inline stack"><span class="mono logo-mini"><img src="assets/ngo/huashan.jpg" alt="華山基金會"></span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt="One-Forty"></span></span></div>
-          <div class="by">Donated by <b id="bigby"><span class="zh">你</span><span class="en">you</span></b></div>
-        </article>
-      </div>
-      <div class="fstrip reveal d2">
-        <span class="lbl"><span class="zh">大公司各捐各的</span><span class="en">Big tech gives on its own</span></span>
-        <img src="assets/brands/microsoft.svg" alt="Microsoft"><img src="assets/brands/google.svg" alt="Google"><img src="assets/brands/openai.svg" alt="OpenAI"><img src="assets/brands/anthropic.svg" alt="Anthropic" class="anth"><img src="assets/brands/nvidia.svg" alt="NVIDIA">
-        <span class="lbl hi"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe</span></span>
-      </div>
-      <div class="powered reveal d3"><span>Share the Speed · built on</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
     </div>
   </section>
 
@@ -735,7 +763,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
     var io=new IntersectionObserver(function(es){es.forEach(function(e){
       var f=fields.filter(function(x){return e.target.contains(x.el)})[0];
       if(e.isIntersecting){e.target.classList.add('seen');if(f)f.start();
-        if(e.intersectionRatio>=.5){cur=slides.indexOf(e.target);count.textContent=pad(cur+1)+' / '+pad(total);document.body.classList.toggle('bigqr',/^(Live|Final)$/.test(e.target.getAttribute('aria-label')||''));}}
+        if(e.intersectionRatio>=.5){cur=slides.indexOf(e.target);count.textContent=pad(cur+1)+' / '+pad(total);}}
       else if(f)f.stop();});},{root:deck,threshold:[0,.15,.5]});
     slides.forEach(function(s){io.observe(s)});
   } else {slides.forEach(function(s){s.classList.add('seen')});}
@@ -781,6 +809,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
   /* donate QR */
   var qrBox=document.getElementById('qr'),urlEl=document.getElementById('donate-url'),qrDone=false;
   function renderDonate(){
+    if(!qrBox)return;
     var u=window.DONATE_URL;
     if(!u){qrBox.className='qr empty reveal d1';qrBox.innerHTML='<span>'+(L()?'Paste the Stripe Payment Link<br>into DONATE_URL':'把 Stripe 付款連結<br>貼進 DONATE_URL')+'</span>';urlEl.textContent='';return;}
     urlEl.textContent=u.replace(/^https?:\/\//,'');
