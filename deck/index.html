@@ -333,6 +333,19 @@ body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none
 :root{--dwq:clamp(110px,8vw,150px)}
 #dw .dw-qr .code{width:var(--dwq)}
 .duo,.sflow,.flowline,.scen{width:min(1400px,calc(100vw - 2 * (var(--dwq) + 80px)))}
+
+/* ===== big-number contrast ===== */
+.vs{display:flex;align-items:center;justify-content:center;gap:5vw;flex-wrap:wrap}
+.vsn{display:flex;flex-direction:column;align-items:center;gap:1.4vh;max-width:22em}
+.vsn b{font-size:clamp(72px,9vw,170px);font-weight:300;letter-spacing:-0.05em;line-height:1;font-variant-numeric:tabular-nums}
+.vsn b small{font-size:.35em;letter-spacing:0;margin-left:.1em;color:var(--muted)}
+.vsn span{font-size:clamp(15px,1.35vw,24px);color:var(--muted);text-wrap:balance}
+.vsdiv{width:1px;align-self:stretch;background:linear-gradient(180deg,transparent,var(--border-strong),transparent)}
+/* ===== live slide ===== */
+.livecol{display:flex;flex-direction:column;gap:2.6vh}
+.liveqr{display:flex;align-items:center;gap:2vw;flex-wrap:wrap}
+.liveqr .qr{width:clamp(170px,13vw,250px)}
+.liveqr .sub{margin-left:clamp(60px,5vw,96px)}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -512,75 +525,17 @@ body.idle .chrome{opacity:0;pointer-events:none}
     </div>
   </section>
 
-  <!-- 1 Speed-up and the gap, side by side -->
+  <!-- 1 AI sped us up, but the world isn't fair -->
   <section class="slide" aria-label="1">
     <canvas class="field" data-mode="fast"></canvas>
     <div class="inner">
-      <p class="h2 reveal"><span class="zh">AI 讓我們加速了 330 倍，<br><span class="blue">也把世界的差距拉得更開。</span></span><span class="en">AI sped us up 330 times,<br><span class="blue">and pulled the world further apart.</span></span></p>
-      <div class="duo reveal d1">
-        <div class="panel">
-          <span class="ptitle"><b class="blue">330×</b><span class="zh">Google 每月處理的 token，兩年成長</span><span class="en">growth in Google's monthly tokens, in two years</span></span>
-          <svg class="bars" viewBox="0 0 520 300" role="img" aria-label="Google monthly tokens: 9.7 trillion in 2024, 480 trillion in 2025, 3.2 quadrillion in 2026">
-          <line x1="0" y1="260" x2="520" y2="260" stroke="#24272b"/>
-          <rect x="30" y="258" width="110" height="2" fill="#6e7277"/>
-          <rect x="200" y="221" width="110" height="39" rx="6" fill="#33373c"/>
-          <rect x="370" y="0" width="110" height="260" rx="6" fill="url(#gb)"/>
-          <defs><linearGradient id="gb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient></defs>
-          <text x="85" y="245" text-anchor="middle" style="fill:#d6d8db;font-size:22px">9.7T</text>
-          <text x="255" y="210" text-anchor="middle" style="fill:#d6d8db;font-size:22px">480T</text>
-          <text x="425" y="36" text-anchor="middle" style="fill:#000;font-size:22px;font-weight:600">3.2Q</text>
-          <text x="85" y="288" text-anchor="middle">2024</text><text x="255" y="288" text-anchor="middle">2025</text><text x="425" y="288" text-anchor="middle">2026</text>
-        </svg>
-          <span class="src"><span class="zh">資料：Google I/O 2024–2026</span><span class="en">Source: Google I/O 2024–2026</span></span>
-        </div>
-        <div class="panel">
-          <span class="ptitle"><b>9.8 → 10.6</b><span class="zh">已開發與開發中國家的 AI 使用率差距（百分點），半年內又擴大</span><span class="en">percentage-point AI gap between developed and developing countries, widening in six months</span></span>
-          <svg class="bars" viewBox="0 0 640 320" role="img" aria-label="AI user share: Global North 22.9% to 24.7%, Global South 13.1% to 14.1% in 2025">
-          <line x1="0" y1="270" x2="640" y2="270" stroke="#24272b"/>
-          <defs><linearGradient id="gn" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4586f0"/><stop offset="1" stop-color="#8fb8ff"/></linearGradient></defs>
-          <!-- scale: 1% = 9px -->
-          <rect x="40" y="64" width="110" height="206" rx="6" fill="#1e3a66"/><rect x="170" y="48" width="110" height="222" rx="6" fill="url(#gn)"/>
-          <rect x="360" y="152" width="110" height="118" rx="6" fill="#26292d"/><rect x="490" y="143" width="110" height="127" rx="6" fill="#4a4e54"/>
-          <text x="95" y="54" text-anchor="middle" style="fill:#d6d8db;font-size:22px">22.9%</text>
-          <text x="225" y="38" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">24.7%</text>
-          <text x="415" y="142" text-anchor="middle" style="fill:#d6d8db;font-size:22px">13.1%</text>
-          <text x="545" y="133" text-anchor="middle" style="fill:#f5f5f3;font-size:22px">14.1%</text>
-          <text x="95" y="294" text-anchor="middle">H1</text><text x="225" y="294" text-anchor="middle">H2</text>
-          <text x="415" y="294" text-anchor="middle">H1</text><text x="545" y="294" text-anchor="middle">H2</text>
-          <text x="160" y="316" text-anchor="middle" style="fill:#8fb8ff"><tspan class="zh">已開發國家</tspan><tspan class="en">Developed countries</tspan></text>
-          <text x="480" y="316" text-anchor="middle"><tspan class="zh">開發中國家</tspan><tspan class="en">Developing countries</tspan></text>
-        </svg>
-          <span class="src"><span class="zh">資料：Microsoft AI Diffusion Report 2025 H2</span><span class="en">Source: Microsoft AI Diffusion Report 2025 H2</span></span>
-        </div>
+      <p class="h1 reveal"><span class="zh">AI 加速了，<br><span class="blue">但世界是不公平的。</span></span><span class="en">AI sped us up.<br><span class="blue">But the world isn't fair.</span></span></p>
+      <div class="vs reveal d1">
+        <div class="vsn"><b class="blue">330×</b><span><span class="zh">Google 每月處理的 token，兩年成長</span><span class="en">growth in Google's monthly tokens in two years</span></span></div>
+        <div class="vsdiv" aria-hidden="true"></div>
+        <div class="vsn"><b>10.6<small>pt</small></b><span><span class="zh">已開發與開發中國家的 AI 使用率差距，還在擴大</span><span class="en">AI adoption gap between developed and developing countries, and growing</span></span></div>
       </div>
-    </div>
-  </section>
-
-  <!-- 3 Who is left behind: Taiwan data + persona -->
-  <section class="slide" aria-label="3">
-    <div class="bleed" style="--img:url('assets/photos/elder.jpg')" aria-hidden="true"></div>
-    <div class="stage s3">
-      <div style="display:flex;flex-direction:column;gap:2.4vh">
-        <div class="eyebrow reveal"><span class="zh">晚上 9:47 · 在台灣每天都在發生</span><span class="en">9:47 pm · Happening in Taiwan every day</span></div>
-        <p class="h2 reveal d1"><span class="zh">獨居的阿嬤接到詐騙電話，<br><span class="blue">身邊卻沒有一個人可以問。</span></span><span class="en">Grandma gets a scam call,<br><span class="blue">and there's no one to ask.</span></span></p>
-        <p class="sub reveal d2"><span class="zh">「健保局」說她的卡被盜用、要她轉帳。社工下班了，孩子在台北。</span><span class="en">"The health bureau" says her card was stolen and she must transfer money. Her caseworker is off. Her kids are in Taipei.</span></p>
-        <div class="facts reveal d3">
-          <div><span class="n">1 / 4</span><span class="l"><span class="zh">長者獨居</span><span class="en">elders live alone</span></span></div>
-          <div><span class="n">16.2<small><span class="zh">萬件</span><span class="en">K</span></small></span><span class="l"><span class="zh">2025 詐騙案</span><span class="en">scam cases in 2025</span></span></div>
-          <div><span class="n">893<small><span class="zh">億</span><span class="en">×100M</span></small></span><span class="l"><span class="zh">2025 詐騙財損（新台幣）</span><span class="en">NT$ lost to scams in 2025</span></span></div>
-        </div>
-        <p class="src reveal d3"><span class="zh">資料：內政部（2025 年底）、TVBS 引內政部獨居數據、警政署 165 打詐儀表板。阿梅阿嬤為示意人物。</span><span class="en">Sources: Ministry of the Interior (end of 2025), TVBS citing MOI, NPA 165 anti-fraud dashboard. Grandma Mei is illustrative.</span></p>
-      </div>
-      <div class="phone reveal d2" aria-label="Incoming call mock">
-        <div class="ph-top"><span>21:47</span><span>●●●</span></div>
-        <div class="ph-call">
-          <span class="ph-sub"><span class="zh">來電</span><span class="en">Incoming call</span></span>
-          <span class="ph-name"><span class="zh">健保局 客服中心</span><span class="en">Health Bureau Service</span></span>
-          <span class="ph-num">+886 2 2xxx xxxx</span>
-        </div>
-        <div class="ph-msg"><span class="zh">「您的健保卡遭到盜用，請立即將存款轉到安全帳戶……」</span><span class="en">"Your health card has been stolen. Move your savings to a safe account now..."</span></div>
-        <div class="ph-btns"><span class="dec"></span><span class="acc"></span></div>
-      </div>
+      <p class="src reveal d2"><span class="zh">資料：Google I/O 2024–2026；Microsoft AI Diffusion Report 2025 H2</span><span class="en">Sources: Google I/O 2024–2026; Microsoft AI Diffusion Report 2025 H2</span></p>
     </div>
   </section>
 
@@ -601,37 +556,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <div class="node ppl"><div class="faces"><span style="background-image:url('assets/photos/elder.jpg');background-position:52% 25%"></span><span style="background-image:url('assets/photos/dogs.jpg');background-position:60% 40%"></span><span style="background-image:url('assets/photos/migrant.jpg');background-position:58% 50%"></span></div><b><span class="zh">被留下的人</span><span class="en">People left behind</span></b></div>
       </div>
       <p class="sub reveal d2"><span class="zh">把你的 AI 算力，分一份給服務弱勢的 NGO。<br>建置、部署，我們一起送。</span><span class="en">Share a slice of your AI capacity with the NGOs that serve people left behind.<br>We build and deploy the agent for them.</span></p>
-    </div>
-  </section>
-
-  <!-- How: modules -->
-  <section class="slide howblue" aria-label="How">
-    <div class="inner">
-      <div class="eyebrow reveal"><span class="zh">解法 · 怎麼做到</span><span class="en">How it works</span></div>
-      <p class="h2 reveal d1"><span class="zh">你的一筆捐款，<br><span class="blue">走完這四步，變成一個會動的 agent。</span></span><span class="en">Your gift<br><span class="blue">takes four steps to become a working agent.</span></span></p>
-      <div class="flowline reveal d2">
-        <div class="mod">
-          <div class="ico"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3"/><path d="M5 14h22M10 19h5"/></svg></div>
-          <h3><span class="zh">捐贈池</span><span class="en">Donation pool</span></h3>
-          <p><span class="zh">個人刷卡、企業撥出閒置額度，統一進到 NGO 的 AI 帳戶</span><span class="en">People pay by card, companies set aside spare capacity, all into the NGO's AI account</span></p>
-        </div>
-        <div class="mod hot">
-          <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span>Agent Lab · AI Gateway</span></div>
-          <h3>AI Gateway</h3>
-          <p><span class="zh">分配預算、自動選模型、計量每一次呼叫；額度用完就暫停</span><span class="en">Allocates budget, routes models, meters every call; pauses when credits run out</span></p>
-        </div>
-        <div class="mod hot">
-          <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span><span class="zh">Agent Lab · 部署</span><span class="en">Agent Lab · Deploy</span></span></div>
-          <h3>Deployment</h3>
-          <p><span class="zh">NGO 不寫程式，一鍵把 agent 上線到 LINE、網頁、語音</span><span class="en">No code: one click puts the agent on LINE, web and voice</span></p>
-        </div>
-        <div class="mod">
-          <div class="ico"><svg viewBox="0 0 32 32"><path d="M6 25V7M6 25h20"/><path d="M10 20l5-5 4 3 6-7"/></svg></div>
-          <h3><span class="zh">成效回報</span><span class="en">Impact report</span></h3>
-          <p><span class="zh">服務了誰、花了多少，回到每一位捐贈者手上</span><span class="en">Who was served and at what cost, back to every donor</span></p>
-        </div>
-      </div>
-      <p class="sub reveal d3"><span class="zh">NGO 只要提供知識和服務流程，其他我們全包。</span><span class="en">NGOs bring their knowledge and process. We handle the rest.</span></p>
     </div>
   </section>
 
@@ -670,17 +594,17 @@ body.idle .chrome{opacity:0;pointer-events:none}
     </div>
   </section>
 
-  <!-- 6 -->
-  <section class="slide" aria-label="6">
+  <!-- Live: tonight-only double giving + demo -->
+  <section class="slide" aria-label="Live">
     <div class="stage">
-      <div style="display:flex;flex-direction:column;gap:2.6vh">
-        <div class="eyebrow reveal"><span class="zh">現場 Demo</span><span class="en">Live demo</span></div>
-        <p class="h2 reveal d1"><span class="zh">每一次回答，<br><span class="blue">都在用捐來的額度。</span></span><span class="en">Every answer<br><span class="blue">uses a little donated credit.</span></span></p>
-        <div class="chat reveal d2">
-          <div class="bub me"><span class="zh">剛剛「健保局」打來說我的卡被盜用，要我轉帳，是真的嗎？</span><span class="en">"The health bureau" says my card was stolen and I must transfer money. Is it real?</span></div>
-          <div class="bub ai"><span class="zh">這是詐騙，請不要轉帳。我已經通知你的社工林小姐。</span><span class="en">It's a scam. Don't transfer anything. I've alerted your caseworker.</span></div>
+      <div class="livecol">
+        <div class="eyebrow reveal"><span class="zh">只有今晚 · 兩倍捐贈</span><span class="en">Tonight only · Double your gift</span></div>
+        <p class="h2 reveal d1"><span class="zh">你捐一份，<br><span class="blue">Agent Lab 加碼一份。</span></span><span class="en">You give one.<br><span class="blue">Agent Lab matches it.</span></span></p>
+        <div class="liveqr reveal d2">
+          <div class="qrbox"><div class="qr" id="qr"></div><span class="match">×2</span></div>
+          <p class="sub"><span class="zh">掃碼捐款，<br>看右邊阿嬤的 agent 恢復服務。</span><span class="en">Scan to give,<br>and watch Grandma's agent come back.</span></p>
         </div>
-        <p class="sub reveal d3"><span class="zh">額度歸零，阿嬤的 agent 就會停下來。</span><span class="en">When credits hit zero, Grandma's agent stops.</span></p>
+        <p class="url" id="donate-url" hidden></p>
       </div>
       <div class="console reveal d2" id="console">
         <div class="top"><span class="ttl"><span class="dot"></span>Agent Lab Impact Console</span><span class="pill" id="status"><i></i><span class="zh">服務中</span><span class="en">Online</span></span></div>
@@ -704,20 +628,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
     </div>
   </section>
 
-  <!-- 7 -->
-  <section class="slide" aria-label="7">
-    <div class="qrwrap">
-      <div class="donate-copy">
-        <div class="eyebrow reveal"><span class="zh">今晚限定 · 加倍配捐</span><span class="en">Tonight only · Matched giving</span></div>
-        <p class="h1 reveal d1"><span class="zh">你捐一份，<br><span class="blue">我們加碼一份。</span></span><span class="en">You give one.<br><span class="blue">We match it.</span></span></p>
-        <p class="sub reveal d2"><span class="zh">今晚每一筆捐款，Agent Lab 都加碼同等算力給 NGO。掃碼之後，看台上的阿嬤恢復服務。</span><span class="en">Tonight, Agent Lab matches every gift with the same amount of AI credits for the NGO. Scan, then watch Grandma's agent come back.</span></p>
-        <div class="ngos reveal d3"><span class="lbl"><span class="zh">這筆捐款支持</span><span class="en">Your gift supports</span></span><span class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/huashan.jpg" alt="華山基金會"></span><span><span class="zh">華山基金會</span><span class="en">Hwa Shan Foundation</span></span></span><span class="ngo"><span class="logo-chip"><img class="ngo-logo" src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><span><span class="zh">台灣動物緊急救援小組</span><span class="en">Animal Rescue Team Taiwan</span></span></span><span class="ngo"><span class="logo-chip sq"><img class="ngo-logo" src="assets/ngo/oneforty.png" alt="One-Forty"></span><span>One-Forty</span></span></div>
-        <p class="url reveal d3" id="donate-url"></p>
-      </div>
-      <div class="qrbox reveal d1"><div class="qr" id="qr"></div><span class="match">×2</span></div>
-    </div>
-  </section>
-
   <!-- 7b Map: from Taipei to every corner -->
   <section class="slide" aria-label="Map">
     <div class="stage mapstage">
@@ -731,30 +641,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         <p class="src reveal d3"><span class="zh">起點：台北市中山區南京東路三段 8 號（今晚會場）。據點與數字為示意。</span><span class="en">Origin: No. 8, Sec. 3, Nanjing E. Rd., Taipei (tonight's venue). Sites and figures are illustrative.</span></p>
       </div>
       <svg class="twmap reveal d1" id="twmap" viewBox="0 0 560 800" role="img" aria-label="Map of Taiwan with donations flowing from Taipei to rural towns"></svg>
-    </div>
-  </section>
-
-  <!-- 8 -->
-  <section class="slide" aria-label="8">
-    <div class="inner">
-      <p class="h2 reveal"><span class="zh">每一塊都有人做過，<br><span class="dim">還沒有人把它們接起來。</span></span><span class="en">Every piece has been proven.<br><span class="dim">Nobody has connected them.</span></span></p>
-      <div class="nums reveal d1">
-        <div class="num"><span class="n blue">28</span><span class="l"><span class="zh">家企業與機構，把算力捐進美國 NAIRR</span><span class="en">organizations pooled compute in the US NAIRR pilot</span></span></div>
-        <div class="num"><span class="n">50+</span><span class="l"><span class="zh">種語言，IRC Signpost 用 AI 服務難民</span><span class="en">languages served by IRC Signpost's AI for refugees</span></span></div>
-        <div class="num"><span class="n">120+</span><span class="l"><span class="zh">個公益組織，獲得科技公司 AI 協助</span><span class="en">nonprofits got pro bono AI help from tech companies</span></span></div>
-        <div class="num"><span class="n blue">0</span><span class="l"><span class="zh">個中立平台，把閒置算力接給 NGO</span><span class="en">neutral platforms connect spare AI to NGOs</span></span></div>
-      </div>
-      <div class="brands reveal d2">
-        <span class="lbl"><span class="zh">大公司都在捐 AI 給 NGO，但各捐各的</span><span class="en">Big tech already gives AI to NGOs, each on its own</span></span>
-        <div class="row">
-          <img src="assets/brands/microsoft.svg" alt="Microsoft">
-          <img src="assets/brands/google.svg" alt="Google">
-          <img src="assets/brands/openai.svg" alt="OpenAI">
-          <img src="assets/brands/anthropic.svg" alt="Anthropic">
-          <img src="assets/brands/nvidia.svg" alt="NVIDIA">
-        </div>
-        <span class="lbl"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe between them</span></span>
-      </div>
     </div>
   </section>
 
@@ -844,7 +730,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
     var io=new IntersectionObserver(function(es){es.forEach(function(e){
       var f=fields.filter(function(x){return e.target.contains(x.el)})[0];
       if(e.isIntersecting){e.target.classList.add('seen');if(f)f.start();
-        if(e.intersectionRatio>=.5){cur=slides.indexOf(e.target);count.textContent=pad(cur+1)+' / '+pad(total);document.body.classList.toggle('bigqr',/^(7|Final)$/.test(e.target.getAttribute('aria-label')||''));}}
+        if(e.intersectionRatio>=.5){cur=slides.indexOf(e.target);count.textContent=pad(cur+1)+' / '+pad(total);document.body.classList.toggle('bigqr',/^(Live|Final)$/.test(e.target.getAttribute('aria-label')||''));}}
       else if(f)f.stop();});},{root:deck,threshold:[0,.15,.5]});
     slides.forEach(function(s){io.observe(s)});
   } else {slides.forEach(function(s){s.classList.add('seen')});}
