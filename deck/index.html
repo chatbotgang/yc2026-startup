@@ -322,6 +322,10 @@ html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
 .lv i{width:8px;height:8px;border-radius:50%;border:1.5px dashed currentColor}
 .lv.on{color:#ff6b6b}.lv.on i{background:currentColor;border-style:solid;animation:blink 1.4s ease-in-out infinite}
 @keyframes blink{50%{opacity:.3}}
+
+/* one QR per slide: hide the corner widget QR where the slide has its own big QR */
+#dw-qr{transition:opacity .4s ease,visibility .4s}
+body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none!important}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -833,7 +837,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
     var io=new IntersectionObserver(function(es){es.forEach(function(e){
       var f=fields.filter(function(x){return e.target.contains(x.el)})[0];
       if(e.isIntersecting){e.target.classList.add('seen');if(f)f.start();
-        if(e.intersectionRatio>=.5){cur=slides.indexOf(e.target);count.textContent=pad(cur+1)+' / '+pad(total);}}
+        if(e.intersectionRatio>=.5){cur=slides.indexOf(e.target);count.textContent=pad(cur+1)+' / '+pad(total);document.body.classList.toggle('bigqr',/^(7|Final)$/.test(e.target.getAttribute('aria-label')||''));}}
       else if(f)f.stop();});},{root:deck,threshold:[0,.15,.5]});
     slides.forEach(function(s){io.observe(s)});
   } else {slides.forEach(function(s){s.classList.add('seen')});}
