@@ -338,8 +338,10 @@ function PayButtons({
 
   return (
     <div className="relative flex flex-col gap-4">
-      {/* Invisible probe (kept on-screen so mobile browsers load it): which wallets work here? */}
-      {!probed && (
+      {/* Invisible probe (kept on-screen so mobile browsers load it): which wallets work here?
+          Stripe allows only one Express Checkout Element per page, so the probe is removed as
+          soon as a wallet is selected and that wallet's real button takes its place. */}
+      {!probed && method === "card" && (
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-12 opacity-0"
