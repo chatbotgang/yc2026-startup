@@ -145,7 +145,7 @@ html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-he
 .slide.seen .bleed{animation:kb 16s var(--ease) both}
 .slide>.bleed~.inner,.slide>.bleed~.stage{position:relative;z-index:1}
 .qrbox{position:relative}
-.match{position:absolute;top:-22px;right:-22px;display:grid;place-items:center;width:clamp(64px,6vw,108px);aspect-ratio:1;border-radius:50%;background:var(--accent);color:#fff;
+.match{position:absolute;top:0;left:100%;margin-left:14px;display:grid;place-items:center;width:clamp(52px,4.6vw,84px);aspect-ratio:1;border-radius:50%;background:var(--accent);color:#fff;
   font-size:clamp(24px,2.4vw,44px);font-weight:500;letter-spacing:-0.03em;box-shadow:0 10px 40px -8px rgba(69,134,240,.8)}
 .slide.seen .match{animation:pop 1s cubic-bezier(.2,1.6,.4,1) .8s both}
 @keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
@@ -326,6 +326,13 @@ html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
 /* one QR per slide: hide the corner widget QR where the slide has its own big QR */
 #dw-qr{transition:opacity .4s ease,visibility .4s}
 body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none!important}
+
+/* corner donate widget: bottom-right, above the slide nav; toasts stack upward */
+#dw.dw{top:auto;bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 56px);display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px}
+
+:root{--dwq:clamp(110px,8vw,150px)}
+#dw .dw-qr .code{width:var(--dwq)}
+.duo,.sflow,.flowline,.scen{width:min(1400px,calc(100vw - 2 * (var(--dwq) + 80px)))}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
