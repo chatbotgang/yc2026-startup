@@ -30,11 +30,11 @@
 | 成員 | 權限 |
 |---|---|
 | kane.wei@cresclab.com | 專案 Editor ＋ `run-sources-c0mpiled-18-yc-hackathon-asia-east1` bucket 的 Storage Object Admin |
-| kade.wang@cresclab.com | 專案 Editor |
+| kade.wang@cresclab.com | 專案 Editor ＋ `run-sources-c0mpiled-18-yc-hackathon-asia-east1` bucket 的 Storage Object Admin |
 
 - Editor 可以部署、看 log、更新 Secret 的新版本。
 - Editor **不能**讀 Secret 的值，也不能改 Cloud Run 的公開存取設定（這是刻意的）。
-- `gcloud run deploy --source` 會先把原始碼上傳到上面那個 bucket，Editor 本身沒有上傳權限，所以 Kane 另外加了 bucket 權限。Kade 要部署的話也要比照加上。
+- `gcloud run deploy --source` 會先把原始碼上傳到上面那個 bucket，Editor 本身沒有上傳權限，所以兩人都另外加了 bucket 權限。之後新成員要部署也要比照加上。
 
 ## 第一次設定（只做一次）
 
