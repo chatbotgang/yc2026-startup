@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
+  // /display serves the presentation deck in public/deck (synced with `pnpm deck:sync`).
+  rewrites() {
+    return [
+      // The presentation deck is the home page (and still at /display); payments live at /pay.
+      { source: "/", destination: "/deck/index.html" },
+      { source: "/display", destination: "/deck/index.html" },
+    ];
+  },
   turbopack: {
     rules: {
       "*.css": {

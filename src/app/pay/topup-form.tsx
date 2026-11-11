@@ -197,7 +197,7 @@ function PayButtons({
       const created = await createTopUpPayment({ amount, name, message });
       if (!created.ok) throw new Error(created.error);
 
-      const returnUrl = `${window.location.origin}/`;
+      const returnUrl = `${window.location.origin}/pay`;
       const { error: confirmError } = await stripe.confirmPayment({
         elements,
         clientSecret: created.clientSecret,
@@ -224,7 +224,7 @@ function PayButtons({
       });
       if (confirmError) throw new Error(confirmError.message);
 
-      router.push(`/?payment_intent=${created.paymentIntentId}`);
+      router.push(`/pay?payment_intent=${created.paymentIntentId}`);
       setPending(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Payment failed. Please try again.");

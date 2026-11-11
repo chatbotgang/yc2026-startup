@@ -13,7 +13,7 @@ import { TopUpForm } from "./topup-form";
 
 const twd = (n: number) => `NT$${n.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
 
-type SearchParams = PageProps<"/">["searchParams"];
+type SearchParams = PageProps<"/pay">["searchParams"];
 
 /**
  * Credit a just-paid top-up (idempotent backup for the webhook), then read the wallet.
@@ -143,7 +143,7 @@ function ListSkeleton() {
   );
 }
 
-export default function Home({ searchParams }: PageProps<"/">) {
+export default function Home({ searchParams }: PageProps<"/pay">) {
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-4 py-10 sm:py-14">
       <header className="flex flex-wrap items-end justify-between gap-4">
@@ -152,7 +152,7 @@ export default function Home({ searchParams }: PageProps<"/">) {
           <p className="text-muted-foreground">Anyone can contribute by card, Apple Pay or Google Pay. The total updates live on the board.</p>
         </div>
         <Button variant="outline" asChild>
-          <a href="/display" target="_blank" rel="noopener">
+          <a href="/live" target="_blank" rel="noopener">
             <MonitorPlay />
             Open live board
           </a>
