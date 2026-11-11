@@ -317,7 +317,6 @@ function PayButtons({
           googlePay: only === "googlePay" ? "always" : "never",
           link: "never",
         },
-        layout: { maxColumns: 1, maxRows: 1, overflow: "never" },
       }}
       onReady={({ availablePaymentMethods: a }) => {
         const ok = Boolean(a?.[only]);
