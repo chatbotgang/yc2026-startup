@@ -276,6 +276,19 @@ html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
 .js .slide:not(.seen) .bub{opacity:0;transform:translateY(16px)}
 .bub{transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .bub.me{transition-delay:.6s}.bub.ai{transition-delay:1.6s}
+
+.fmain{gap:5vw}
+.fq{display:flex;flex-direction:column;align-items:center;gap:2.4vh;text-align:center}
+.fq .foffer{font-size:clamp(24px,2.4vw,44px)}
+.dcard.big{width:min(640px,40vw);gap:2.4vh;text-align:left;padding:clamp(26px,3vw,52px)}
+.dcard.big .who{font-size:clamp(13px,1.2vw,22px)}
+.dcard.big .amt{font-size:clamp(64px,7vw,128px)}
+.dcard.big .dl{font-size:clamp(18px,1.7vw,30px);display:flex;align-items:center;gap:14px}
+.dcard.big .mono.logo-mini{min-width:clamp(48px,4.2vw,76px);height:clamp(48px,4.2vw,76px)}
+.dcard.big .mono.logo-mini img{width:clamp(40px,3.6vw,66px);height:clamp(40px,3.6vw,66px)}
+.dcard.big .ngo.stack .mono+.mono{margin-left:-10px}
+.dcard.big .by{font-size:clamp(15px,1.4vw,24px)}
+@media (max-width:900px){.dcard.big{width:100%}}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -664,19 +677,16 @@ body.idle .chrome{opacity:0;pointer-events:none}
     <div class="inner fin2">
       <p class="h2 reveal"><span class="zh">不只我們被加速，<br><span class="blue">讓整個世界一起被加速。</span></span><span class="en">Not just us.<br><span class="blue">Let's speed up the whole world.</span></span></p>
       <div class="fmain reveal d1">
-        <div class="qrbox"><div class="qr" id="qr2"></div><span class="match">×2</span></div>
-        <div class="fcopy">
-          <span class="eyebrow"><span class="zh">現在就掃</span><span class="en">Scan now</span></span>
+        <div class="fq">
+          <div class="qrbox"><div class="qr" id="qr2"></div><span class="match">×2</span></div>
           <p class="foffer"><span class="zh">你捐一份，<br><span class="blue">Agent Lab 加碼一份。</span></span><span class="en">You give one.<br><span class="blue">Agent Lab matches it.</span></span></p>
-          <div class="fngos">
-            <span class="lbl"><span class="zh">直接送到這些 NGO 的 agent</span><span class="en">Straight to these NGOs' agents</span></span>
-            <div class="row">
-              <span class="logo-chip"><img src="assets/ngo/huashan.jpg" alt="華山基金會"></span>
-              <span class="logo-chip"><img src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span>
-              <span class="logo-chip sq"><img src="assets/ngo/oneforty.png" alt="One-Forty"></span>
-            </div>
-          </div>
         </div>
+        <article class="dcard corp big">
+          <div class="dtop"><span class="who"><span class="zh">你的名字會在這裡</span><span class="en">Your name goes here</span></span></div>
+          <div class="amt">2,000 <small>credits</small></div>
+          <div class="dl"><span class="zh">支持</span><span class="en">Supporting</span> <span class="ngo inline stack"><span class="mono logo-mini"><img src="assets/ngo/huashan.jpg" alt="華山基金會"></span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt="One-Forty"></span></span></div>
+          <div class="by">Donated by <b><span class="zh">你</span><span class="en">you</span></b></div>
+        </article>
       </div>
       <div class="fstrip reveal d2">
         <span class="lbl"><span class="zh">大公司各捐各的</span><span class="en">Big tech gives on its own</span></span>
