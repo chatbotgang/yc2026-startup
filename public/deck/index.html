@@ -451,6 +451,40 @@ html[data-lang="zh"] .slogan.hero p{letter-spacing:-0.01em;line-height:1.18;font
 .herofinal > .powered{justify-content:center}
 .herofinal .console .btns .btn{padding:8px 16px}
 .herofinal .meter{padding:12px 14px}
+
+/* ===== final v4: hero slogan + one horizontal offer panel ===== */
+.slide[aria-label="Live"] .slogan.hero p{font-size:clamp(30px,3.6vw,68px)}
+.herofinal{gap:4.2vh}
+.herofinal .stage{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,.95fr);grid-template-rows:auto auto;column-gap:clamp(20px,2.6vw,48px);row-gap:.6vh;align-items:center;
+  width:min(1180px,calc(100vw - 2 * (var(--dwq) + 80px)));padding:clamp(20px,2vw,34px) clamp(24px,2.6vw,44px);border-radius:28px;text-align:left;
+  background:linear-gradient(180deg,rgba(23,30,46,.85),rgba(12,16,24,.85));border:1px solid rgba(143,184,255,.28);box-shadow:0 40px 120px -40px rgba(69,134,240,.6);backdrop-filter:blur(6px)}
+.herofinal .livecol{display:contents}
+.herofinal .livecol > .eyebrow{grid-column:1;grid-row:1;align-self:end;margin:0}
+.herofinal .x2big{grid-column:1;grid-row:2;align-self:start;font-size:clamp(72px,6.6vw,124px)}
+.herofinal .livecol > .h2{grid-column:2;grid-row:1;align-self:end;margin:0;font-size:clamp(24px,2.3vw,42px);text-align:left}
+.herofinal .livecol > .sub{grid-column:2;grid-row:2;align-self:start;margin:0;font-size:clamp(14px,1.1vw,19px);max-width:none}
+.herofinal .livecol > .sub br,.herofinal .livecol > .h2 br{display:none}
+.herofinal .livecol > .h2 .blue{display:block}
+.herofinal .console{grid-column:3;grid-row:1 / span 2;height:auto;gap:1.2vh;padding:clamp(14px,1.3vw,22px);box-shadow:none;background:rgba(10,12,16,.7)}
+.herofinal .console .kv,.herofinal .console .log{display:none}
+.herofinal .console .meter{padding:10px 14px;gap:6px}
+.herofinal .credits{font-size:clamp(32px,3vw,54px)}
+.herofinal .console .btns .btn{padding:8px 16px;font-size:clamp(13px,1vw,17px)}
+.herofinal .console .btns #reset{margin-left:auto}
+.herofinal > .powered{opacity:.85}
+.herofinal > .powered .lockup img{height:clamp(20px,1.7vw,30px)}
+.herofinal > .powered .lockup b{font-size:clamp(15px,1.3vw,22px)}
+@media (max-width:1000px){.herofinal .stage{grid-template-columns:minmax(0,1fr);text-align:center}.herofinal .livecol > *, .herofinal .x2big, .herofinal .console{grid-column:1;grid-row:auto}}
+
+/* final v4 grid fix */
+.herofinal .stage{grid-template-columns:auto minmax(0,1fr) minmax(340px,1fr);grid-template-rows:auto auto auto;row-gap:.4vh}
+.herofinal .livecol > .eyebrow{grid-column:1 / span 2;grid-row:1;align-self:end}
+.herofinal .x2big{grid-column:1;grid-row:2 / span 2;align-self:center}
+.herofinal .livecol > .h2{grid-column:2;grid-row:2;align-self:end}
+.herofinal .livecol > .sub{grid-column:2;grid-row:3;align-self:start}
+.herofinal .console{grid-column:3;grid-row:1 / span 3}
+.herofinal .console .top{flex-wrap:nowrap}
+.herofinal .console .ttl{white-space:nowrap;font-size:clamp(13px,1vw,17px)}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
