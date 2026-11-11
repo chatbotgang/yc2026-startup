@@ -10,7 +10,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
 <script>
 /* ====== 現場設定：把 Stripe Payment Link 貼在這裡（或網址加 ?donate=連結）====== */
-window.DONATE_URL = 'https://yc2026-wallet-310672118987.asia-east1.run.app';
+window.DONATE_URL = 'https://yc2026-wallet-310672118987.asia-east1.run.app/pay';
+window.DONATE_API = 'https://yc2026-wallet-310672118987.asia-east1.run.app';
 (function(){var l='zh';try{var s=localStorage.getItem('deck-lang');if(s==='zh'||s==='en')l=s;}catch(e){}
 var q=/[?#&]lang=(zh|en)/.exec(location.href);if(q)l=q[1];
 var d=/[?&]donate=([^&#]+)/.exec(location.search);if(d)window.DONATE_URL=decodeURIComponent(d[1]);
@@ -346,6 +347,9 @@ body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none
 .liveqr{display:flex;align-items:center;gap:2vw;flex-wrap:wrap}
 .liveqr .qr{width:clamp(170px,13vw,250px)}
 .liveqr .sub{margin-left:clamp(60px,5vw,96px)}
+
+.gwtag{font-family:var(--font-mono);font-size:clamp(11px,.9vw,15px);letter-spacing:.06em;color:#fff;background:var(--accent);border-radius:999px;padding:4px 12px;box-shadow:0 8px 24px -8px rgba(69,134,240,.8)}
+.sub b.blue{font-weight:500}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -549,13 +553,13 @@ body.idle .chrome{opacity:0;pointer-events:none}
       <div class="sflow reveal d2" aria-label="Your spare AI flows through Agent Lab to NGO agents and the people they serve">
         <div class="node you"><div class="dotsq"></div><b><span class="zh">你的閒置 AI 額度</span><span class="en">Your spare AI</span></b></div>
         <div class="pipe"><i></i></div>
-        <div class="node lab"><img src="assets/agentlab/app-icon-512.png" alt=""><b>Agent Lab</b></div>
+        <div class="node lab"><img src="assets/agentlab/app-icon-512.png" alt=""><b>Agent Lab</b><span class="gwtag">AI Gateway</span></div>
         <div class="pipe"><i></i></div>
         <div class="node ngo"><div class="trio"><span class="logo-chip"><img src="assets/ngo/huashan.jpg" alt=""></span><span class="logo-chip"><img src="assets/ngo/art.png" alt=""></span><span class="logo-chip sq"><img src="assets/ngo/oneforty.png" alt=""></span></div><b><span class="zh">NGO 的 AI agent</span><span class="en">NGO agents</span></b></div>
         <div class="pipe"><i></i></div>
         <div class="node ppl"><div class="faces"><span style="background-image:url('assets/photos/elder.jpg');background-position:52% 25%"></span><span style="background-image:url('assets/photos/dogs.jpg');background-position:60% 40%"></span><span style="background-image:url('assets/photos/migrant.jpg');background-position:58% 50%"></span></div><b><span class="zh">被留下的人</span><span class="en">People left behind</span></b></div>
       </div>
-      <p class="sub reveal d2"><span class="zh">把你的 AI 算力，分一份給服務弱勢的 NGO。<br>建置、部署，我們一起送。</span><span class="en">Share a slice of your AI capacity with the NGOs that serve people left behind.<br>We build and deploy the agent for them.</span></p>
+      <p class="sub reveal d2"><span class="zh">Agent Lab 的 <b class="blue">AI Gateway</b> 分配、計量每一筆捐出的額度，<br>建置、部署也由我們一起送給 NGO。</span><span class="en">Agent Lab's <b class="blue">AI Gateway</b> allocates and meters every donated credit,<br>and we build and deploy the agent for the NGO.</span></p>
     </div>
   </section>
 
@@ -885,7 +889,7 @@ body.idle .chrome{opacity:0;pointer-events:none}
 
   /* ===== live donations from the wallet API (falls back to simulation) ===== */
   (function(){
-    var API=(window.DONATE_URL||'').replace(/\/$/,'')+'/api/balance';
+    var API=(window.DONATE_API||window.DONATE_URL||'').replace(/\/$/,'')+'/api/balance';
     if(!window.DONATE_URL)return;
     var lv=document.getElementById('lv'),raised=document.getElementById('raised'),last=null,seen={};
     function setLive(on){lv.classList.toggle('on',on);lv.innerHTML='<i></i>'+(on?'<span class="zh">即時</span><span class="en">Live</span>':'<span class="zh">模擬</span><span class="en">Simulated</span>');}
