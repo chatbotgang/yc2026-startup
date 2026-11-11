@@ -381,6 +381,12 @@ body.bigqr #dw-qr{opacity:0!important;visibility:hidden!important;animation:none
 
 .h2.closer{font-size:clamp(22px,2.2vw,40px);color:var(--fg)}
 .slide[aria-label="Live"] .stage{width:min(1280px,calc(100vw - 2 * (var(--dwq) + 80px)))}
+
+.slogan{display:flex;flex-direction:column;align-items:center;gap:1.4vh;text-align:center;background:#141821;border:1px solid var(--border-strong);border-radius:24px;padding:clamp(18px,2vw,32px) clamp(20px,2.4vw,40px);max-width:40em}
+.slogan .heart{width:clamp(24px,2vw,34px);height:auto;fill:none;stroke:#f0a3ad;stroke-width:1.8;stroke-linejoin:round}
+.slogan p{margin:0;font-size:clamp(22px,2.3vw,42px);font-weight:600;letter-spacing:-0.02em;line-height:1.2;text-wrap:balance}
+html[data-lang="zh"] .slogan p{font-weight:500}
+.slogan .tag{font-size:clamp(13px,1.1vw,19px);color:var(--muted)}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -676,7 +682,11 @@ body.idle .chrome{opacity:0;pointer-events:none}
       <div class="livecol">
         <div class="eyebrow reveal"><span class="zh">只有今晚 · 兩倍捐贈</span><span class="en">Tonight only · Double the impact</span></div>
         <p class="h2 reveal d1"><span class="zh">你捐多少，<br><span class="blue">影響力就變成兩倍。</span></span><span class="en">Whatever you give,<br><span class="blue">we double the impact.</span></span></p>
-        <p class="h2 closer reveal d2"><span class="zh">你捐贈，我們把幫助送到。</span><span class="en">You give. We make it help.</span></p>
+        <div class="slogan reveal d2">
+          <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.3 3 5 6.2 5c2 0 3.3 1.1 3.8 2.2h.0C10.5 6.1 11.8 5 13.8 5 17 5 18.8 8.3 17.2 11.4 15 15.6 12 20 12 20z" transform="translate(1 0)"/></svg>
+          <p><span class="zh">AI 不該因為有人付不起，<br>就停止幫忙。</span><span class="en">AI should never stop helping<br>because someone can't afford it.</span></p>
+          <span class="tag">Agent Lab — Compute for Good.</span>
+        </div>
         <p class="sub reveal d2"><span class="zh">掃右下角的 QR，看阿嬤的 agent 恢復服務。</span><span class="en">Scan the QR in the corner and watch Grandma's agent come back.</span></p>
         <div class="powered reveal d3" style="justify-content:flex-start"><span>Share the Speed · Crescendo AI Gateway ·</span><span class="lockup"><img src="assets/agentlab/symbol-color.svg" alt=""><b>Agent Lab</b><small>by Crescendo Lab</small></span></div>
       </div>
