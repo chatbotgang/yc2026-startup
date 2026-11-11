@@ -598,6 +598,22 @@ body.idle .chrome{opacity:0;pointer-events:none}
     </div>
   </section>
 
+  <!-- 7b Map: from Taipei to every corner -->
+  <section class="slide" aria-label="Map">
+    <div class="stage mapstage">
+      <div style="display:flex;flex-direction:column;gap:2.6vh">
+        <div class="eyebrow reveal"><span class="zh">你的捐款去了哪裡</span><span class="en">Where your gift goes</span></div>
+        <p class="h2 reveal d1"><span class="zh">從南京東路，<br><span class="blue">送到台灣每個角落。</span></span><span class="en">From Nanjing East Road<br><span class="blue">to every corner of Taiwan.</span></span></p>
+        <div class="mapkpi reveal d2">
+          <div><span class="n" id="mk-places">0</span><span class="l"><span class="zh">個偏鄉據點</span><span class="en">rural sites reached</span></span></div>
+          <div><span class="n" id="mk-credits">0</span><span class="l"><span class="zh">credits 已送出</span><span class="en">credits delivered</span></span></div>
+        </div>
+        <p class="src reveal d3"><span class="zh">起點：台北市中山區南京東路三段 8 號（今晚會場）。據點與數字為示意。</span><span class="en">Origin: No. 8, Sec. 3, Nanjing E. Rd., Taipei (tonight's venue). Sites and figures are illustrative.</span></p>
+      </div>
+      <svg class="twmap reveal d1" id="twmap" viewBox="0 0 560 800" role="img" aria-label="Map of Taiwan with donations flowing from Taipei to rural towns"></svg>
+    </div>
+  </section>
+
   <!-- Live: tonight-only double giving + demo -->
   <section class="slide" aria-label="Live">
     <div class="stage">
@@ -629,22 +645,6 @@ body.idle .chrome{opacity:0;pointer-events:none}
         </div>
         <ul class="log" id="log" aria-live="polite"></ul>
       </div>
-    </div>
-  </section>
-
-  <!-- 7b Map: from Taipei to every corner -->
-  <section class="slide" aria-label="Map">
-    <div class="stage mapstage">
-      <div style="display:flex;flex-direction:column;gap:2.6vh">
-        <div class="eyebrow reveal"><span class="zh">你的捐款去了哪裡</span><span class="en">Where your gift goes</span></div>
-        <p class="h2 reveal d1"><span class="zh">從南京東路，<br><span class="blue">送到台灣每個角落。</span></span><span class="en">From Nanjing East Road<br><span class="blue">to every corner of Taiwan.</span></span></p>
-        <div class="mapkpi reveal d2">
-          <div><span class="n" id="mk-places">0</span><span class="l"><span class="zh">個偏鄉據點</span><span class="en">rural sites reached</span></span></div>
-          <div><span class="n" id="mk-credits">0</span><span class="l"><span class="zh">credits 已送出</span><span class="en">credits delivered</span></span></div>
-        </div>
-        <p class="src reveal d3"><span class="zh">起點：台北市中山區南京東路三段 8 號（今晚會場）。據點與數字為示意。</span><span class="en">Origin: No. 8, Sec. 3, Nanjing E. Rd., Taipei (tonight's venue). Sites and figures are illustrative.</span></p>
-      </div>
-      <svg class="twmap reveal d1" id="twmap" viewBox="0 0 560 800" role="img" aria-label="Map of Taiwan with donations flowing from Taipei to rural towns"></svg>
     </div>
   </section>
 
