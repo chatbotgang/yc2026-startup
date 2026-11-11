@@ -222,6 +222,32 @@ html[data-lang="zh"] .h1,html[data-lang="zh"] .h2{letter-spacing:-0.01em;line-he
 .blogos img[alt="Anthropic"]{height:clamp(12px,1.1vw,20px)}
 .blogos img:last-child{grid-column:1 / -1;justify-self:center}
 @media (max-width:1000px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== how slide: key, blue ===== */
+.howblue{background:radial-gradient(70% 60% at 50% 35%,rgba(69,134,240,.30),transparent 70%),radial-gradient(50% 40% at 50% 100%,rgba(143,184,255,.12),transparent 70%),var(--bg)}
+.howblue .mod{border-color:rgba(69,134,240,.55);background:linear-gradient(180deg,rgba(12,24,48,.95),rgba(17,18,20,.95))}
+.howblue .mod.hot{border-color:var(--accent);background:linear-gradient(180deg,#123067,#0c1830);box-shadow:0 30px 80px -30px rgba(69,134,240,.7)}
+.howblue .mod .ico{background:rgba(69,134,240,.15);border-color:rgba(69,134,240,.5)}
+.brandpill{display:inline-flex;align-items:center;gap:8px;width:fit-content;background:#fff;color:#1f49a3;border-radius:var(--pill);padding:5px 12px 5px 6px;font-weight:600;font-size:clamp(11px,.9vw,15px)}
+.brandpill img{width:clamp(18px,1.5vw,26px);height:auto;display:block}
+.shot{aspect-ratio:1200/630;border-radius:12px;background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.12)}
+
+/* ===== final v2 ===== */
+.fin2{gap:3.6vh}
+.fmain{display:flex;align-items:center;justify-content:center;gap:4.5vw;flex-wrap:wrap}
+.fmain .qr{width:clamp(200px,17vw,320px)}
+.fcopy{display:flex;flex-direction:column;align-items:flex-start;gap:2vh;text-align:left}
+.foffer{margin:0;font-size:clamp(30px,3.4vw,62px);font-weight:300;letter-spacing:-0.03em;line-height:1.15}
+html[data-lang="zh"] .foffer{letter-spacing:-0.01em}
+.fngos{display:flex;flex-direction:column;gap:1.2vh}
+.fngos .lbl{font-size:clamp(12px,1vw,17px);color:var(--subtle)}
+.fngos .row{display:flex;gap:12px;align-items:center}
+.fstrip{display:flex;align-items:center;justify-content:center;gap:clamp(14px,2vw,36px);flex-wrap:wrap;padding:1.6vh 2.4vw;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.fstrip .lbl{font-size:clamp(12px,1vw,17px);color:var(--muted)}
+.fstrip .lbl.hi{color:var(--accent-2)}
+.fstrip img{height:clamp(14px,1.3vw,22px);width:auto;filter:brightness(0) invert(1);opacity:.75}
+.fstrip img.anth{height:clamp(10px,.85vw,15px)}
+@media (max-width:900px){.fcopy{align-items:center;text-align:center}}
 /* ===== NGO badges ===== */
 .ngo{display:inline-flex;align-items:center;gap:10px}
 .ngo .mono{display:inline-grid;place-items:center;min-width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);padding:0 6px;border-radius:50%;
@@ -461,32 +487,30 @@ body.idle .chrome{opacity:0;pointer-events:none}
   </section>
 
   <!-- How: modules -->
-  <section class="slide" aria-label="How">
+  <section class="slide howblue" aria-label="How">
     <div class="inner">
       <div class="eyebrow reveal"><span class="zh">解法 · 怎麼做到</span><span class="en">How it works</span></div>
       <p class="h2 reveal d1"><span class="zh">捐錢買不到一個會動的 agent。<br><span class="blue">Agent Lab 把四件事接成一條線。</span></span><span class="en">Cash can't buy a working agent.<br><span class="blue">Agent Lab connects four pieces into one line.</span></span></p>
       <div class="flowline reveal d2">
         <div class="mod">
           <div class="ico"><svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="15" rx="3"/><path d="M5 14h22M10 19h5"/></svg></div>
-          <span class="tag now"><span class="zh">今晚上線</span><span class="en">Live tonight</span></span>
           <h3><span class="zh">捐贈池</span><span class="en">Donation pool</span></h3>
           <p><span class="zh">個人刷卡、企業撥出閒置額度，統一進到 NGO 的 AI 帳戶</span><span class="en">People pay by card, companies set aside spare capacity, all into the NGO's AI account</span></p>
         </div>
         <div class="mod hot">
-          <div class="ico"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="10"/><path d="M6 16h20M16 6c3 3 4 6.5 4 10s-1 7-4 10M16 6c-3 3-4 6.5-4 10s1 7 4 10"/></svg></div>
-          <span class="tag prod"><span class="zh">Agent Lab 正式運作中</span><span class="en">In production</span></span>
+          <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span>Agent Lab · AI Gateway</span></div>
+          <div class="shot" style="background-image:url('assets/agentlab/og-gateway.png')"></div>
           <h3>AI Gateway</h3>
           <p><span class="zh">分配預算、自動選模型、計量每一次呼叫；額度用完就暫停</span><span class="en">Allocates budget, routes models, meters every call; pauses when credits run out</span></p>
         </div>
         <div class="mod hot">
-          <div class="ico"><svg viewBox="0 0 32 32"><path d="M16 5l9 5v12l-9 5-9-5V10z"/><path d="M7 10l9 5 9-5M16 15v12"/></svg></div>
-          <span class="tag prod"><span class="zh">Agent Lab 正式運作中</span><span class="en">In production</span></span>
+          <div class="brandpill"><img src="assets/agentlab/app-icon-512.png" alt=""><span><span class="zh">Agent Lab · 部署</span><span class="en">Agent Lab · Deploy</span></span></div>
+          <div class="shot" style="background-image:url('assets/agentlab/og-deploy.png')"></div>
           <h3>Deployment</h3>
           <p><span class="zh">NGO 不寫程式，一鍵把 agent 上線到 LINE、網頁、語音</span><span class="en">No code: one click puts the agent on LINE, web and voice</span></p>
         </div>
         <div class="mod">
           <div class="ico"><svg viewBox="0 0 32 32"><path d="M6 25V7M6 25h20"/><path d="M10 20l5-5 4 3 6-7"/></svg></div>
-          <span class="tag now"><span class="zh">今晚上線</span><span class="en">Live tonight</span></span>
           <h3><span class="zh">成效回報</span><span class="en">Impact report</span></h3>
           <p><span class="zh">服務了誰、花了多少，回到每一位捐贈者手上</span><span class="en">Who was served and at what cost, back to every donor</span></p>
         </div>
@@ -535,8 +559,8 @@ body.idle .chrome{opacity:0;pointer-events:none}
     <div class="stage">
       <div style="display:flex;flex-direction:column;gap:2.6vh">
         <div class="eyebrow reveal"><span class="zh">現場 Demo</span><span class="en">Live demo</span></div>
-        <p class="h2 reveal d1"><span class="zh">阿嬤、社工、贊助者，<br><span class="blue">共用同一個 agent。</span></span><span class="en">Grandma, caseworker, sponsor.<br><span class="blue">One shared agent.</span></span></p>
-        <p class="sub reveal d2"><span class="zh">額度一用完，<br>阿嬤的問題就沒有人回答了。</span><span class="en">When the credits run out,<br>Grandma's questions go unanswered.</span></p>
+        <p class="h2 reveal d1"><span class="zh">每一次回答，<br><span class="blue">都用掉一點捐來的額度。</span></span><span class="en">Every answer<br><span class="blue">uses a little donated credit.</span></span></p>
+        <p class="sub reveal d2"><span class="zh">額度歸零，阿嬤的 agent 就會停下來。</span><span class="en">When credits hit zero, Grandma's agent stops.</span></p>
       </div>
       <div class="console reveal d2" id="console">
         <div class="top"><span class="ttl"><span class="dot"></span>Agent Lab Impact Console</span><span class="pill" id="status"><i></i><span class="zh">服務中</span><span class="en">Online</span></span></div>
@@ -592,28 +616,29 @@ body.idle .chrome{opacity:0;pointer-events:none}
   <!-- Final: close + QR + donor card + big tech -->
   <section class="slide" aria-label="Final">
     <div class="plate" style="--img:url('assets/leaves-bokeh.webp')" aria-hidden="true"></div>
-    <div class="inner fin">
-      <p class="h2 reveal"><span class="zh">不只我們被加速，<span class="blue">讓整個世界一起被加速。</span></span><span class="en">Not just us. <span class="blue">Let's speed up the whole world.</span></span></p>
-      <div class="fgrid reveal d1">
-        <div class="fcol qcol">
-          <div class="qrbox"><div class="qr" id="qr2"></div><span class="match">×2</span></div>
-          <span class="offer"><span class="zh">你捐一份，Agent Lab 加碼一份</span><span class="en">You give one, Agent Lab matches it</span></span>
-        </div>
-        <article class="dcard corp dmini">
-          <div class="dtop"><span class="who"><span class="zh">你的名字會在這裡</span><span class="en">Your name goes here</span></span></div>
-          <div class="amt">2,000 <small>credits</small></div>
-          <div class="dl"><span class="zh">支持</span><span class="en">Supporting</span> <span class="ngo inline stack"><span class="mono logo-mini"><img src="assets/ngo/huashan.jpg" alt=""></span><span class="mono logo-mini"><img src="assets/ngo/art.png" alt=""></span><span class="mono logo-mini"><img src="assets/ngo/oneforty.png" alt=""></span></span></div>
-          <div class="by">Donated by <b><span class="zh">你</span><span class="en">you</span></b></div>
-        </article>
-        <div class="fcol bcol">
-          <span class="lbl"><span class="zh">大公司都在捐 AI，但各捐各的</span><span class="en">Big tech gives AI, each on its own</span></span>
-          <div class="blogos">
-            <img src="assets/brands/microsoft.svg" alt="Microsoft"><img src="assets/brands/google.svg" alt="Google"><img src="assets/brands/openai.svg" alt="OpenAI"><img src="assets/brands/anthropic.svg" alt="Anthropic"><img src="assets/brands/nvidia.svg" alt="NVIDIA">
+    <div class="inner fin2">
+      <p class="h2 reveal"><span class="zh">不只我們被加速，<br><span class="blue">讓整個世界一起被加速。</span></span><span class="en">Not just us.<br><span class="blue">Let's speed up the whole world.</span></span></p>
+      <div class="fmain reveal d1">
+        <div class="qrbox"><div class="qr" id="qr2"></div><span class="match">×2</span></div>
+        <div class="fcopy">
+          <span class="eyebrow"><span class="zh">現在就掃</span><span class="en">Scan now</span></span>
+          <p class="foffer"><span class="zh">你捐一份，<br><span class="blue">Agent Lab 加碼一份。</span></span><span class="en">You give one.<br><span class="blue">Agent Lab matches it.</span></span></p>
+          <div class="fngos">
+            <span class="lbl"><span class="zh">直接送到這些 NGO 的 agent</span><span class="en">Straight to these NGOs' agents</span></span>
+            <div class="row">
+              <span class="logo-chip"><img src="assets/ngo/huashan.jpg" alt="華山基金會"></span>
+              <span class="logo-chip"><img src="assets/ngo/art.png" alt="台灣動物緊急救援小組"></span>
+              <span class="logo-chip sq"><img src="assets/ngo/oneforty.png" alt="One-Forty"></span>
+            </div>
           </div>
-          <span class="lbl hi"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe</span></span>
         </div>
       </div>
-      <div class="powered reveal d2"><span>Share the Speed · Agent Lab by</span><img src="assets/agentlab-logo-dark.svg" alt="Agent Lab"></div>
+      <div class="fstrip reveal d2">
+        <span class="lbl"><span class="zh">大公司各捐各的</span><span class="en">Big tech gives on its own</span></span>
+        <img src="assets/brands/microsoft.svg" alt="Microsoft"><img src="assets/brands/google.svg" alt="Google"><img src="assets/brands/openai.svg" alt="OpenAI"><img src="assets/brands/anthropic.svg" alt="Anthropic" class="anth"><img src="assets/brands/nvidia.svg" alt="NVIDIA">
+        <span class="lbl hi"><span class="zh">Agent Lab 是中立的那條管道</span><span class="en">Agent Lab is the neutral pipe</span></span>
+      </div>
+      <div class="powered reveal d3"><span>Share the Speed · Agent Lab by</span><img src="assets/agentlab-logo-dark.svg" alt="Crescendo Lab"></div>
     </div>
   </section>
 
