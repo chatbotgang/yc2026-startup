@@ -6,24 +6,37 @@ import { siteOrigin } from "@/lib/origin";
 import { getWalletSnapshot } from "@/lib/wallet";
 import { LiveBalance } from "./live-balance";
 
-export const metadata: Metadata = { title: "儲值金即時看板" };
+export const metadata: Metadata = { title: "Share the Speed · Live" };
 
 async function Board() {
   await connection();
-  const [initial, origin] = await Promise.all([getWalletSnapshot(), siteOrigin()]);
-  const qrSvg = await QRCode.toString(`${origin}/`, {
-    type: "svg",
-    margin: 0,
-    color: { dark: "#ffffff", light: "#00000000" },
-  });
+  const [initial, origin] = await Promise.all([
+    getWalletSnapshot().catch((err) => {
+      console.error("[display] balance read failed", err);
+      return null;
+    }),
+    siteOrigin(),
+  ]);
+  const donateUrl = `${origin}/`;
+  // Dark modules on white: inverted QR codes don't scan reliably on every phone.
+  const qrSvg = await QRCode.toString(donateUrl, { type: "svg", margin: 0, errorCorrectionLevel: "M" });
+  const isLocal = /^https?:\/\/(localhost|127\.|\[::1\])/.test(donateUrl);
 
   const qr = (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-4">
+      <p className="font-mono text-[clamp(12px,1vw,16px)] tracking-[.14em] text-[#6e7277] uppercase">Scan to give</p>
       <div
-        className="size-40 rounded-2xl bg-card p-4 ring-1 ring-border lg:size-48 [&>svg]:size-full"
+        role="img"
+        aria-label={`QR code linking to ${donateUrl}`}
+        className="grid aspect-square w-[clamp(220px,22vw,380px)] max-w-full animate-[qr-pulse_2.6s_ease-out_infinite] place-items-center rounded-[28px] bg-white p-[clamp(14px,1.4vw,24px)] motion-reduce:animate-none [&>svg]:h-auto [&>svg]:w-full"
         dangerouslySetInnerHTML={{ __html: qrSvg }}
       />
-      <p className="text-muted-foreground">掃描 QR code 贊助</p>
+      <p className="font-mono text-[clamp(12px,.95vw,16px)] break-all text-[#6e7277]">{donateUrl}</p>
+      {isLocal && (
+        <p role="alert" className="rounded-xl border border-[#f0b8cf]/40 px-4 py-2 text-sm text-[#f0b8cf]">
+          This QR points to localhost, so phones can’t open it. Set SITE_URL to the public URL.
+        </p>
+      )}
     </div>
   );
 
@@ -32,9 +45,18 @@ async function Board() {
 
 export default function DisplayPage() {
   return (
-    <main className="dark flex min-h-screen flex-col items-center bg-background text-foreground">
+    <main className="relative flex min-h-screen flex-col items-center overflow-hidden bg-black font-light text-[#f5f5f3] antialiased">
+      {/* Signal Field dot texture, faded toward the corner like the deck's cards */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgb(245_245_243/0.08)_1.2px,transparent_1.8px)] bg-[length:10px_10px] [mask-image:radial-gradient(80%_70%_at_100%_0%,#000,transparent)]"
+      />
+      <p className="absolute top-5 left-6 flex items-center gap-2.5 font-mono text-xs tracking-[.12em] text-[#6e7277] uppercase">
+        <span className="size-2.5 rounded-full bg-[#4586f0] shadow-[0_0_14px_#4586f0]" />
+        Share the Speed · Agent Lab
+      </p>
       <Suspense
-        fallback={<div className="flex flex-1 items-center justify-center text-muted-foreground">載入中…</div>}
+        fallback={<div className="flex flex-1 items-center justify-center font-mono text-[#6e7277]">Loading…</div>}
       >
         <Board />
       </Suspense>
